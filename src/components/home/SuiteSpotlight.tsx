@@ -125,8 +125,8 @@ export default function SuiteSpotlight() {
 
               <div className="p-4 rounded-2xl bg-[#141212] border border-white/5 space-y-1.5">
                 <Tv className="w-5 h-5 text-[#B4872F]" />
-                <h4 className="font-serif text-lg text-[#F5EBDD] font-normal">Dual Smart TVs</h4>
-                <p className="text-xs text-[#F5EBDD]/60 font-light">55&quot; 4K screens in salon and bedroom</p>
+                <h4 className="font-serif text-lg text-[#F5EBDD] font-normal">55&quot; 4K Smart TV</h4>
+                <p className="text-xs text-[#F5EBDD]/60 font-light">Large LED screen with streaming apps</p>
               </div>
 
               <div className="p-4 rounded-2xl bg-[#141212] border border-white/5 space-y-1.5">

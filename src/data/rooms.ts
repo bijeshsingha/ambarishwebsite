@@ -231,7 +231,7 @@ export const ROOMS: RoomCategory[] = [
         mealPlan: "EP",
         description: "Exclusive suite access with flexibility to order a-la-carte room service.",
         pricePerNight: 3500,
-        inclusions: ["Separate living room & bedroom", "Dual 55\" Smart TVs", "High-speed Wi-Fi", "Express check-in", "Daily housekeeping"],
+        inclusions: ["Separate living room & bedroom", "55\" 4K Smart TV", "High-speed Wi-Fi", "Express check-in", "Daily housekeeping"],
       },
       {
         id: "plan-sui-cp",
@@ -243,7 +243,7 @@ export const ROOMS: RoomCategory[] = [
         inclusions: [
           "Buffet breakfast for all suite guests",
           "Separate living room & master bedroom",
-          "Dual 55\" Smart TVs",
+          "55\" 4K Smart TV",
           "High-speed Wi-Fi",
           "Tea & coffee hamper",
         ],
@@ -252,7 +252,7 @@ export const ROOMS: RoomCategory[] = [
     amenities: [
       { iconName: "Layers", label: "Separate Living Drawing Room & Master Bedroom" },
       { iconName: "Wind", label: "Dual Split Air Conditioners" },
-      { iconName: "Tv", label: "Dual 55\" Smart 4K TVs" },
+      { iconName: "Tv", label: "55\" Smart 4K TV" },
       { iconName: "Armchair", label: "Full 5-Seater Sofa Set with Coffee Table" },
       { iconName: "Coffee", label: "Gourmet Tea/Coffee Station" },
       { iconName: "ShieldCheck", label: "Intercom & 24/7 Room Service Ext 9" },
