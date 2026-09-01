@@ -92,7 +92,7 @@ export async function POST(request: Request) {
       const roomsHtml = newReservation.bookedRooms && newReservation.bookedRooms.length > 0
         ? newReservation.bookedRooms.map((rm) => `
             <tr>
-              <td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>${rm.quantity}x ${rm.roomName}</strong> (${rm.ratePlanName})</td>
+              <td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>${rm.quantity}x ${rm.roomName}</strong> ${rm.bedType ? `(${rm.bedType})` : ""} - ${rm.ratePlanName}</td>
               <td style="padding: 8px 12px; border-bottom: 1px solid #eee; text-align: right;">${formatCurrencyINR(rm.pricePerNight * rm.quantity)}/night</td>
             </tr>
           `).join("")

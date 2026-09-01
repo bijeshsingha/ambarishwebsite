@@ -49,7 +49,7 @@ function CheckoutContent() {
     const rawRoomsData = searchParams.get("rooms_data");
     if (rawRoomsData) {
       try {
-        const parsed = JSON.parse(rawRoomsData) as { slug: string; plan: string; quantity: number }[];
+        const parsed = JSON.parse(rawRoomsData) as { slug: string; plan: string; bedType?: string; quantity: number }[];
         if (Array.isArray(parsed) && parsed.length > 0) {
           const list: BookedRoomItem[] = [];
           parsed.forEach((p) => {
@@ -60,6 +60,7 @@ function CheckoutContent() {
                 roomSlug: room.slug,
                 roomName: room.name,
                 categoryCode: room.categoryCode,
+                bedType: p.bedType || (room.bedType.includes("Twin") ? "Twin Bed" : "King Bed"),
                 ratePlanCode: plan.code,
                 ratePlanName: plan.name,
                 pricePerNight: plan.pricePerNight,
@@ -77,6 +78,7 @@ function CheckoutContent() {
     // Fallback to legacy single room params
     const roomSlug = searchParams.get("room") || "deluxe-room";
     const planCode = searchParams.get("plan") || "EP";
+    const bedTypeParam = searchParams.get("bedType") || "King Bed";
     const roomsCount = Math.max(1, parseInt(searchParams.get("rooms") || "1", 10));
     const room = ROOMS.find((r) => r.slug === roomSlug) || ROOMS[0];
     const plan = room.ratePlans.find((p) => p.code === planCode) || room.ratePlans[0];
@@ -86,6 +88,7 @@ function CheckoutContent() {
         roomSlug: room.slug,
         roomName: room.name,
         categoryCode: room.categoryCode,
+        bedType: bedTypeParam,
         ratePlanCode: plan.code,
         ratePlanName: plan.name,
         pricePerNight: plan.pricePerNight,
@@ -553,7 +556,7 @@ function CheckoutContent() {
                       >
                         <div className="space-y-0.5">
                           <span className="text-[9px] font-mono uppercase tracking-wider text-[#A27520] font-bold block">
-                            {item.quantity}&times; {item.categoryCode}
+                            {item.quantity}&times; {item.categoryCode} {item.bedType ? `• ${item.bedType}` : ""}
                           </span>
                           <h4 className="font-serif text-sm font-semibold text-[#1A1715] leading-snug">
                             {item.roomName}

@@ -29,9 +29,11 @@ import { calculateRoomGST } from "@/lib/gst";
 import { formatCurrencyINR, calculateNights, getTodayDate, getTomorrowDate } from "@/lib/formatters";
 import { AVAILABLE_PROMOS, validateAndApplyPromo, PromoCode } from "@/data/promos";
 import { saveStaySession, getStaySession } from "@/lib/session";
+import { getMaxRoomCapacity, getBedTypeOptions, PHYSICAL_ROOM_CAPACITIES } from "@/data/inventory";
 
 interface RoomSelectionState {
   planCode: string;
+  bedType: "KING" | "TWIN";
   quantity: number;
 }
 
@@ -61,14 +63,17 @@ function BookingContent() {
 
   const nights = Math.max(1, calculateNights(checkIn, checkOut));
 
-  // Multi-room selection map: { [slug]: { planCode: "EP" | "CP", quantity: number } }
+  // Multi-room selection map: { [slug]: { planCode: "EP" | "CP", bedType: "KING" | "TWIN", quantity: number } }
   const [roomSelections, setRoomSelections] = useState<Record<string, RoomSelectionState>>(() => {
     const initial: Record<string, RoomSelectionState> = {};
     ROOMS.forEach((r) => {
       const isTarget = selectedRoomSlug === r.slug || (!selectedRoomSlug && r.slug === "deluxe-room");
+      const defaultBedType: "KING" | "TWIN" = "KING";
+      const maxCap = getMaxRoomCapacity(r.slug, defaultBedType);
       initial[r.slug] = {
         planCode: "EP",
-        quantity: isTarget ? targetRoomsParam : 0,
+        bedType: defaultBedType,
+        quantity: isTarget ? Math.min(targetRoomsParam, maxCap) : 0,
       };
     });
     return initial;
@@ -133,11 +138,12 @@ function BookingContent() {
     setPromoMsg(null);
   };
 
-  // Quantity and plan modifiers
+  // Quantity and plan modifiers respecting exact physical inventory
   const handleQuantityChange = (slug: string, delta: number) => {
     setRoomSelections((prev) => {
-      const current = prev[slug] || { planCode: "EP", quantity: 0 };
-      const nextQty = Math.max(0, Math.min(6, current.quantity + delta));
+      const current = prev[slug] || { planCode: "EP", bedType: "KING", quantity: 0 };
+      const maxCapacity = getMaxRoomCapacity(slug, current.bedType);
+      const nextQty = Math.max(0, Math.min(maxCapacity, current.quantity + delta));
       return {
         ...prev,
         [slug]: { ...current, quantity: nextQty },
@@ -145,9 +151,21 @@ function BookingContent() {
     });
   };
 
+  const handleBedTypeChange = (slug: string, bedType: "KING" | "TWIN") => {
+    setRoomSelections((prev) => {
+      const current = prev[slug] || { planCode: "EP", bedType: "KING", quantity: 0 };
+      const maxCapacity = getMaxRoomCapacity(slug, bedType);
+      const nextQty = Math.min(current.quantity, maxCapacity);
+      return {
+        ...prev,
+        [slug]: { ...current, bedType, quantity: nextQty },
+      };
+    });
+  };
+
   const handlePlanChange = (slug: string, planCode: string) => {
     setRoomSelections((prev) => {
-      const current = prev[slug] || { planCode: "EP", quantity: 0 };
+      const current = prev[slug] || { planCode: "EP", bedType: "KING", quantity: 0 };
       return {
         ...prev,
         [slug]: { ...current, planCode },
@@ -155,7 +173,7 @@ function BookingContent() {
     });
   };
 
-  // Calculate live multi-room cart totals with Extra Pax (+500/night beyond 2 adults/room) and Free Children
+  // Calculate live multi-room cart totals with Extra Pax (+500/night beyond 2 adults/room)
   const cartSummary = useMemo(() => {
     let totalRoomsCount = 0;
     let grossBaseTariff = 0;
@@ -163,6 +181,7 @@ function BookingContent() {
       room: RoomCategory;
       planCode: string;
       planName: string;
+      bedType: string;
       pricePerNight: number;
       quantity: number;
       lineTotal: number;
@@ -179,6 +198,7 @@ function BookingContent() {
           room: r,
           planCode: plan.code,
           planName: plan.name,
+          bedType: sel.bedType === "KING" ? "King Bed" : "Twin Bed",
           pricePerNight: plan.pricePerNight,
           quantity: sel.quantity,
           lineTotal,
@@ -226,6 +246,7 @@ function BookingContent() {
     const roomsConfig = cartSummary.items.map((item) => ({
       slug: item.room.slug,
       plan: item.planCode,
+      bedType: item.bedType,
       quantity: item.quantity,
     }));
 
@@ -392,7 +413,7 @@ function BookingContent() {
               </div>
             </div>
 
-            {/* Instant Promo Badges (Horizontal Scroll on Mobile) */}
+            {/* Instant Promo Badges */}
             <div className="pt-2 border-t border-[#E6DED3]/60 flex items-center justify-between gap-2 overflow-x-auto no-scrollbar">
               <div className="flex items-center gap-1.5 shrink-0">
                 <span className="text-[9px] uppercase font-semibold text-[#787069] whitespace-nowrap">
@@ -438,10 +459,12 @@ function BookingContent() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 sm:space-y-8">
         <div className="space-y-6">
           {ROOMS.map((room) => {
-            const currentSelection = roomSelections[room.slug] || { planCode: "EP", quantity: 0 };
+            const currentSelection = roomSelections[room.slug] || { planCode: "EP", bedType: "KING", quantity: 0 };
             const currentPlan =
               room.ratePlans.find((p) => p.code === currentSelection.planCode) || room.ratePlans[0];
             const isSelected = currentSelection.quantity > 0;
+            const bedOptions = getBedTypeOptions(room.slug);
+            const maxAvailableForBed = getMaxRoomCapacity(room.slug, currentSelection.bedType);
 
             return (
               <div
@@ -469,12 +492,14 @@ function BookingContent() {
                     {isSelected && (
                       <div className="absolute bottom-3 left-3 bg-[#B62576] text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center space-x-1.5">
                         <Check className="w-3.5 h-3.5" />
-                        <span>{currentSelection.quantity} {currentSelection.quantity === 1 ? "Room" : "Rooms"} Selected</span>
+                        <span>
+                          {currentSelection.quantity} {currentSelection.quantity === 1 ? "Room" : "Rooms"} ({currentSelection.bedType === "KING" ? "King" : "Twin"})
+                        </span>
                       </div>
                     )}
                   </div>
 
-                  {/* Right Column: Details, Plans & Quantity Stepper (7 Cols) */}
+                  {/* Right Column: Details, Bed Type, Plans & Quantity Stepper (7 Cols) */}
                   <div className="lg:col-span-7 p-4 sm:p-6 lg:p-8 flex flex-col justify-between space-y-4 sm:space-y-6">
                     <div className="space-y-3 sm:space-y-4">
                       {/* Title */}
@@ -490,11 +515,6 @@ function BookingContent() {
                       {/* Specs Row */}
                       <div className="flex flex-wrap items-center gap-3 text-[11px] sm:text-xs text-[#4A443F] py-1.5 border-t border-b border-[#E6DED3]/60">
                         <span className="flex items-center">
-                          <Bed className="w-3.5 h-3.5 text-[#A27520] mr-1" />
-                          {room.bedType}
-                        </span>
-                        <span>•</span>
-                        <span className="flex items-center">
                           <Users className="w-3.5 h-3.5 text-[#A27520] mr-1" />
                           Max {room.capacity.maxGuests} Guests
                         </span>
@@ -503,11 +523,59 @@ function BookingContent() {
                           <ShieldCheck className="w-3.5 h-3.5 text-[#A27520] mr-1" />
                           {room.acType}
                         </span>
+                        <span>•</span>
+                        <span className="text-[#A27520] font-medium">
+                          {maxAvailableForBed} Total in Hotel
+                        </span>
+                      </div>
+
+                      {/* Bed Configuration Selector */}
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] uppercase font-semibold tracking-wider text-[#A27520]">
+                            Select Bed Type:
+                          </span>
+                          <span className="text-[10px] text-[#787069]">
+                            {maxAvailableForBed} Physical Rooms Available
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-2 sm:grid-cols-2 gap-2">
+                          {bedOptions.map((b) => {
+                            const isBedActive = currentSelection.bedType === b.type;
+                            return (
+                              <button
+                                key={b.type}
+                                type="button"
+                                onClick={() => handleBedTypeChange(room.slug, b.type)}
+                                className={`p-2.5 rounded-xl text-left border-2 transition-all flex items-center justify-between ${
+                                  isBedActive
+                                    ? "border-[#B62576] bg-[#FFF8FA] text-[#1A1715] shadow-sm"
+                                    : "border-[#E6DED3] bg-[#FAF7F2] text-[#4A443F] hover:border-[#A27520]"
+                                }`}
+                              >
+                                <div className="flex items-center space-x-2">
+                                  <Bed className={`w-4 h-4 ${isBedActive ? "text-[#B62576]" : "text-[#A27520]"}`} />
+                                  <div>
+                                    <span className="text-xs font-bold block">{b.label}</span>
+                                    <span className="text-[9px] text-[#787069] block">
+                                      Max {b.maxCapacity} rooms
+                                    </span>
+                                  </div>
+                                </div>
+                                {isBedActive && (
+                                  <span className="w-3.5 h-3.5 rounded-full bg-[#B62576] text-white flex items-center justify-center text-[9px] shrink-0">
+                                    ✓
+                                  </span>
+                                )}
+                              </button>
+                            );
+                          })}
+                        </div>
                       </div>
 
                       {/* Meal Plan Options */}
                       <div className="space-y-2">
-                        <span className="text-[9px] sm:text-[10px] uppercase font-semibold tracking-wider text-[#A27520] block">
+                        <span className="text-[10px] uppercase font-semibold tracking-wider text-[#A27520] block">
                           Select Rate / Meal Plan:
                         </span>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -552,11 +620,11 @@ function BookingContent() {
                       </div>
                     </div>
 
-                    {/* Room Quantity Controller */}
+                    {/* Room Quantity Controller with Hard Inventory Limits */}
                     <div className="pt-3 border-t border-[#E6DED3] flex items-center justify-between gap-3">
                       <div>
-                        <span className="text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold text-[#787069] block">
-                          Quantity:
+                        <span className="text-[10px] uppercase tracking-wider font-semibold text-[#787069] block">
+                          Quantity (Max {maxAvailableForBed}):
                         </span>
                         <div className="flex items-baseline space-x-1.5">
                           <span className="font-serif text-lg sm:text-xl font-bold text-[#1A1715]">
@@ -599,11 +667,11 @@ function BookingContent() {
                             <button
                               type="button"
                               onClick={() => handleQuantityChange(room.slug, 1)}
-                              disabled={currentSelection.quantity >= 6}
-                              className="w-7 h-7 rounded-full bg-[#B62576] hover:bg-[#9A1D62] text-white flex items-center justify-center font-bold shadow-sm transition-colors disabled:opacity-50"
-                              title="Add more rooms"
+                              disabled={currentSelection.quantity >= maxAvailableForBed}
+                              className="w-7 h-7 rounded-full bg-[#B62576] hover:bg-[#9A1D62] text-white flex items-center justify-center font-bold shadow-sm transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                              title={currentSelection.quantity >= maxAvailableForBed ? `Maximum ${maxAvailableForBed} rooms available` : "Add more rooms"}
                             >
-                              <Plus className="w-3.5 h-3.5" />
+                              <Plus className="w-3 h-3" />
                             </button>
                           </div>
                         )}
@@ -640,7 +708,7 @@ function BookingContent() {
               <div className="flex flex-wrap items-center gap-x-2 text-xs text-[#C4B9A9]">
                 {cartSummary.items.map((item, idx) => (
                   <span key={idx}>
-                    <strong className="text-white">{item.quantity}&times;</strong> {item.room.name} ({item.planCode})
+                    <strong className="text-white">{item.quantity}&times;</strong> {item.room.name} ({item.bedType}, {item.planCode})
                     {idx < cartSummary.items.length - 1 ? "," : ""}
                   </span>
                 ))}

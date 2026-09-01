@@ -6,6 +6,7 @@ export interface BookedRoomItem {
   roomSlug: string;
   roomName: string;
   categoryCode: string;
+  bedType?: string; // e.g. "King Bed" or "Twin Bed"
   ratePlanCode: string;
   ratePlanName: string;
   pricePerNight: number;
