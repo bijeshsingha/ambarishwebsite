@@ -21,12 +21,14 @@ import {
   Check,
   ShoppingBag,
   Trash2,
+  Baby,
 } from "lucide-react";
 import { ROOMS, RoomCategory } from "@/data/rooms";
 import { HOTEL_INFO } from "@/data/hotel-info";
 import { calculateRoomGST } from "@/lib/gst";
 import { formatCurrencyINR, calculateNights, getTodayDate, getTomorrowDate } from "@/lib/formatters";
 import { AVAILABLE_PROMOS, validateAndApplyPromo, PromoCode } from "@/data/promos";
+import { saveStaySession, getStaySession } from "@/lib/session";
 
 interface RoomSelectionState {
   planCode: string;
@@ -37,11 +39,24 @@ function BookingContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [checkIn, setCheckIn] = useState(searchParams.get("checkIn") || getTodayDate());
-  const [checkOut, setCheckOut] = useState(searchParams.get("checkOut") || getTomorrowDate());
-  const [adults, setAdults] = useState(searchParams.get("adults") || "2");
+  // Load saved session preferences if query params are not explicitly provided
+  const savedStay = typeof window !== "undefined" ? getStaySession() : null;
+
+  const [checkIn, setCheckIn] = useState(
+    searchParams.get("checkIn") || savedStay?.checkIn || getTodayDate()
+  );
+  const [checkOut, setCheckOut] = useState(
+    searchParams.get("checkOut") || savedStay?.checkOut || getTomorrowDate()
+  );
+  const [adults, setAdults] = useState(
+    searchParams.get("adults") || (savedStay?.adults ? String(savedStay.adults) : "2")
+  );
+  const [children, setChildren] = useState(
+    searchParams.get("children") || (savedStay?.children !== undefined ? String(savedStay.children) : "0")
+  );
+
   const targetRoomsParam = Math.max(1, parseInt(searchParams.get("rooms") || "1", 10));
-  const initialPromo = searchParams.get("promo") || "";
+  const initialPromo = searchParams.get("promo") || savedStay?.promoCode || "";
   const selectedRoomSlug = searchParams.get("room");
 
   const nights = Math.max(1, calculateNights(checkIn, checkOut));
@@ -77,6 +92,17 @@ function BookingContent() {
       }
     }
   }, [initialPromo]);
+
+  // Persist stay parameters in session cookies
+  useEffect(() => {
+    saveStaySession({
+      checkIn,
+      checkOut,
+      adults: parseInt(adults, 10) || 2,
+      children: parseInt(children, 10) || 0,
+      promoCode: appliedPromo?.code || promoInput || undefined,
+    });
+  }, [checkIn, checkOut, adults, children, appliedPromo, promoInput]);
 
   const handleApplyPromo = (codeToApply?: string) => {
     const code = (codeToApply || promoInput).trim().toUpperCase();
@@ -207,6 +233,7 @@ function BookingContent() {
       checkIn,
       checkOut,
       adults,
+      children,
       rooms: String(cartSummary.totalRoomsCount),
       rooms_data: JSON.stringify(roomsConfig),
       ...(appliedPromo ? { promo: appliedPromo.code } : {}),
@@ -214,6 +241,8 @@ function BookingContent() {
 
     router.push(`/checkout?${query.toString()}`);
   };
+
+  const parsedChildren = parseInt(children, 10) || 0;
 
   return (
     <div className="bg-[#FAF7F2] text-[#1A1715] min-h-screen pb-32 sm:pb-36">
@@ -237,14 +266,17 @@ function BookingContent() {
                 <strong>{checkIn}</strong> &rarr; <strong>{checkOut}</strong> ({nights}N)
               </span>
               <span className="text-black/20">•</span>
-              <span className="font-medium text-[#1A1715]">{adults} Guests</span>
+              <span className="font-medium text-[#1A1715]">
+                {adults} {parseInt(adults, 10) === 1 ? "Adult" : "Adults"}
+                {parsedChildren > 0 ? `, ${parsedChildren} ${parsedChildren === 1 ? "Child" : "Children"} (Free)` : ""}
+              </span>
             </div>
           </div>
 
-          {/* Interactive Date, Guest & Promo Card */}
+          {/* Interactive Date, Adult, Child & Promo Card */}
           <div className="bg-[#FFFFFF] p-3.5 sm:p-5 rounded-2xl border border-[#E6DED3] shadow-sm space-y-3">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 items-center">
-              {/* Check-In */}
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3 items-center">
+              {/* 1. Check-In */}
               <div className="space-y-1">
                 <label className="text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold text-[#A27520]">
                   Check-In
@@ -265,7 +297,7 @@ function BookingContent() {
                 />
               </div>
 
-              {/* Check-Out */}
+              {/* 2. Check-Out */}
               <div className="space-y-1">
                 <label className="text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold text-[#A27520]">
                   Check-Out
@@ -279,10 +311,11 @@ function BookingContent() {
                 />
               </div>
 
-              {/* Guests Count Selector */}
+              {/* 3. Adults (18+ Yrs) */}
               <div className="space-y-1">
-                <label className="text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold text-[#A27520]">
-                  Total Guests
+                <label className="text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold text-[#A27520] flex items-center justify-between">
+                  <span>Adults</span>
+                  <span className="text-[9px] text-[#787069] lowercase font-normal">(18+ yrs)</span>
                 </label>
                 <div className="relative">
                   <select
@@ -290,9 +323,9 @@ function BookingContent() {
                     onChange={(e) => setAdults(e.target.value)}
                     className="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576] appearance-none cursor-pointer pr-8"
                   >
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15].map((count) => (
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12].map((count) => (
                       <option key={count} value={String(count)}>
-                        {count} {count === 1 ? "Guest" : "Guests"}
+                        {count} {count === 1 ? "Adult" : "Adults"}
                       </option>
                     ))}
                   </select>
@@ -302,7 +335,31 @@ function BookingContent() {
                 </div>
               </div>
 
-              {/* Promo Code Input */}
+              {/* 4. Children (0-17 Yrs - Free) */}
+              <div className="space-y-1">
+                <label className="text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold text-[#A27520] flex items-center justify-between">
+                  <span>Children</span>
+                  <span className="text-[9px] text-emerald-700 font-bold uppercase">Free</span>
+                </label>
+                <div className="relative">
+                  <select
+                    value={children}
+                    onChange={(e) => setChildren(e.target.value)}
+                    className="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576] appearance-none cursor-pointer pr-8"
+                  >
+                    {[0, 1, 2, 3, 4, 5].map((count) => (
+                      <option key={count} value={String(count)}>
+                        {count === 0 ? "0 Children" : `${count} ${count === 1 ? "Child" : "Children"} (Free)`}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[#787069]">
+                    <Baby className="w-3.5 h-3.5" />
+                  </div>
+                </div>
+              </div>
+
+              {/* 5. Promo Code Input */}
               <div className="col-span-2 md:col-span-1 space-y-1">
                 <label className="text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold text-[#A27520]">
                   Promo Code
@@ -548,7 +605,7 @@ function BookingContent() {
                               className="w-7 h-7 rounded-full bg-[#B62576] hover:bg-[#9A1D62] text-white flex items-center justify-center font-bold shadow-sm transition-colors disabled:opacity-50"
                               title="Add more rooms"
                             >
-                              <Plus className="w-3 h-3" />
+                              <Plus className="w-3.5 h-3.5" />
                             </button>
                           </div>
                         )}
@@ -573,7 +630,8 @@ function BookingContent() {
                   {cartSummary.totalRoomsCount} {cartSummary.totalRoomsCount === 1 ? "Room Selected" : "Rooms Selected"}
                 </span>
                 <span className="text-xs text-[#F5EBDD] font-medium">
-                  &bull; {nights} {nights === 1 ? "Night" : "Nights"} ({checkIn} &rarr; {checkOut}) &bull; {adults} Guests
+                  &bull; {nights} {nights === 1 ? "Night" : "Nights"} ({checkIn} &rarr; {checkOut}) &bull; {adults} {parseInt(adults, 10) === 1 ? "Adult" : "Adults"}
+                  {parsedChildren > 0 ? `, ${parsedChildren} ${parsedChildren === 1 ? "Child" : "Children"}` : ""}
                 </span>
                 {cartSummary.extraPaxCount > 0 && (
                   <span className="px-2 py-0.5 rounded-md bg-[#B4872F] text-white text-[10px] font-bold">

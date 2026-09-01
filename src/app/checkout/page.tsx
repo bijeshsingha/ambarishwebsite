@@ -31,6 +31,7 @@ import { calculateRoomGST } from "@/lib/gst";
 import { formatCurrencyINR, calculateNights, getTodayDate, getTomorrowDate } from "@/lib/formatters";
 import { AVAILABLE_PROMOS, validateAndApplyPromo, PromoCode } from "@/data/promos";
 import { BookedRoomItem } from "@/lib/hotel-os-client";
+import { saveGuestSession, getGuestSession } from "@/lib/session";
 
 function CheckoutContent() {
   const router = useRouter();
@@ -168,7 +169,7 @@ function CheckoutContent() {
   const taxAmount = Math.round(netBaseAmount * 0.05); // 5% GST
   const totalAmount = netBaseAmount + taxAmount;
 
-  // Form state
+  // Form state with session cookie prefill
   const [guestName, setGuestName] = useState("");
   const [guestEmail, setGuestEmail] = useState("");
   const [guestPhone, setGuestPhone] = useState("");
@@ -181,6 +182,35 @@ function CheckoutContent() {
   const [paymentMethod, setPaymentMethod] = useState<"ONLINE" | "PAY_AT_HOTEL">("ONLINE");
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+
+  // Load saved guest profile on mount
+  useEffect(() => {
+    const saved = getGuestSession();
+    if (saved) {
+      if (saved.guestName) setGuestName(saved.guestName);
+      if (saved.guestEmail) setGuestEmail(saved.guestEmail);
+      if (saved.guestPhone) setGuestPhone(saved.guestPhone);
+      if (saved.guestCity) setGuestCity(saved.guestCity);
+      if (saved.companyName) {
+        setCompanyName(saved.companyName);
+        setWantsGstInvoice(true);
+      }
+      if (saved.gstin) {
+        setGuestGstin(saved.gstin);
+        setWantsGstInvoice(true);
+      }
+      if (saved.specialRequests) setSpecialRequests(saved.specialRequests);
+    }
+  }, []);
+
+  // Sync guest inputs to session cookie
+  const updateGuestName = (val: string) => { setGuestName(val); saveGuestSession({ guestName: val }); };
+  const updateGuestEmail = (val: string) => { setGuestEmail(val); saveGuestSession({ guestEmail: val }); };
+  const updateGuestPhone = (val: string) => { setGuestPhone(val); saveGuestSession({ guestPhone: val }); };
+  const updateGuestCity = (val: string) => { setGuestCity(val); saveGuestSession({ guestCity: val }); };
+  const updateCompanyName = (val: string) => { setCompanyName(val); saveGuestSession({ companyName: val }); };
+  const updateGuestGstin = (val: string) => { setGuestGstin(val); saveGuestSession({ gstin: val }); };
+  const updateSpecialRequests = (val: string) => { setSpecialRequests(val); saveGuestSession({ specialRequests: val }); };
 
   const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -295,7 +325,7 @@ function CheckoutContent() {
                     required
                     placeholder="e.g. Bijesh Sharma"
                     value={guestName}
-                    onChange={(e) => setGuestName(e.target.value)}
+                    onChange={(e) => updateGuestName(e.target.value)}
                     className="w-full p-3 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576]"
                   />
                 </div>
@@ -309,7 +339,7 @@ function CheckoutContent() {
                     required
                     placeholder="e.g. bijesh@gmail.com"
                     value={guestEmail}
-                    onChange={(e) => setGuestEmail(e.target.value)}
+                    onChange={(e) => updateGuestEmail(e.target.value)}
                     className="w-full p-3 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576]"
                   />
                 </div>
@@ -323,7 +353,7 @@ function CheckoutContent() {
                     required
                     placeholder="e.g. 9876543210"
                     value={guestPhone}
-                    onChange={(e) => setGuestPhone(e.target.value)}
+                    onChange={(e) => updateGuestPhone(e.target.value)}
                     className="w-full p-3 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576]"
                   />
                 </div>
@@ -336,7 +366,7 @@ function CheckoutContent() {
                     type="text"
                     placeholder="e.g. Guwahati / Kolkata / Delhi"
                     value={guestCity}
-                    onChange={(e) => setGuestCity(e.target.value)}
+                    onChange={(e) => updateGuestCity(e.target.value)}
                     className="w-full p-3 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576]"
                   />
                 </div>
@@ -366,7 +396,7 @@ function CheckoutContent() {
                         type="text"
                         placeholder="Company name"
                         value={companyName}
-                        onChange={(e) => setCompanyName(e.target.value)}
+                        onChange={(e) => updateCompanyName(e.target.value)}
                         className="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715]"
                       />
                     </div>
@@ -378,7 +408,7 @@ function CheckoutContent() {
                         type="text"
                         placeholder="e.g. 18AAAAA0000A1Z5"
                         value={guestGstin}
-                        onChange={(e) => setGuestGstin(e.target.value.toUpperCase())}
+                        onChange={(e) => updateGuestGstin(e.target.value.toUpperCase())}
                         className="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] uppercase"
                       />
                     </div>
@@ -396,7 +426,7 @@ function CheckoutContent() {
                 rows={2}
                 placeholder="E.g., adjacent rooms requested, early check-in preference, extra towels..."
                 value={specialRequests}
-                onChange={(e) => setSpecialRequests(e.target.value)}
+                onChange={(e) => updateSpecialRequests(e.target.value)}
                 className="w-full p-3 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs text-[#1A1715] focus:outline-none focus:border-[#B62576]"
               />
             </div>
@@ -501,7 +531,7 @@ function CheckoutContent() {
                   Reservation Summary
                 </h3>
                 <Link
-                  href={`/booking?checkIn=${checkIn}&checkOut=${checkOut}&rooms=${totalRoomsCount}&adults=${adults}`}
+                  href={`/booking?checkIn=${checkIn}&checkOut=${checkOut}&rooms=${totalRoomsCount}&adults=${adults}&children=${children}`}
                   className="text-[11px] font-semibold text-[#B62576] hover:underline"
                 >
                   Edit Rooms &rarr;
@@ -561,9 +591,16 @@ function CheckoutContent() {
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#787069]">Total Inventory:</span>
+                  <span className="text-[#787069]">Rooms:</span>
                   <span className="font-semibold text-[#1A1715]">
-                    {totalRoomsCount} {totalRoomsCount === 1 ? "Room" : "Rooms"} • {adults} Guests Total
+                    {totalRoomsCount} {totalRoomsCount === 1 ? "Room" : "Rooms"}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-[#787069]">Guests:</span>
+                  <span className="font-semibold text-[#1A1715]">
+                    {adults} {adults === 1 ? "Adult" : "Adults"}
+                    {children > 0 ? `, ${children} ${children === 1 ? "Child" : "Children"} (Free)` : ""}
                   </span>
                 </div>
               </div>
