@@ -225,7 +225,7 @@ Submitted when a corporate planner or event host requests a banquet quote.
 {
   "success": true,
   "delivered": true,
-  "recipient": "hotelambarish@gmail.com",
+  "recipient": "reservation.ambarish@gmail.com",
   "message": "Enquiry successfully logged and dispatched."
 }
 ```
@@ -241,10 +241,10 @@ PMS_WEBHOOK_URL=http://localhost:3000/api/v1/reservations
 PMS_API_SECRET=your_secret_token_here
 
 # Automated Management & Guest Email Alerts
-NOTIFICATION_EMAIL=hotelambarish@gmail.com
+NOTIFICATION_EMAIL=reservation.ambarish@gmail.com
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
-SMTP_USER=hotelambarish@gmail.com
+SMTP_USER=reservation.ambarish@gmail.com
 SMTP_PASS=your_gmail_app_password
 ```
 

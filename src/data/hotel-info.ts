@@ -39,7 +39,7 @@ export const HOTEL_INFO: HotelInfo = {
   phone: "088220 41211",
   phoneRaw: "+918822041211",
   altPhone: "+91 361 273 4500",
-  email: "reservations@hotelambarish.com",
+  email: "reservation.ambarish@gmail.com",
   address: {
     street: "Md Shah Road, Paltan Bazaar",
     area: "Paltan Bazaar",
