@@ -241,11 +241,11 @@ function BookingContent() {
             </div>
           </div>
 
-          {/* Interactive Date & Promo Card (Mobile Responsive Grid) */}
-          <div className="bg-[#FFFFFF] p-3.5 sm:p-4 rounded-2xl border border-[#E6DED3] shadow-sm space-y-3">
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 items-center">
+          {/* Interactive Date, Guest & Promo Card */}
+          <div className="bg-[#FFFFFF] p-3.5 sm:p-5 rounded-2xl border border-[#E6DED3] shadow-sm space-y-3">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 items-center">
               {/* Check-In */}
-              <div className="space-y-0.5">
+              <div className="space-y-1">
                 <label className="text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold text-[#A27520]">
                   Check-In
                 </label>
@@ -261,12 +261,12 @@ function BookingContent() {
                       setCheckOut(next.toISOString().split("T")[0]);
                     }
                   }}
-                  className="w-full p-2 sm:p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576]"
+                  className="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576]"
                 />
               </div>
 
               {/* Check-Out */}
-              <div className="space-y-0.5">
+              <div className="space-y-1">
                 <label className="text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold text-[#A27520]">
                   Check-Out
                 </label>
@@ -275,12 +275,35 @@ function BookingContent() {
                   min={checkIn || getTodayDate()}
                   value={checkOut}
                   onChange={(e) => setCheckOut(e.target.value)}
-                  className="w-full p-2 sm:p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576]"
+                  className="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576]"
                 />
               </div>
 
+              {/* Guests Count Selector */}
+              <div className="space-y-1">
+                <label className="text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold text-[#A27520]">
+                  Total Guests
+                </label>
+                <div className="relative">
+                  <select
+                    value={adults}
+                    onChange={(e) => setAdults(e.target.value)}
+                    className="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576] appearance-none cursor-pointer pr-8"
+                  >
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15].map((count) => (
+                      <option key={count} value={String(count)}>
+                        {count} {count === 1 ? "Guest" : "Guests"}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[#787069]">
+                    <Users className="w-3.5 h-3.5" />
+                  </div>
+                </div>
+              </div>
+
               {/* Promo Code Input */}
-              <div className="col-span-2 sm:col-span-1 space-y-0.5">
+              <div className="col-span-2 md:col-span-1 space-y-1">
                 <label className="text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold text-[#A27520]">
                   Promo Code
                 </label>
@@ -290,7 +313,7 @@ function BookingContent() {
                     placeholder="e.g. DIRECT10"
                     value={promoInput}
                     onChange={(e) => setPromoInput(e.target.value.toUpperCase())}
-                    className="w-full p-2 sm:p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-bold uppercase text-[#1A1715] placeholder:font-normal placeholder:text-black/35 focus:outline-none focus:border-[#B62576]"
+                    className="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-bold uppercase text-[#1A1715] placeholder:font-normal placeholder:text-black/35 focus:outline-none focus:border-[#B62576]"
                   />
                   {appliedPromo ? (
                     <button
