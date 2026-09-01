@@ -166,10 +166,10 @@ export default function BookingBar({
               </div>
             </div>
 
-            {/* 5. Children (0 to 4 - Free) */}
+            {/* 5. Children */}
             <div className="flex-1 min-w-[100px] px-3 py-1.5 flex flex-col justify-center">
               <label className="flex items-center text-[10px] font-mono font-bold tracking-[0.16em] uppercase text-[#B4872F] mb-0.5">
-                <Baby className="w-3 h-3 mr-1 text-emerald-700 shrink-0" />
+                <Baby className="w-3 h-3 mr-1 text-[#B4872F] shrink-0" />
                 Children
               </label>
               <div className="relative flex items-center">
@@ -179,10 +179,10 @@ export default function BookingBar({
                   className="w-full bg-transparent text-xs xl:text-sm text-[#0C0B0B] font-semibold focus:outline-none cursor-pointer pr-4 appearance-none"
                 >
                   <option value="0">0 Children</option>
-                  <option value="1">1 Child (Free)</option>
-                  <option value="2">2 Children (Free)</option>
-                  <option value="3">3 Children (Free)</option>
-                  <option value="4">4 Children (Free)</option>
+                  <option value="1">1 Child</option>
+                  <option value="2">2 Children</option>
+                  <option value="3">3 Children</option>
+                  <option value="4">4 Children</option>
                 </select>
                 <ChevronDown className="w-3.5 h-3.5 text-[#0C0B0B]/50 absolute right-0 pointer-events-none" />
               </div>
@@ -299,7 +299,7 @@ export default function BookingBar({
               </div>
 
               <div className="bg-[#FAF7F2] p-1.5 rounded-xl border border-[#E6DED3]">
-                <label className="flex items-center text-[8px] font-mono font-bold tracking-wider uppercase text-emerald-700 mb-0.5">
+                <label className="flex items-center text-[8px] font-mono font-bold tracking-wider uppercase text-[#B4872F] mb-0.5">
                   Children
                 </label>
                 <div className="relative flex items-center">
@@ -309,9 +309,9 @@ export default function BookingBar({
                     className="w-full bg-transparent text-xs text-[#0C0B0B] font-semibold focus:outline-none cursor-pointer pr-2 appearance-none"
                   >
                     <option value="0">0</option>
-                    <option value="1">1 (Free)</option>
-                    <option value="2">2 (Free)</option>
-                    <option value="3">3 (Free)</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
                   </select>
                   <ChevronDown className="w-2.5 h-2.5 text-[#0C0B0B]/50 absolute right-0 pointer-events-none" />
                 </div>

@@ -268,7 +268,7 @@ function BookingContent() {
               <span className="text-black/20">•</span>
               <span className="font-medium text-[#1A1715]">
                 {adults} {parseInt(adults, 10) === 1 ? "Adult" : "Adults"}
-                {parsedChildren > 0 ? `, ${parsedChildren} ${parsedChildren === 1 ? "Child" : "Children"} (Free)` : ""}
+                {parsedChildren > 0 ? `, ${parsedChildren} ${parsedChildren === 1 ? "Child" : "Children"}` : ""}
               </span>
             </div>
           </div>
@@ -278,7 +278,7 @@ function BookingContent() {
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3 items-center">
               {/* 1. Check-In */}
               <div className="space-y-1">
-                <label className="text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold text-[#A27520]">
+                <label className="text-[10px] uppercase tracking-wider font-semibold text-[#A27520] block">
                   Check-In
                 </label>
                 <input
@@ -299,7 +299,7 @@ function BookingContent() {
 
               {/* 2. Check-Out */}
               <div className="space-y-1">
-                <label className="text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold text-[#A27520]">
+                <label className="text-[10px] uppercase tracking-wider font-semibold text-[#A27520] block">
                   Check-Out
                 </label>
                 <input
@@ -311,11 +311,10 @@ function BookingContent() {
                 />
               </div>
 
-              {/* 3. Adults (18+ Yrs) */}
+              {/* 3. Adults */}
               <div className="space-y-1">
-                <label className="text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold text-[#A27520] flex items-center justify-between">
-                  <span>Adults</span>
-                  <span className="text-[9px] text-[#787069] lowercase font-normal">(18+ yrs)</span>
+                <label className="text-[10px] uppercase tracking-wider font-semibold text-[#A27520] block">
+                  Adults
                 </label>
                 <div className="relative">
                   <select
@@ -335,11 +334,10 @@ function BookingContent() {
                 </div>
               </div>
 
-              {/* 4. Children (0-17 Yrs - Free) */}
+              {/* 4. Children */}
               <div className="space-y-1">
-                <label className="text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold text-[#A27520] flex items-center justify-between">
-                  <span>Children</span>
-                  <span className="text-[9px] text-emerald-700 font-bold uppercase">Free</span>
+                <label className="text-[10px] uppercase tracking-wider font-semibold text-[#A27520] block">
+                  Children
                 </label>
                 <div className="relative">
                   <select
@@ -349,7 +347,7 @@ function BookingContent() {
                   >
                     {[0, 1, 2, 3, 4, 5].map((count) => (
                       <option key={count} value={String(count)}>
-                        {count === 0 ? "0 Children" : `${count} ${count === 1 ? "Child" : "Children"} (Free)`}
+                        {count === 0 ? "0 Children" : `${count} ${count === 1 ? "Child" : "Children"}`}
                       </option>
                     ))}
                   </select>
@@ -361,7 +359,7 @@ function BookingContent() {
 
               {/* 5. Promo Code Input */}
               <div className="col-span-2 md:col-span-1 space-y-1">
-                <label className="text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold text-[#A27520]">
+                <label className="text-[10px] uppercase tracking-wider font-semibold text-[#A27520] block">
                   Promo Code
                 </label>
                 <div className="flex space-x-1.5">
