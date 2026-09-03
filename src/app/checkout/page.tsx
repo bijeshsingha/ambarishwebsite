@@ -4,6 +4,7 @@ import React, { useState, Suspense, useEffect, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import Script from "next/script";
 import {
   Lock,
   ArrowUpRight,
@@ -220,15 +221,7 @@ function CheckoutContent() {
   const updateGuestGstin = (val: string) => { setGuestGstin(val); saveGuestSession({ gstin: val }); };
   const updateSpecialRequests = (val: string) => { setSpecialRequests(val); saveGuestSession({ specialRequests: val }); };
 
-  const handleBookingSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!agreeTerms) {
-      setErrorMsg("Please accept the booking and cancellation policy to proceed.");
-      return;
-    }
-    setErrorMsg("");
-    setIsProcessing(true);
-
+  const createFinalReservation = async (verifiedPaymentId: string) => {
     try {
       const primaryRoom = bookedRoomsList[0];
       const res = await fetch("/api/v1/reservations", {
@@ -252,14 +245,16 @@ function CheckoutContent() {
           guestPhone,
           guestCity,
           guestState,
-          guestGstin: (wantsGstInvoice || isB2bBooking) ? guestGstin : undefined,
-          b2b: isB2bBooking ? {
-            accountType: "CORPORATE",
-            companyName: companyName,
-            corporateEmail: corporateEmail || guestEmail,
-            poNumber: poNumber || undefined,
-            billingInstruction: billingInstruction
-          } : undefined,
+          guestGstin: wantsGstInvoice || isB2bBooking ? guestGstin : undefined,
+          b2b: isB2bBooking
+            ? {
+                accountType: "CORPORATE",
+                companyName: companyName,
+                corporateEmail: corporateEmail || guestEmail,
+                poNumber: poNumber || undefined,
+                billingInstruction: billingInstruction,
+              }
+            : undefined,
           specialRequests,
           promoCode: appliedPromo?.code || undefined,
           discountAmount,
@@ -267,10 +262,7 @@ function CheckoutContent() {
           taxAmount,
           totalAmount,
           paymentMethod: paymentMethod === "ONLINE" ? "RAZORPAY" : "PAY_AT_HOTEL",
-          paymentId:
-            paymentMethod === "ONLINE"
-              ? `rzp_pay_${Date.now()}`
-              : "PAY_AT_HOTEL",
+          paymentId: verifiedPaymentId,
         }),
       });
 
@@ -278,7 +270,10 @@ function CheckoutContent() {
       if (data.success && data.reservation) {
         if (typeof window !== "undefined") {
           try {
-            sessionStorage.setItem(`hag_res_${data.reservation.bookingReference}`, JSON.stringify(data.reservation));
+            sessionStorage.setItem(
+              `hag_res_${data.reservation.bookingReference}`,
+              JSON.stringify(data.reservation)
+            );
           } catch {
             // Ignore sessionStorage quota errors
           }
@@ -286,16 +281,127 @@ function CheckoutContent() {
         router.push(`/booking/confirmation/${data.reservation.bookingReference}`);
       } else {
         setErrorMsg(data.error || "Reservation failed. Please try again or call our front desk.");
+        setIsProcessing(false);
       }
     } catch (err: any) {
       setErrorMsg(err.message || "A network error occurred. Please try again.");
-    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleBookingSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!agreeTerms) {
+      setErrorMsg("Please accept the booking and cancellation policy to proceed.");
+      return;
+    }
+    setErrorMsg("");
+    setIsProcessing(true);
+
+    try {
+      if (paymentMethod === "ONLINE") {
+        // 1. Create official Razorpay Order on server
+        const orderRes = await fetch("/api/v1/payment/order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: totalAmount,
+            currency: "INR",
+            receipt: `rcpt_${Date.now()}`,
+            notes: {
+              hotel: "Hotel Ambarish Grand Residency",
+              guestName,
+              guestPhone,
+              checkIn,
+              checkOut,
+            },
+          }),
+        });
+
+        const orderData = await orderRes.json();
+        if (!orderRes.ok || !orderData.orderId) {
+          throw new Error(orderData.error || "Failed to initialize payment gateway. Please try again.");
+        }
+
+        if (typeof window === "undefined" || !(window as any).Razorpay) {
+          throw new Error("Payment gateway is still loading. Please wait a few seconds and try again.");
+        }
+
+        const primaryRoom = bookedRoomsList[0];
+
+        // 2. Launch Razorpay Checkout Modal
+        const options = {
+          key: orderData.keyId,
+          amount: orderData.amount,
+          currency: orderData.currency || "INR",
+          name: "Hotel Ambarish Grand Residency",
+          description: `${nights} Night(s) Stay • ${primaryRoom.roomName}`,
+          image: "/images/logo.png",
+          order_id: orderData.orderId,
+          prefill: {
+            name: guestName,
+            email: guestEmail,
+            contact: guestPhone,
+          },
+          notes: {
+            hotel: "Hotel Ambarish Grand Residency",
+            city: guestCity,
+          },
+          theme: {
+            color: "#B62576",
+          },
+          modal: {
+            ondismiss: () => {
+              setIsProcessing(false);
+            },
+          },
+          handler: async (response: {
+            razorpay_payment_id: string;
+            razorpay_order_id: string;
+            razorpay_signature: string;
+          }) => {
+            try {
+              // 3. Cryptographically verify signature
+              const verifyRes = await fetch("/api/v1/payment/verify", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(response),
+              });
+              const verifyData = await verifyRes.json();
+              if (!verifyData.success || !verifyData.verified) {
+                throw new Error(verifyData.error || "Payment verification failed.");
+              }
+
+              // 4. Create confirmed reservation
+              await createFinalReservation(response.razorpay_payment_id);
+            } catch (vErr: any) {
+              setErrorMsg(vErr.message || "Payment verification failed. Please contact our front desk.");
+              setIsProcessing(false);
+            }
+          },
+        };
+
+        const rzp = new (window as any).Razorpay(options);
+        rzp.on("payment.failed", (failResp: any) => {
+          setErrorMsg(failResp.error?.description || "Payment was cancelled or failed. Please try again.");
+          setIsProcessing(false);
+        });
+        rzp.open();
+        return;
+      }
+
+      // If Pay at Hotel
+      await createFinalReservation("PAY_AT_HOTEL");
+    } catch (err: any) {
+      setErrorMsg(err.message || "A network error occurred. Please try again.");
       setIsProcessing(false);
     }
   };
 
   return (
     <div className="bg-[#FAF7F2] text-[#1A1715] min-h-screen pb-24">
+      {/* Official Razorpay Checkout Script */}
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
       {/* Header */}
       <section className="bg-[#F5EFEB] hairline-b py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
