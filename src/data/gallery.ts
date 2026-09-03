@@ -1,7 +1,7 @@
 export interface GalleryImage {
   id: string;
   title: string;
-  category: "all" | "rooms" | "suites" | "reception" | "dining" | "building" | "meetings";
+  category: "all" | "rooms" | "suites" | "bar" | "reception" | "dining" | "building" | "meetings";
   categoryLabel: string;
   src: string;
   alt: string;
@@ -188,6 +188,51 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     src: "/images/polished/restaurant-empty-portrait.webp",
     alt: "Vertical view of the restaurant interior and modern decor",
     caption: "Elegant lighting and modern decor creating an inviting culinary setting.",
+  },
+  {
+    id: "g-bar-1",
+    title: "Pavillion Bar Lounge Seating",
+    category: "bar",
+    categoryLabel: "Pavillion Bar (2nd Floor)",
+    src: "/images/bar/bar1-lounge-seating.webp",
+    alt: "Pavillion Bar intimate lounge seating with warm lighting at Hotel Ambarish",
+    caption: "Intimate plush lounge seating for fine spirits and evening relaxation on the 2nd floor.",
+  },
+  {
+    id: "g-bar-2",
+    title: "Pavillion Bar Wide Lounge Hall",
+    category: "bar",
+    categoryLabel: "Pavillion Bar (2nd Floor)",
+    src: "/images/bar/bar2-lounge-wide.webp",
+    alt: "Wide angle view of Pavillion Bar 2nd floor hall",
+    caption: "Spacious air-conditioned lounge ambiance with warm ambient mood lighting.",
+  },
+  {
+    id: "g-bar-3",
+    title: "Pavillion Bar Service Counter",
+    category: "bar",
+    categoryLabel: "Pavillion Bar (2nd Floor)",
+    src: "/images/bar/bar3-counter-view.webp",
+    alt: "Pavillion Bar counter with curated spirits and single malt display",
+    caption: "Full-service bar counter featuring fine single malts, scotch, spirits, and chilled brews.",
+  },
+  {
+    id: "g-bar-4",
+    title: "Pavillion Bar Corner Lounge & Booths",
+    category: "bar",
+    categoryLabel: "Pavillion Bar (2nd Floor)",
+    src: "/images/bar/bar4-lounge-angle.webp",
+    alt: "Pavillion Bar corner booth seating for private conversations",
+    caption: "Comfortable booth and corner arrangements for private discussions and evening drinks.",
+  },
+  {
+    id: "g-bar-5",
+    title: "Pavillion Bar 2nd Floor Entrance",
+    category: "bar",
+    categoryLabel: "Pavillion Bar (2nd Floor)",
+    src: "/images/bar/bar5-entrance-sign.webp",
+    alt: "Pavillion Bar entrance sign on 2nd floor",
+    caption: "Welcoming 2nd floor entrance to Pavillion Bar at Hotel Ambarish Grand Residency.",
   },
   {
     id: "g16-dish1",

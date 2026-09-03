@@ -14,8 +14,9 @@ export default function GalleryPage() {
     { id: "all", label: "All" },
     { id: "rooms", label: "Rooms" },
     { id: "suites", label: "Suites" },
-    { id: "reception", label: "Lobby" },
+    { id: "bar", label: "Pavillion Bar" },
     { id: "dining", label: "Restaurant" },
+    { id: "reception", label: "Lobby" },
     { id: "building", label: "Building" },
     { id: "meetings", label: "Banquets" },
   ];

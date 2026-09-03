@@ -17,6 +17,11 @@ const curatedGallery = [
     category: "Deluxe Rooms",
   },
   {
+    src: "/images/bar/bar1-lounge-seating.webp",
+    title: "Pavillion Bar Lounge (2nd Floor)",
+    category: "Pavillion Bar",
+  },
+  {
     src: "/images/polished/restaurant-dining.webp",
     title: "The Ambarish Restaurant",
     category: "Dining",
