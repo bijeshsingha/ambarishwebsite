@@ -23,6 +23,9 @@ import { ROOMS } from "@/data/rooms";
 export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
+  const isCheckoutOrConfirmation =
+    pathname?.startsWith("/checkout") ||
+    pathname?.startsWith("/booking/confirmation");
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [showScrollDock, setShowScrollDock] = useState(false);
@@ -168,12 +171,14 @@ export default function Header() {
 
           {/* Mobile Menu Trigger */}
           <div className="flex lg:hidden items-center space-x-2.5">
-            <button
-              onClick={() => setShowQuickBookModal(true)}
-              className="px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white bg-[#B62576] rounded-full sm:hidden shadow-sm"
-            >
-              Book Now
-            </button>
+            {!isCheckoutOrConfirmation && (
+              <button
+                onClick={() => setShowQuickBookModal(true)}
+                className="px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white bg-[#B62576] rounded-full sm:hidden shadow-sm"
+              >
+                Book Now
+              </button>
+            )}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 text-[#F5EBDD] hover:text-[#B4872F] transition-colors rounded-xl bg-white/5 border border-white/10"
@@ -215,35 +220,37 @@ export default function Header() {
       </div>
 
       {/* MOBILE STICKY FLOATING QUICK BOOK DOCK */}
-      <div
-        className={`sm:hidden fixed bottom-3 left-3 right-3 z-40 transition-all duration-500 ease-out transform ${
-          showScrollDock
-            ? "translate-y-0 opacity-100 scale-100 pointer-events-auto"
-            : "translate-y-12 opacity-0 scale-95 pointer-events-none"
-        }`}
-      >
-        <div className="flex items-center justify-between gap-2 p-1.5 rounded-full bg-[#0A0909]/95 backdrop-blur-2xl border border-[#B4872F]/50 shadow-2xl shadow-black/90">
-          <button
-            onClick={() => setShowQuickBookModal(true)}
-            className="flex-1 py-3 px-4 rounded-full bg-gradient-to-r from-[#B62576] to-[#92185C] text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center space-x-2 shadow-lg shadow-[#B62576]/30 active:scale-[0.98]"
-          >
-            <Calendar className="w-3.5 h-3.5 text-[#F5EBDD]" />
-            <span>Quick Book Direct</span>
-            <ArrowUpRight className="w-3.5 h-3.5 ml-0.5" />
-          </button>
+      {!isCheckoutOrConfirmation && (
+        <div
+          className={`sm:hidden fixed bottom-3 left-3 right-3 z-40 transition-all duration-500 ease-out transform ${
+            showScrollDock
+              ? "translate-y-0 opacity-100 scale-100 pointer-events-auto"
+              : "translate-y-12 opacity-0 scale-95 pointer-events-none"
+          }`}
+        >
+          <div className="flex items-center justify-between gap-2 p-1.5 rounded-full bg-[#0A0909]/95 backdrop-blur-2xl border border-[#B4872F]/50 shadow-2xl shadow-black/90">
+            <button
+              onClick={() => setShowQuickBookModal(true)}
+              className="flex-1 py-3 px-4 rounded-full bg-gradient-to-r from-[#B62576] to-[#92185C] text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center space-x-2 shadow-lg shadow-[#B62576]/30 active:scale-[0.98]"
+            >
+              <Calendar className="w-3.5 h-3.5 text-[#F5EBDD]" />
+              <span>Quick Book Direct</span>
+              <ArrowUpRight className="w-3.5 h-3.5 ml-0.5" />
+            </button>
 
-          <a
-            href={`tel:${HOTEL_INFO.phoneRaw}`}
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 text-[#B4872F] border border-white/10 shrink-0 active:scale-95"
-            title="Call Front Desk"
-          >
-            <Phone className="w-4 h-4" />
-          </a>
+            <a
+              href={`tel:${HOTEL_INFO.phoneRaw}`}
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 text-[#B4872F] border border-white/10 shrink-0 active:scale-95"
+              title="Call Front Desk"
+            >
+              <Phone className="w-4 h-4" />
+            </a>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* INSTANT RESERVATION & DATES POP-UP MODAL (Mobile Bottom Sheet + Desktop Modal) */}
-      {showQuickBookModal && (
+      {showQuickBookModal && !isCheckoutOrConfirmation && (
         <div className="fixed inset-0 z-[110] bg-black/80 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 animate-in fade-in duration-200">
           <div className="bg-[#FFFFFF] text-[#1A1715] rounded-t-[2rem] sm:rounded-3xl max-w-lg w-full max-h-[92vh] overflow-y-auto p-5 sm:p-8 space-y-5 shadow-2xl border border-[#E6DED3] relative animate-in slide-in-from-bottom-6 sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-200">
             {/* Mobile Sheet Grab Handle */}
