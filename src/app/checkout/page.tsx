@@ -276,6 +276,13 @@ function CheckoutContent() {
 
       const data = await res.json();
       if (data.success && data.reservation) {
+        if (typeof window !== "undefined") {
+          try {
+            sessionStorage.setItem(`hag_res_${data.reservation.bookingReference}`, JSON.stringify(data.reservation));
+          } catch {
+            // Ignore sessionStorage quota errors
+          }
+        }
         router.push(`/booking/confirmation/${data.reservation.bookingReference}`);
       } else {
         setErrorMsg(data.error || "Reservation failed. Please try again or call our front desk.");

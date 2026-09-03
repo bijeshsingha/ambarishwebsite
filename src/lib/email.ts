@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { serverConfig } from "@/lib/config";
 import { HOTEL_INFO } from "@/data/hotel-info";
 import { formatCurrencyINR } from "@/lib/formatters";
 
@@ -41,35 +42,61 @@ export interface ReservationEmailPayload {
   paymentMethod?: string;
 }
 
-function getMailTransporter() {
-  const smtpHost = process.env.SMTP_HOST || "smtp.gmail.com";
-  const smtpPort = parseInt(process.env.SMTP_PORT || "587", 10);
-  const smtpUser = (process.env.SMTP_USER || process.env.NOTIFICATION_EMAIL || HOTEL_INFO.email).trim();
-  const smtpPass = process.env.SMTP_PASS?.replace(/^["']|["']$/g, "").replace(/\s+/g, "");
+export interface EventEmailPayload {
+  eventType: string;
+  eventDate: string;
+  attendees: string | number;
+  seatingLayout?: string;
+  name: string;
+  email: string;
+  phone: string;
+  notes?: string;
+}
 
-  if (!smtpPass) {
+export interface B2bEmailPayload {
+  companyName: string;
+  accountType?: string;
+  contactPerson: string;
+  designation?: string;
+  email: string;
+  phone: string;
+  gstin?: string;
+  city?: string;
+  state?: string;
+  estimatedMonthlyRoomNights?: number;
+  requiredMealPlans?: string[];
+  billingPreference?: string;
+  message?: string;
+}
+
+/**
+ * Creates and returns configured Nodemailer transporter using centralized config
+ */
+function getMailTransporter() {
+  const { host, port, user, pass } = serverConfig.mail;
+
+  if (!pass) {
     return null;
   }
 
   return {
     transporter: nodemailer.createTransport({
-      host: smtpHost,
-      port: smtpPort,
-      secure: smtpPort === 465,
-      auth: {
-        user: smtpUser,
-        pass: smtpPass,
-      },
+      host,
+      port,
+      secure: port === 465,
+      auth: { user, pass },
     }),
-    senderEmail: smtpUser,
+    senderEmail: user,
   };
 }
 
+/**
+ * Sends both Hotel Notification & Guest Confirmation Voucher emails
+ */
 export async function sendReservationNotificationEmails(payload: ReservationEmailPayload) {
-  const recipientEmail = process.env.NOTIFICATION_EMAIL || HOTEL_INFO.email;
-  const mailConfig = getMailTransporter();
+  const recipientEmail = serverConfig.mail.recipient;
+  const mailSetup = getMailTransporter();
 
-  // Itemized rooms table HTML
   const roomsHtml = payload.bookedRooms && payload.bookedRooms.length > 0
     ? payload.bookedRooms.map((rm) => `
         <tr>
@@ -94,7 +121,6 @@ export async function sendReservationNotificationEmails(payload: ReservationEmai
       </tr>
     `;
 
-  // 1. Hotel Management Notification Email Template
   const adminHtml = `
     <!DOCTYPE html>
     <html>
@@ -115,7 +141,6 @@ export async function sendReservationNotificationEmails(payload: ReservationEmai
         table.grid td.label { color: #787069; width: 38%; font-weight: 500; }
         table.grid td.val { color: #1A1715; font-weight: 600; }
         table.rooms { width: 100%; border-collapse: collapse; background: #FAF7F2; border-radius: 10px; overflow: hidden; margin-top: 8px; }
-        .total-box { background: #0C0B0B; color: #FFFFFF; border-radius: 12px; padding: 16px 20px; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; }
         .cta-btn { display: inline-block; background: #B62576; color: #FFFFFF !important; text-decoration: none; font-weight: bold; font-size: 14px; padding: 12px 24px; border-radius: 24px; text-align: center; margin-top: 20px; }
         .footer { padding: 20px 32px; background: #FAF7F2; border-top: 1px solid #EDE7DE; text-align: center; font-size: 11px; color: #787069; }
       </style>
@@ -195,7 +220,6 @@ export async function sendReservationNotificationEmails(payload: ReservationEmai
     </html>
   `;
 
-  // 2. Guest Confirmation Voucher Template
   const guestHtml = `
     <!DOCTYPE html>
     <html>
@@ -226,7 +250,7 @@ export async function sendReservationNotificationEmails(payload: ReservationEmai
         <div class="content">
           <h2 style="color: #0C0B0B; margin-top: 0; font-size: 20px;">Reservation Confirmed</h2>
           <p>Dear <strong>${payload.guestName}</strong>,</p>
-          <p>Thank you for choosing <strong>Hotel Ambarish Grand Residency</strong>. Your reservation has been registered directly in our hotel system.</p>
+          <p>Thank you for choosing <strong>Hotel Ambarish Grand Residency</strong>. Your reservation has been confirmed in our hotel management system.</p>
           
           <div class="ref-box">
             <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #787069; display: block; margin-bottom: 4px;">Official Booking Reference</span>
@@ -244,7 +268,7 @@ export async function sendReservationNotificationEmails(payload: ReservationEmai
 
           <div style="background: #FAF7F2; padding: 14px; border-radius: 8px; font-size: 12px; color: #4A443F; line-height: 1.5; margin-top: 20px;">
             📍 <strong>Location:</strong> Md Shah Road, Paltan Bazaar, Guwahati, Assam 781008 (Just 200m from Guwahati Railway Station).<br/>
-            🪪 <strong>Check-In Note:</strong> Please present a valid Government Photo ID (Aadhaar/Voter ID/Passport/Driving License) for all adult occupants upon arrival.
+            🪪 <strong>Check-In Note:</strong> Please present a valid Government Photo ID for all adult occupants upon arrival.
           </div>
         </div>
         <div class="footer">
@@ -256,50 +280,128 @@ export async function sendReservationNotificationEmails(payload: ReservationEmai
     </html>
   `;
 
-  if (mailConfig) {
+  if (mailSetup) {
     try {
-      // 1. Dispatch Hotel Management Alert
-      await mailConfig.transporter.sendMail({
-        from: `"${HOTEL_INFO.name}" <${mailConfig.senderEmail}>`,
+      await mailSetup.transporter.sendMail({
+        from: `"${HOTEL_INFO.name}" <${mailSetup.senderEmail}>`,
         to: recipientEmail,
         replyTo: payload.guestEmail,
-        subject: `[New Direct Booking] Ref #${payload.confirmationNo} — ${payload.guestName} (${payload.rooms} Rms, ${payload.nights}N)`,
+        subject: `[New Booking] #${payload.confirmationNo} — ${payload.guestName} (${payload.rooms} Rms, ${payload.nights}N)`,
         html: adminHtml,
       });
 
-      console.log(`✅ [Email Dispatched] Hotel notification sent to ${recipientEmail} for #${payload.confirmationNo}`);
+      console.log(`[Email] Hotel notification sent to ${recipientEmail} for #${payload.confirmationNo}`);
 
-      // 2. Dispatch Guest Voucher Email if valid guest email provided
       if (payload.guestEmail && payload.guestEmail.includes("@")) {
         try {
-          await mailConfig.transporter.sendMail({
-            from: `"${HOTEL_INFO.name}" <${mailConfig.senderEmail}>`,
+          await mailSetup.transporter.sendMail({
+            from: `"${HOTEL_INFO.name}" <${mailSetup.senderEmail}>`,
             to: payload.guestEmail,
             subject: `Reservation Confirmed: #${payload.confirmationNo} at Hotel Ambarish Grand Residency`,
             html: guestHtml,
           });
-          console.log(`✅ [Email Dispatched] Guest confirmation voucher sent to ${payload.guestEmail}`);
+          console.log(`[Email] Guest confirmation voucher sent to ${payload.guestEmail}`);
         } catch (guestErr: any) {
-          console.warn("Guest confirmation email error:", guestErr?.message);
+          console.warn("[Email] Guest voucher email warning:", guestErr?.message);
         }
       }
 
       return { success: true, delivered: true, recipient: recipientEmail };
     } catch (err: any) {
-      console.error("❌ SMTP Email Dispatch Error:", err?.message);
+      console.error("[Email] SMTP Dispatch Error:", err?.message);
       return { success: false, delivered: false, error: err?.message };
     }
   } else {
-    // SMTP credentials not yet provided in .env.local -> log detailed card to terminal
-    console.log("==================================================");
-    console.log(`🏨 NEW ROOM RESERVATION CREATED: Ref #${payload.confirmationNo}`);
-    console.log(`Guest: ${payload.guestName} (${payload.guestPhone}, ${payload.guestEmail})`);
-    console.log(`Dates: ${payload.checkIn} to ${payload.checkOut} (${payload.nights} Nights)`);
-    console.log(`Rooms: ${payload.rooms} Rooms | Total: ${formatCurrencyINR(payload.totalAmount || 0)}`);
-    console.log(`Notification Target: ${recipientEmail}`);
-    console.log("💡 To deliver live emails directly to your Gmail inbox, add SMTP_USER and SMTP_PASS (Gmail App Password) in .env.local");
-    console.log("==================================================");
-
+    console.log(`[Email Mock] SMTP not configured. Booking #${payload.confirmationNo} logged.`);
     return { success: true, delivered: false, logged: true, recipient: recipientEmail };
   }
+}
+
+/**
+ * Sends Banquet / Event RFP email notification
+ */
+export async function sendEventEnquiryNotificationEmail(payload: EventEmailPayload) {
+  const recipientEmail = serverConfig.mail.recipient;
+  const mailSetup = getMailTransporter();
+
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="utf-8"></head>
+    <body style="font-family: sans-serif; background-color: #FAF7F2; padding: 24px; color: #1A1715;">
+      <div style="max-width: 600px; margin: auto; background: #FFFFFF; border-radius: 12px; border: 1px solid #E6DED3; padding: 24px;">
+        <h2 style="color: #0C0B0B; margin-top: 0;">New Banquet / Event Proposal</h2>
+        <p style="color: #A27520; font-weight: bold;">Category: ${payload.eventType}</p>
+        <table style="width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 12px;">
+          <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #777;">Date:</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: bold;">${payload.eventDate}</td></tr>
+          <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #777;">Attendees:</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: bold;">${payload.attendees} Pax</td></tr>
+          <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #777;">Contact:</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: bold;">${payload.name} (<a href="tel:${payload.phone}">${payload.phone}</a>)</td></tr>
+          <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #777;">Email:</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${payload.email}</td></tr>
+          ${payload.notes ? `<tr><td style="padding: 8px 0; color: #777;">Notes:</td><td style="padding: 8px 0;">${payload.notes}</td></tr>` : ""}
+        </table>
+      </div>
+    </body>
+    </html>
+  `;
+
+  if (mailSetup) {
+    try {
+      await mailSetup.transporter.sendMail({
+        from: `"${HOTEL_INFO.name}" <${mailSetup.senderEmail}>`,
+        to: recipientEmail,
+        replyTo: payload.email,
+        subject: `[Event Enquiry] ${payload.eventType} on ${payload.eventDate} — ${payload.name}`,
+        html,
+      });
+      return { success: true, delivered: true };
+    } catch (err: any) {
+      console.warn("[Email] Event enquiry dispatch error:", err.message);
+    }
+  }
+  return { success: true, delivered: false };
+}
+
+/**
+ * Sends B2B Corporate / Travel Agency Enquiry notification
+ */
+export async function sendB2bEnquiryNotificationEmail(payload: B2bEmailPayload) {
+  const recipientEmail = serverConfig.mail.recipient;
+  const mailSetup = getMailTransporter();
+
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="utf-8"></head>
+    <body style="font-family: sans-serif; background-color: #FAF7F2; padding: 24px; color: #1A1715;">
+      <div style="max-width: 600px; margin: auto; background: #FFFFFF; border-radius: 12px; border: 1px solid #E6DED3; padding: 24px;">
+        <h2 style="color: #0C0B0B; margin-top: 0;">New Corporate / Agent Rate Request</h2>
+        <p style="color: #B62576; font-weight: bold;">Company: ${payload.companyName} (${payload.accountType || "CORPORATE"})</p>
+        <table style="width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 12px;">
+          <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #777;">Contact Person:</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: bold;">${payload.contactPerson} (${payload.designation || "Executive"})</td></tr>
+          <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #777;">Phone:</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: bold;"><a href="tel:${payload.phone}">${payload.phone}</a></td></tr>
+          <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #777;">Email:</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${payload.email}</td></tr>
+          ${payload.gstin ? `<tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #777;">GSTIN:</td><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-family: monospace;">${payload.gstin}</td></tr>` : ""}
+          ${payload.estimatedMonthlyRoomNights ? `<tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #777;">Monthly Volume:</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${payload.estimatedMonthlyRoomNights} Room Nights</td></tr>` : ""}
+          ${payload.message ? `<tr><td style="padding: 8px 0; color: #777;">Message:</td><td style="padding: 8px 0;">${payload.message}</td></tr>` : ""}
+        </table>
+      </div>
+    </body>
+    </html>
+  `;
+
+  if (mailSetup) {
+    try {
+      await mailSetup.transporter.sendMail({
+        from: `"${HOTEL_INFO.name}" <${mailSetup.senderEmail}>`,
+        to: recipientEmail,
+        replyTo: payload.email,
+        subject: `[B2B Rate Request] ${payload.companyName} — ${payload.contactPerson}`,
+        html,
+      });
+      return { success: true, delivered: true };
+    } catch (err: any) {
+      console.warn("[Email] B2B enquiry dispatch error:", err.message);
+    }
+  }
+  return { success: true, delivered: false };
 }

@@ -8,7 +8,9 @@ import {
   CheckCircle,
   Printer,
   QrCode,
-  ArrowUpRight,
+  AlertCircle,
+  PhoneCall,
+  ArrowLeft,
 } from "lucide-react";
 import { HOTEL_INFO } from "@/data/hotel-info";
 import { ReservationData } from "@/lib/hotel-os-client";
@@ -16,50 +18,61 @@ import { formatCurrencyINR } from "@/lib/formatters";
 
 export default function ConfirmationPage() {
   const params = useParams();
-  const reference = params.id as string;
+  const reference = (params?.id as string) || "";
 
   const [reservation, setReservation] = useState<ReservationData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
-    async function fetchReservation() {
+    if (!reference) {
+      setLoading(false);
+      setNotFound(true);
+      return;
+    }
+
+    // 1. Check local session cache first for instant render
+    let cachedRes: ReservationData | null = null;
+    if (typeof window !== "undefined") {
       try {
-        const res = await fetch(`/api/v1/reservations?reference=${reference}`);
-        if (res.ok) {
-          const data = await res.json();
-          setReservation(data.reservation);
-        } else {
-          setReservation({
-            id: reference,
-            bookingReference: reference,
-            status: "CONFIRMED",
-            roomSlug: "deluxe-room",
-            roomName: "Double Deluxe Room",
-            ratePlanCode: "EP",
-            ratePlanName: "European Plan (Room Only)",
-            checkIn: "2026-08-22",
-            checkOut: "2026-08-23",
-            nights: 1,
-            rooms: 1,
-            adults: 2,
-            children: 0,
-            guestName: "Direct Guest",
-            guestEmail: "guest@hotelambarish.com",
-            guestPhone: "088220 41211",
-            baseAmount: 2000,
-            taxAmount: 240,
-            totalAmount: 2240,
-            paymentMethod: "PAY_AT_HOTEL",
-            paymentId: "PAY_AT_CHECKIN",
-            createdAt: new Date().toISOString(),
-          });
+        const stored = sessionStorage.getItem(`hag_res_${reference}`);
+        if (stored) {
+          cachedRes = JSON.parse(stored);
+          setReservation(cachedRes);
+          setLoading(false);
         }
       } catch {
-        // Fallback
+        // Ignore JSON or session errors
+      }
+    }
+
+    // 2. Query official server / PMS gateway
+    async function fetchReservation() {
+      try {
+        const res = await fetch(`/api/v1/reservations?reference=${encodeURIComponent(reference)}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.reservation) {
+            setReservation(data.reservation);
+            setNotFound(false);
+            return;
+          }
+        }
+        
+        // If not in API and not in session cache, mark not found
+        if (!cachedRes) {
+          setNotFound(true);
+        }
+      } catch (err) {
+        console.error("Failed to load reservation from server:", err);
+        if (!cachedRes) {
+          setNotFound(true);
+        }
       } finally {
         setLoading(false);
       }
     }
+
     fetchReservation();
   }, [reference]);
 
@@ -70,13 +83,60 @@ export default function ConfirmationPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center text-[#1A1715]">
-        <p className="text-sm font-light">Loading confirmed voucher...</p>
+        <div className="text-center space-y-3">
+          <div className="w-8 h-8 border-2 border-[#A27520] border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-sm font-light text-[#787069]">Loading confirmed voucher...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (notFound || !reservation) {
+    return (
+      <div className="min-h-screen bg-[#FAF7F2] py-20 px-4 sm:px-6 text-[#1A1715] flex items-center justify-center">
+        <div className="max-w-md w-full bg-white rounded-3xl p-8 border border-[#E6DED3] text-center shadow-sm space-y-5">
+          <div className="w-14 h-14 rounded-full bg-amber-50 text-amber-700 mx-auto flex items-center justify-center">
+            <AlertCircle className="w-7 h-7" />
+          </div>
+          <div className="space-y-1">
+            <h1 className="font-serif text-2xl font-normal text-[#1A1715]">Reservation Lookup</h1>
+            <p className="text-xs text-[#787069]">
+              We could not find active records for reference{" "}
+              <strong className="font-mono text-[#A27520]">{reference}</strong>.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-[#FAF7F2] border border-[#EDE7DE] text-left text-xs space-y-2 text-[#4A443F]">
+            <p>If you recently made this booking, please note:</p>
+            <ul className="list-disc pl-4 space-y-1">
+              <li>Check your email inbox for the booking confirmation.</li>
+              <li>Or contact our 24/7 hotel front desk with your phone number.</li>
+            </ul>
+          </div>
+
+          <div className="flex flex-col gap-2 pt-2">
+            <a
+              href={`tel:${HOTEL_INFO.phone}`}
+              className="w-full py-2.5 px-4 bg-[#1A1715] text-white rounded-full text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 hover:bg-[#A27520] transition-colors"
+            >
+              <PhoneCall className="w-3.5 h-3.5" />
+              <span>Call Front Desk ({HOTEL_INFO.phone})</span>
+            </a>
+            <Link
+              href="/"
+              className="w-full py-2.5 px-4 bg-[#FAF7F2] text-[#1A1715] border border-[#EDE7DE] rounded-full text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 hover:bg-[#EDE7DE] transition-colors"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Return to Home</span>
+            </Link>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-[#FAF7F2] text-[#1A1715] min-h-screen py-12 sm:py-16 px-4 sm:px-6 lg:px-8 print:bg-white print:p-0 print:min-h-0 print:py-0 print:px-0">
+    <div className="bg-[#FAF7F2] text-[#1A1715] min-h-screen py-10 sm:py-14 px-4 sm:px-6 lg:px-8 print:bg-white print:p-0 print:min-h-0 print:py-0 print:px-0">
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -114,10 +174,10 @@ export default function ConfirmationPage() {
             <CheckCircle className="w-6 h-6" />
           </div>
           <h1 className="font-serif text-3xl font-normal text-[#1A1715]">
-            Booking Confirmed & Guaranteed
+            Booking Confirmed &amp; Guaranteed
           </h1>
           <p className="text-xs text-[#787069] max-w-md mx-auto font-light">
-            Your reservation reference has been registered in the hotel PMS.
+            Your reservation has been registered in the hotel Property Management System.
           </p>
         </div>
 
@@ -125,9 +185,10 @@ export default function ConfirmationPage() {
         <div className="flex justify-between items-center print:hidden">
           <Link
             href="/"
-            className="text-xs uppercase tracking-wider text-[#4A443F] hover:text-[#1A1715]"
+            className="text-xs uppercase tracking-wider text-[#4A443F] hover:text-[#1A1715] flex items-center gap-1.5"
           >
-            &larr; Return to Home
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Return to Home</span>
           </Link>
 
           <button
@@ -158,7 +219,7 @@ export default function ConfirmationPage() {
                 Booking Reference
               </span>
               <strong className="font-mono text-base font-bold text-[#1A1715]">
-                {reference}
+                {reservation.bookingReference || reference}
               </strong>
             </div>
           </div>
@@ -166,13 +227,13 @@ export default function ConfirmationPage() {
           {/* Matrix */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs print:grid-cols-2 print:gap-3">
             <div className="p-3.5 sm:p-4 rounded-2xl bg-[#FAF7F2] border border-[#EDE7DE] space-y-1.5 print:p-2.5 print:rounded-xl">
-              <span className="font-semibold text-[10px] uppercase text-[#A27520] block">Guest & Corporate Details</span>
-              <p className="font-medium text-sm text-[#1A1715] capitalize">{reservation?.guestName}</p>
-              <p className="text-[#4A443F]">Phone: {reservation?.guestPhone}</p>
-              <p className="text-[#4A443F]">Email: {reservation?.guestEmail}</p>
-              {reservation?.companyName && (
+              <span className="font-semibold text-[10px] uppercase text-[#A27520] block">Guest &amp; Corporate Details</span>
+              <p className="font-medium text-sm text-[#1A1715] capitalize">{reservation.guestName}</p>
+              <p className="text-[#4A443F]">Phone: {reservation.guestPhone}</p>
+              <p className="text-[#4A443F]">Email: {reservation.guestEmail}</p>
+              {(reservation.companyName || reservation.b2b?.companyName) && (
                 <div className="pt-1.5 border-t border-[#EDE7DE] text-[11px]">
-                  <p className="font-semibold text-[#1A1715]">🏢 {reservation.companyName}</p>
+                  <p className="font-semibold text-[#1A1715]">🏢 {reservation.companyName || reservation.b2b?.companyName}</p>
                   {reservation.guestGstin && (
                     <p className="font-mono text-[#A27520]">GSTIN: {reservation.guestGstin}</p>
                   )}
@@ -181,8 +242,8 @@ export default function ConfirmationPage() {
             </div>
 
             <div className="p-3.5 sm:p-4 rounded-2xl bg-[#FAF7F2] border border-[#EDE7DE] space-y-1.5 print:p-2.5 print:rounded-xl">
-              <span className="font-semibold text-[10px] uppercase text-[#A27520] block">Stay & Reserved Rooms</span>
-              {reservation?.bookedRooms && reservation.bookedRooms.length > 0 ? (
+              <span className="font-semibold text-[10px] uppercase text-[#A27520] block">Stay &amp; Reserved Rooms</span>
+              {reservation.bookedRooms && reservation.bookedRooms.length > 0 ? (
                 <div className="space-y-1 pb-1">
                   {reservation.bookedRooms.map((rm, idx) => (
                     <div key={idx} className="flex justify-between items-center text-xs">
@@ -190,21 +251,21 @@ export default function ConfirmationPage() {
                         <span className="font-medium text-[#1A1715]">{rm.quantity}&times; {rm.roomName}</span>
                         <span className="text-[10px] text-[#787069] block">{rm.ratePlanName}</span>
                       </div>
-                      <span className="font-mono text-[#A27520] font-semibold">{formatCurrencyINR(rm.pricePerNight * rm.quantity)}/n</span>
+                      <span className="font-mono text-[#A27520] font-semibold">{formatCurrencyINR((rm.pricePerNight || 0) * (rm.quantity || 1))}/n</span>
                     </div>
                   ))}
                 </div>
               ) : (
                 <>
-                  <p className="font-medium text-sm text-[#1A1715]">{reservation?.roomName}</p>
-                  <p className="text-[#A27520] font-semibold">{reservation?.ratePlanName}</p>
+                  <p className="font-medium text-sm text-[#1A1715]">{reservation.roomName || "Double Deluxe Room"}</p>
+                  <p className="text-[#A27520] font-semibold">{reservation.ratePlanName || "Standard Rate"}</p>
                 </>
               )}
               <p className="text-[#4A443F] text-xs pt-1 border-t border-[#EDE7DE]">
-                {reservation?.checkIn} &rarr; {reservation?.checkOut} ({reservation?.nights} {reservation?.nights === 1 ? "Night" : "Nights"})
+                {reservation.checkIn} &rarr; {reservation.checkOut} ({reservation.nights} {reservation.nights === 1 ? "Night" : "Nights"})
               </p>
               <div className="text-[11px] font-semibold text-[#1A1715]">
-                <span>Total: {reservation?.rooms || 1} {((reservation?.rooms || 1) === 1) ? "Room" : "Rooms"} • {reservation?.adults || 2} Guests</span>
+                <span>Total: {reservation.rooms || 1} {((reservation.rooms || 1) === 1) ? "Room" : "Rooms"} • {reservation.adults || 2} Guests</span>
               </div>
             </div>
           </div>
@@ -213,9 +274,9 @@ export default function ConfirmationPage() {
           <div className="p-3.5 sm:p-4 rounded-2xl bg-[#FAF7F2] border border-[#EDE7DE] space-y-1.5 text-xs print:p-2.5 print:rounded-xl">
             <div className="flex justify-between text-[#4A443F]">
               <span>Base Tariff:</span>
-              <span>{formatCurrencyINR(reservation?.baseAmount || 0)}</span>
+              <span>{formatCurrencyINR(reservation.baseAmount || 0)}</span>
             </div>
-            {reservation?.promoCode && (reservation?.discountAmount || 0) > 0 && (
+            {reservation.promoCode && (reservation.discountAmount || 0) > 0 && (
               <div className="flex justify-between text-emerald-700 font-medium">
                 <span>Promo Discount ({reservation.promoCode}):</span>
                 <span>-{formatCurrencyINR(reservation.discountAmount || 0)}</span>
@@ -223,12 +284,12 @@ export default function ConfirmationPage() {
             )}
             <div className="flex justify-between text-[#4A443F]">
               <span>Taxes (GST SAC 996311):</span>
-              <span>{formatCurrencyINR(reservation?.taxAmount || 0)}</span>
+              <span>{formatCurrencyINR(reservation.taxAmount || 0)}</span>
             </div>
             <div className="pt-1.5 hairline-t flex justify-between items-baseline font-bold text-sm text-[#1A1715]">
               <span>Grand Total</span>
               <span className="font-serif text-base sm:text-lg text-[#A27520]">
-                {formatCurrencyINR(reservation?.totalAmount || 0)}
+                {formatCurrencyINR(reservation.totalAmount || 0)}
               </span>
             </div>
           </div>
