@@ -28,10 +28,12 @@ export async function POST(request: Request) {
       message: body.message,
     };
 
-    // Send email notification to hotel management
-    sendB2bEnquiryNotificationEmail(payload).catch((mailErr) => {
+    // Await email notification so serverless lambda does not terminate early
+    try {
+      await sendB2bEnquiryNotificationEmail(payload);
+    } catch (mailErr: any) {
       console.warn("[B2B Enquiry] Email dispatch warning:", mailErr?.message);
-    });
+    }
 
     return NextResponse.json({
       success: true,

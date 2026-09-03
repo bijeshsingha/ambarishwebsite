@@ -30,13 +30,15 @@ export async function POST(request: Request) {
     // Cache in server store
     globalReservationStore.set(confirmationNo, reservation);
 
-    // Dispatch background email notification to hotel management and guest
-    sendReservationNotificationEmails({
-      confirmationNo,
-      ...body,
-    }).catch((mailErr) => {
-      console.warn("[Reservation Email] Dispatch warning:", mailErr?.message);
-    });
+    // Await email delivery so serverless lambda (Vercel) does not freeze before SMTP dispatch finishes
+    try {
+      await sendReservationNotificationEmails({
+        confirmationNo,
+        ...body,
+      });
+    } catch (mailErr: any) {
+      console.error("[Reservation Email] Dispatch warning:", mailErr?.message);
+    }
 
     return NextResponse.json({
       success: true,

@@ -23,19 +23,21 @@ export async function POST(request: Request) {
       );
     }
 
-    // Dispatch Email Notification directly to hotel management
-    sendEventEnquiryNotificationEmail({
-      eventType,
-      eventDate,
-      attendees,
-      seatingLayout,
-      name,
-      email,
-      phone,
-      notes,
-    }).catch((mailErr) => {
+    // Await email notification so serverless lambda does not terminate early
+    try {
+      await sendEventEnquiryNotificationEmail({
+        eventType,
+        eventDate,
+        attendees,
+        seatingLayout,
+        name,
+        email,
+        phone,
+        notes,
+      });
+    } catch (mailErr: any) {
       console.warn("[Event Enquiry] Email dispatch warning:", mailErr.message);
-    });
+    }
 
     return NextResponse.json({
       success: true,
