@@ -194,17 +194,15 @@ export default function Header() {
         }`}
       >
         <div className="flex items-center gap-1.5 p-1 rounded-full bg-[#0A0909]/95 backdrop-blur-xl border border-[#B4872F]/40 shadow-2xl shadow-black/90">
-          {/* Quick Pop-up Modal Trigger Button */}
           <button
             onClick={() => setShowQuickBookModal(true)}
             className="px-4 py-2.5 rounded-full bg-gradient-to-r from-[#B62576] to-[#92185C] hover:from-[#C72E84] hover:to-[#A71C67] text-white text-xs font-bold uppercase tracking-wider flex items-center space-x-2 shadow-lg shadow-[#B62576]/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
           >
             <Calendar className="w-3.5 h-3.5 text-[#F5EBDD]" />
-            <span>Check Rates & Book</span>
+            <span>Check Rates &amp; Book</span>
             <ArrowUpRight className="w-3.5 h-3.5 ml-0.5" />
           </button>
 
-          {/* Direct Phone Call Button */}
           <a
             href={`tel:${HOTEL_INFO.phoneRaw}`}
             className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-[#B4872F] text-[#F5EBDD] hover:text-white transition-all border border-white/10 shrink-0"
@@ -216,23 +214,54 @@ export default function Header() {
         </div>
       </div>
 
-      {/* INSTANT RESERVATION & DATES POP-UP MODAL */}
+      {/* MOBILE STICKY FLOATING QUICK BOOK DOCK */}
+      <div
+        className={`sm:hidden fixed bottom-3 left-3 right-3 z-40 transition-all duration-500 ease-out transform ${
+          showScrollDock
+            ? "translate-y-0 opacity-100 scale-100 pointer-events-auto"
+            : "translate-y-12 opacity-0 scale-95 pointer-events-none"
+        }`}
+      >
+        <div className="flex items-center justify-between gap-2 p-1.5 rounded-full bg-[#0A0909]/95 backdrop-blur-2xl border border-[#B4872F]/50 shadow-2xl shadow-black/90">
+          <button
+            onClick={() => setShowQuickBookModal(true)}
+            className="flex-1 py-3 px-4 rounded-full bg-gradient-to-r from-[#B62576] to-[#92185C] text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center space-x-2 shadow-lg shadow-[#B62576]/30 active:scale-[0.98]"
+          >
+            <Calendar className="w-3.5 h-3.5 text-[#F5EBDD]" />
+            <span>Quick Book Direct</span>
+            <ArrowUpRight className="w-3.5 h-3.5 ml-0.5" />
+          </button>
+
+          <a
+            href={`tel:${HOTEL_INFO.phoneRaw}`}
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 text-[#B4872F] border border-white/10 shrink-0 active:scale-95"
+            title="Call Front Desk"
+          >
+            <Phone className="w-4 h-4" />
+          </a>
+        </div>
+      </div>
+
+      {/* INSTANT RESERVATION & DATES POP-UP MODAL (Mobile Bottom Sheet + Desktop Modal) */}
       {showQuickBookModal && (
-        <div className="fixed inset-0 z-[110] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-[#FFFFFF] text-[#1A1715] rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-[#E6DED3] relative animate-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-[110] bg-black/80 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 animate-in fade-in duration-200">
+          <div className="bg-[#FFFFFF] text-[#1A1715] rounded-t-[2rem] sm:rounded-3xl max-w-lg w-full max-h-[92vh] overflow-y-auto p-5 sm:p-8 space-y-5 shadow-2xl border border-[#E6DED3] relative animate-in slide-in-from-bottom-6 sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-200">
+            {/* Mobile Sheet Grab Handle */}
+            <div className="w-12 h-1 rounded-full bg-black/15 mx-auto -mt-1 mb-2 sm:hidden" />
+
             {/* Modal Header */}
-            <div className="flex justify-between items-start border-b border-[#E6DED3] pb-4">
+            <div className="flex justify-between items-start border-b border-[#E6DED3] pb-3.5">
               <div>
                 <span className="text-[10px] font-mono font-bold tracking-widest text-[#B4872F] uppercase block">
                   Best Direct Rate Guarantee
                 </span>
                 <h3 className="font-serif text-2xl font-normal text-[#1A1715]">
-                  Instant Room Reservation
+                  Quick Reservation
                 </h3>
               </div>
               <button
                 onClick={() => setShowQuickBookModal(false)}
-                className="p-1.5 rounded-full hover:bg-black/5 text-[#787069] transition-colors"
+                className="p-2 rounded-full hover:bg-black/5 text-[#787069] transition-colors"
                 aria-label="Close modal"
               >
                 <X className="w-5 h-5" />
@@ -241,6 +270,15 @@ export default function Header() {
 
             {/* Quick Booking Form */}
             <form onSubmit={handleQuickBookSubmit} className="space-y-4 text-xs">
+              {/* Hotel Check-in Policy Pill */}
+              <div className="flex items-center justify-between text-[11px] text-[#A27520] bg-[#FAF7F2] border border-[#EDE7DE] px-3.5 py-2 rounded-xl">
+                <span>Check-in: <strong>11:00 AM</strong></span>
+                <span>•</span>
+                <span>Check-out: <strong>12:00 PM</strong></span>
+                <span>•</span>
+                <span className="text-emerald-700 font-semibold">Free Cancellation</span>
+              </div>
+
               {/* Dates */}
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
@@ -258,7 +296,7 @@ export default function Header() {
                       }
                     }}
                     required
-                    className="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576]"
+                    className="w-full p-3 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576]"
                   />
                 </div>
                 <div className="space-y-1">
@@ -269,7 +307,7 @@ export default function Header() {
                     value={checkOut}
                     onChange={(e) => setCheckOut(e.target.value)}
                     required
-                    className="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576]"
+                    className="w-full p-3 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576]"
                   />
                 </div>
               </div>
@@ -280,7 +318,7 @@ export default function Header() {
                 <select
                   value={selectedRoomSlug}
                   onChange={(e) => setSelectedRoomSlug(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576]"
+                  className="w-full p-3 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576] cursor-pointer"
                 >
                   {ROOMS.map((r) => (
                     <option key={r.id} value={r.slug}>
@@ -297,7 +335,7 @@ export default function Header() {
                   <select
                     value={roomsCount}
                     onChange={(e) => setRoomsCount(e.target.value)}
-                    className="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576]"
+                    className="w-full p-3 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576] cursor-pointer"
                   >
                     <option value="1">1 Room</option>
                     <option value="2">2 Rooms</option>
@@ -306,21 +344,22 @@ export default function Header() {
                   </select>
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[10px] uppercase font-semibold text-[#787069]">Adults Per Room</label>
+                  <label className="text-[10px] uppercase font-semibold text-[#787069]">Adults</label>
                   <select
                     value={adults}
                     onChange={(e) => setAdults(e.target.value)}
-                    className="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576]"
+                    className="w-full p-3 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576] cursor-pointer"
                   >
                     <option value="1">1 Adult</option>
                     <option value="2">2 Adults</option>
                     <option value="3">3 Adults</option>
+                    <option value="4">4 Adults</option>
                   </select>
                 </div>
               </div>
 
               {/* Promo Code Option */}
-              <div className="pt-2 border-t border-[#E6DED3] space-y-1">
+              <div className="pt-1 border-t border-[#E6DED3] space-y-1">
                 <label className="text-[10px] uppercase font-semibold text-[#A27520]">
                   Have a Promo Code? (Optional)
                 </label>

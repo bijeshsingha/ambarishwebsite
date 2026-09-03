@@ -49,8 +49,8 @@ export const HOTEL_INFO: HotelInfo = {
     full: "Md Shah Road, Paltan Bazaar, Guwahati, Assam 781008",
     landmark: "200 meters from Guwahati Railway Station",
   },
-  checkInTime: "12:00 PM",
-  checkOutTime: "11:00 AM",
+  checkInTime: "11:00 AM",
+  checkOutTime: "12:00 PM",
   coordinates: {
     lat: 26.1824,
     lng: 91.7516,

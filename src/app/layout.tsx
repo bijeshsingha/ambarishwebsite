@@ -107,8 +107,8 @@ export default function RootLayout({
       latitude: HOTEL_INFO.coordinates.lat,
       longitude: HOTEL_INFO.coordinates.lng,
     },
-    checkinTime: "12:00",
-    checkoutTime: "11:00",
+    checkinTime: "11:00",
+    checkoutTime: "12:00",
     amenityFeature: HOTEL_INFO.amenities.map((a) => ({
       "@type": "LocationFeatureSpecification",
       name: a,

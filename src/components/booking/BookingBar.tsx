@@ -257,73 +257,49 @@ export default function BookingBar({
               </div>
             </div>
 
-            {/* Row 2: Rooms, Adults, Children & Promo */}
-            <div className="grid grid-cols-4 gap-1.5">
-              <div className="bg-[#FAF7F2] p-1.5 rounded-xl border border-[#E6DED3]">
-                <label className="flex items-center text-[8px] font-mono font-bold tracking-wider uppercase text-[#B4872F] mb-0.5">
-                  Rooms
-                </label>
-                <div className="relative flex items-center">
-                  <select
-                    value={roomsCount}
-                    onChange={(e) => handleRoomsChange(e.target.value)}
-                    className="w-full bg-transparent text-xs text-[#0C0B0B] font-semibold focus:outline-none cursor-pointer pr-2 appearance-none"
-                  >
-                    <option value="1">1 Rm</option>
-                    <option value="2">2 Rms</option>
-                    <option value="3">3 Rms</option>
-                    <option value="4">4 Rms</option>
-                  </select>
-                  <ChevronDown className="w-2.5 h-2.5 text-[#0C0B0B]/50 absolute right-0 pointer-events-none" />
+            {/* Row 2: Occupancy & Promo (2 Clean Columns) */}
+            <div className="grid grid-cols-2 gap-2">
+              <div className="bg-[#FAF7F2] p-2.5 rounded-xl border border-[#E6DED3] flex items-center justify-between">
+                <div className="flex-1">
+                  <label className="flex items-center text-[9px] font-mono font-bold tracking-wider uppercase text-[#B4872F] mb-0.5">
+                    <Users className="w-3 h-3 mr-1 text-[#B4872F]" />
+                    Rooms &amp; Adults
+                  </label>
+                  <div className="flex items-center gap-1.5">
+                    <select
+                      value={roomsCount}
+                      onChange={(e) => handleRoomsChange(e.target.value)}
+                      className="bg-transparent text-xs text-[#0C0B0B] font-semibold focus:outline-none cursor-pointer"
+                    >
+                      <option value="1">1 Room</option>
+                      <option value="2">2 Rooms</option>
+                      <option value="3">3 Rooms</option>
+                      <option value="4">4 Rooms</option>
+                    </select>
+                    <span className="text-[#B4872F] font-bold">•</span>
+                    <select
+                      value={adults}
+                      onChange={(e) => setAdults(e.target.value)}
+                      className="bg-transparent text-xs text-[#0C0B0B] font-semibold focus:outline-none cursor-pointer"
+                    >
+                      {[1, 2, 3, 4, 5, 6, 8].map((num) => (
+                        <option key={num} value={String(num)}>
+                          {num} {num === 1 ? "Adult" : "Adults"}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
               </div>
 
-              <div className="bg-[#FAF7F2] p-1.5 rounded-xl border border-[#E6DED3]">
-                <label className="flex items-center text-[8px] font-mono font-bold tracking-wider uppercase text-[#B4872F] mb-0.5">
-                  Adults
-                </label>
-                <div className="relative flex items-center">
-                  <select
-                    value={adults}
-                    onChange={(e) => setAdults(e.target.value)}
-                    className="w-full bg-transparent text-xs text-[#0C0B0B] font-semibold focus:outline-none cursor-pointer pr-2 appearance-none"
-                  >
-                    {[1, 2, 3, 4, 5, 6, 8].map((num) => (
-                      <option key={num} value={String(num)}>
-                        {num} Adt
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="w-2.5 h-2.5 text-[#0C0B0B]/50 absolute right-0 pointer-events-none" />
-                </div>
-              </div>
-
-              <div className="bg-[#FAF7F2] p-1.5 rounded-xl border border-[#E6DED3]">
-                <label className="flex items-center text-[8px] font-mono font-bold tracking-wider uppercase text-[#B4872F] mb-0.5">
-                  Children
-                </label>
-                <div className="relative flex items-center">
-                  <select
-                    value={children}
-                    onChange={(e) => setChildren(e.target.value)}
-                    className="w-full bg-transparent text-xs text-[#0C0B0B] font-semibold focus:outline-none cursor-pointer pr-2 appearance-none"
-                  >
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                  </select>
-                  <ChevronDown className="w-2.5 h-2.5 text-[#0C0B0B]/50 absolute right-0 pointer-events-none" />
-                </div>
-              </div>
-
-              <div className="bg-[#FAF7F2] p-1.5 rounded-xl border border-[#E6DED3]">
-                <label className="flex items-center text-[8px] font-mono font-bold tracking-wider uppercase text-[#B4872F] mb-0.5">
-                  Promo
+              <div className="bg-[#FAF7F2] p-2.5 rounded-xl border border-[#E6DED3]">
+                <label className="flex items-center text-[9px] font-mono font-bold tracking-wider uppercase text-[#B4872F] mb-0.5">
+                  <Tag className="w-3 h-3 mr-1 text-[#B4872F]" />
+                  Promo Code
                 </label>
                 <input
                   type="text"
-                  placeholder="Code"
+                  placeholder="e.g. DIRECT10"
                   value={promoCode}
                   onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
                   className="w-full bg-transparent text-xs text-[#0C0B0B] font-bold uppercase placeholder:font-normal placeholder:text-black/35 focus:outline-none"

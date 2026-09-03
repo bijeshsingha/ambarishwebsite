@@ -259,8 +259,8 @@ export async function sendReservationNotificationEmails(payload: ReservationEmai
           </div>
 
           <table class="details">
-            <tr><td class="label">Check-In Date:</td><td class="val">${payload.checkIn} (from 12:00 PM)</td></tr>
-            <tr><td class="label">Check-Out Date:</td><td class="val">${payload.checkOut} (until 11:00 AM)</td></tr>
+            <tr><td class="label">Check-In Date:</td><td class="val">${payload.checkIn} (from 11:00 AM)</td></tr>
+            <tr><td class="label">Check-Out Date:</td><td class="val">${payload.checkOut} (until 12:00 PM)</td></tr>
             <tr><td class="label">Duration:</td><td class="val">${payload.nights} ${payload.nights === 1 ? "Night" : "Nights"}</td></tr>
             <tr><td class="label">Rooms &amp; Guests:</td><td class="val">${payload.rooms} Rooms • ${payload.adults} Adults</td></tr>
             <tr><td class="label">Payment Mode:</td><td class="val">${payload.paymentMethod || "Pay at Hotel"}</td></tr>

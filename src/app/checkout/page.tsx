@@ -597,7 +597,7 @@ function CheckoutContent() {
                     className="w-4 h-4 mt-0.5 rounded text-[#B62576] focus:ring-[#B62576]"
                   />
                   <span className="text-[#787069] leading-relaxed">
-                    I agree to the hotel check-in policy (Check-in: 12:00 PM, Check-out: 11:00 AM) and free cancellation up to 24 hours prior to arrival. Valid Government Photo ID required for all adult guests.
+                    I agree to the hotel check-in policy (Check-in: 11:00 AM, Check-out: 12:00 PM) and free cancellation up to 24 hours prior to arrival. Valid Government Photo ID required for all adult guests.
                   </span>
                 </label>
               </div>

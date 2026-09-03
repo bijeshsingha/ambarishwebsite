@@ -111,7 +111,7 @@ export const ROOMS: RoomCategory[] = [
       "Just 3 minutes walk from Guwahati Railway Station",
     ],
     houseRules: [
-      "Check-in: 12:00 PM | Check-out: 11:00 AM",
+      "Check-in: 11:00 AM | Check-out: 12:00 PM",
       "Valid Government Photo ID required for all adult guests (Aadhaar / Passport / Driving License)",
       "Non-smoking room throughout",
       "Extra adult (pax): ₹500/night with extra mattress | Children stay free (using existing bedding)",
@@ -187,7 +187,7 @@ export const ROOMS: RoomCategory[] = [
       "Electric kettle with complimentary tea & coffee kit",
     ],
     houseRules: [
-      "Check-in: 12:00 PM | Check-out: 11:00 AM",
+      "Check-in: 11:00 AM | Check-out: 12:00 PM",
       "Valid Government Photo ID required at check-in",
       "Non-smoking room",
       "Extra adult (pax): ₹500/night with extra mattress | Children stay free (using existing bedding)",
@@ -266,7 +266,7 @@ export const ROOMS: RoomCategory[] = [
       "Panoramic views overlooking Paltan Bazaar and hills",
     ],
     houseRules: [
-      "Check-in: 12:00 PM | Check-out: 11:00 AM",
+      "Check-in: 11:00 AM | Check-out: 12:00 PM",
       "Valid Photo ID required for all adult guests",
       "Strictly Non-Smoking",
       "Extra adult (pax): ₹500/night with extra mattress | Children stay free",

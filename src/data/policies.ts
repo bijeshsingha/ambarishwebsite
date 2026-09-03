@@ -7,9 +7,9 @@ export const HOTEL_POLICIES: PolicySection[] = [
   {
     title: "Check-in & Check-out Policies",
     items: [
-      "Standard Check-in Time: 12:00 PM (Noon).",
-      "Standard Check-out Time: 11:00 AM.",
-      "Early Check-in between 06:00 AM and 12:00 PM is subject to room availability upon arrival (nominal early-charge may apply for before 8:00 AM).",
+      "Standard Check-in Time: 11:00 AM.",
+      "Standard Check-out Time: 12:00 PM (Noon).",
+      "Early Check-in between 06:00 AM and 11:00 AM is subject to room availability upon arrival (nominal early-charge may apply for before 8:00 AM).",
       "Late Check-out up to 02:00 PM is subject to availability and prior front-desk approval.",
     ],
   },
@@ -24,7 +24,7 @@ export const HOTEL_POLICIES: PolicySection[] = [
   {
     title: "Cancellation & Refund Terms",
     items: [
-      "Free Cancellation: Cancellations made at least 24 hours prior to the standard check-in time (12:00 PM on arrival date) are eligible for a 100% refund of the deposit paid.",
+      "Free Cancellation: Cancellations made at least 24 hours prior to the standard check-in time (11:00 AM on arrival date) are eligible for a 100% refund of the deposit paid.",
       "Late Cancellation / No-Show: Cancellations made within 24 hours of check-in or failure to arrive on the booked date will attract a retention charge equivalent to 1 night's room tariff + taxes.",
       "Refund Processing: Eligible refunds for payments made via Razorpay / Card / UPI are processed back to the original source account within 5 to 7 business days.",
     ],
