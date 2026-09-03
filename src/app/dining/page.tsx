@@ -390,7 +390,7 @@ export default function DiningPage() {
                   <div className="inline-flex items-center space-x-2 bg-[#26211E] border border-[#B4872F]/30 px-3.5 py-1.5 rounded-full">
                     <Wine className="w-3.5 h-3.5 text-[#B4872F]" />
                     <span className="text-[10px] uppercase font-mono tracking-widest text-[#B4872F] font-semibold">
-                      Lobby Lounge &amp; Bar
+                      Hotel Lounge &amp; Bar • 2nd Floor
                     </span>
                   </div>
 
@@ -420,7 +420,7 @@ export default function DiningPage() {
                       <span>Location</span>
                     </div>
                     <p className="text-white font-medium">{PAVILLION_BAR_INFO.location}</p>
-                    <p className="text-[11px] text-[#8C827A]">Direct lobby entrance access</p>
+                    <p className="text-[11px] text-[#8C827A]">2nd Floor elevator &amp; staircase access</p>
                   </div>
                 </div>
 

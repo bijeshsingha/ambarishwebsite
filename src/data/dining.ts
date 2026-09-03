@@ -290,9 +290,9 @@ export const PAVILLION_BAR_INFO: BarInfo = {
   name: "Pavillion Bar",
   tagline: "An intimate, sophisticated lounge for fine spirits, chilled draughts, and evening unwinding.",
   description:
-    "Located on the lobby level at Hotel Ambarish Grand Residency, Pavillion Bar provides a welcoming retreat for corporate travelers, transit guests, and friends. Featuring an extensive collection of premium whiskeys, single malts, spirits, chilled beers, and classic cocktails, accompanied by sizzling hot tandoori and Chinese appetizers freshly prepared from our kitchen.",
+    "Located on the 2nd floor of Hotel Ambarish Grand Residency, Pavillion Bar provides a welcoming retreat for corporate travelers, transit guests, and friends. Featuring an extensive collection of premium whiskeys, single malts, spirits, chilled beers, and classic cocktails, accompanied by sizzling hot tandoori and Chinese appetizers freshly prepared from our kitchen.",
   hours: "11:00 AM – 11:00 PM Daily",
-  location: "Lobby Level, Hotel Ambarish Grand Residency, Paltan Bazaar, Guwahati",
+  location: "2nd Floor, Hotel Ambarish Grand Residency, Paltan Bazaar, Guwahati",
   ambiance: "Warm mood lighting, plush leather lounge seating, ambient music, and attentive personalized service.",
   features: [
     "Extensive domestic & imported spirits, single malts & scotch",
@@ -325,7 +325,7 @@ export const PAVILLION_BAR_INFO: BarInfo = {
     {
       src: "/images/bar/bar5-entrance-sign.webp",
       alt: "Pavillion Bar Entrance & Signage - Hotel Ambarish",
-      caption: "Welcoming lobby entrance to Pavillion Bar",
+      caption: "Welcoming 2nd floor entrance to Pavillion Bar",
     },
   ],
   highlights: [

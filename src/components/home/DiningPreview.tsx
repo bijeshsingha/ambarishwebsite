@@ -278,7 +278,7 @@ export default function DiningPreview() {
               <div className="inline-flex items-center space-x-2 bg-[#26211E] border border-[#B4872F]/30 px-3.5 py-1.5 rounded-full">
                 <Wine className="w-3.5 h-3.5 text-[#B4872F]" />
                 <span className="text-[10px] uppercase font-mono tracking-widest text-[#B4872F] font-semibold">
-                  Lobby Lounge &amp; Bar
+                  Hotel Lounge &amp; Bar • 2nd Floor
                 </span>
               </div>
 
@@ -296,7 +296,7 @@ export default function DiningPreview() {
                   <span>11:00 AM – 11:00 PM Daily</span>
                 </div>
                 <span className="text-white/20">•</span>
-                <span className="text-[#A89F96]">Lobby Level, Hotel Ambarish</span>
+                <span className="text-[#A89F96]">2nd Floor, Hotel Ambarish</span>
               </div>
 
               <div className="pt-2">
