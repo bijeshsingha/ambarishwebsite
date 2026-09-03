@@ -40,6 +40,7 @@ export interface ReservationEmailPayload {
   taxAmount?: number;
   totalAmount?: number;
   paymentMethod?: string;
+  paymentId?: string;
   offlineFallback?: boolean;
 }
 
@@ -165,7 +166,14 @@ export async function sendReservationNotificationEmails(payload: ReservationEmai
               ${payload.guestCity || payload.guestState ? `<tr><td class="label">Location:</td><td class="val">${[payload.guestCity, payload.guestState].filter(Boolean).join(", ")}</td></tr>` : ""}
               <tr><td class="label">Stay Dates:</td><td class="val"><strong>${payload.checkIn}</strong> to <strong>${payload.checkOut}</strong> (${payload.nights} ${payload.nights === 1 ? "Night" : "Nights"})</td></tr>
               <tr><td class="label">Occupancy:</td><td class="val">${payload.rooms} ${payload.rooms === 1 ? "Room" : "Rooms"} • ${payload.adults} Adults ${payload.children > 0 ? `• ${payload.children} Children` : ""}</td></tr>
-              <tr><td class="label">Payment Mode:</td><td class="val"><strong>${payload.paymentMethod || "PAY_AT_HOTEL"}</strong></td></tr>
+              <tr>
+                <td class="label">Payment Mode:</td>
+                <td class="val">
+                  ${payload.paymentMethod === "RAZORPAY"
+                    ? `<span style="display: inline-block; background: #ecfdf5; color: #047857; font-weight: bold; padding: 2px 8px; border-radius: 6px; font-size: 11px;">✓ PAID ONLINE (RAZORPAY)</span>${payload.paymentId ? `<div style="font-family: monospace; font-size: 11px; color: #787069; margin-top: 2px;">Payment ID: ${payload.paymentId}</div>` : ""}`
+                    : `<span style="color: #A27520; font-weight: bold;">Pay at Hotel (Front Desk)</span>`}
+                </td>
+              </tr>
               ${payload.specialRequests ? `<tr><td class="label">Special Requests:</td><td class="val" style="color: #B4872F;">${payload.specialRequests}</td></tr>` : ""}
             </table>
 
@@ -263,7 +271,14 @@ export async function sendReservationNotificationEmails(payload: ReservationEmai
             <tr><td class="label">Check-Out Date:</td><td class="val">${payload.checkOut} (until 12:00 PM)</td></tr>
             <tr><td class="label">Duration:</td><td class="val">${payload.nights} ${payload.nights === 1 ? "Night" : "Nights"}</td></tr>
             <tr><td class="label">Rooms &amp; Guests:</td><td class="val">${payload.rooms} Rooms • ${payload.adults} Adults</td></tr>
-            <tr><td class="label">Payment Mode:</td><td class="val">${payload.paymentMethod || "Pay at Hotel"}</td></tr>
+            <tr>
+              <td class="label">Payment Status:</td>
+              <td class="val">
+                ${payload.paymentMethod === "RAZORPAY"
+                  ? `<span style="color: #047857; font-weight: bold;">PAID ONLINE (Razorpay)</span>${payload.paymentId ? `<div style="font-size: 10px; font-family: monospace; color: #787069;">ID: ${payload.paymentId}</div>` : ""}`
+                  : `<span style="color: #A27520; font-weight: bold;">Pay at Hotel (Front Desk)</span>`}
+              </td>
+            </tr>
             <tr><td class="label">Total Amount:</td><td class="val" style="color: #A27520; font-size: 15px;">${formatCurrencyINR(payload.totalAmount || 0)}</td></tr>
           </table>
 

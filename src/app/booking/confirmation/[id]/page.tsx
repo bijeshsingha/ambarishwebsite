@@ -365,6 +365,27 @@ export default function ConfirmationPage() {
                 {formatCurrencyINR(reservation.totalAmount || 0)}
               </span>
             </div>
+            <div className="pt-1.5 border-t border-[#EDE7DE] flex justify-between items-center text-[11px] voucher-compact-text">
+              <span className="text-[#787069]">Payment Mode &amp; Status:</span>
+              <div className="text-right">
+                {reservation.paymentMethod === "RAZORPAY" ? (
+                  <div>
+                    <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">
+                      ✓ Paid Online (Razorpay)
+                    </span>
+                    {reservation.paymentId && (
+                      <span className="block font-mono text-[10px] text-[#787069] mt-0.5">
+                        Ref: {reservation.paymentId}
+                      </span>
+                    )}
+                  </div>
+                ) : (
+                  <span className="px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 font-bold border border-amber-200">
+                    Pay at Hotel (Front Desk Settlement)
+                  </span>
+                )}
+              </div>
+            </div>
           </div>
 
           {/* QR Code & Front Desk Footer */}
