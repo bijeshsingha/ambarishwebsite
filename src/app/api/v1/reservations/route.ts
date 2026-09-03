@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     }
 
     // Generate guaranteed unique sequential serial number (starting from HAGR-0000)
-    const confirmationNo = getNextReservationReference();
+    const confirmationNo = await getNextReservationReference();
 
     const reservation = {
       bookingReference: confirmationNo,
