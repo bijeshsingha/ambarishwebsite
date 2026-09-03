@@ -28,6 +28,7 @@ yarn-error.log*
 .env
 
 # scratch & raw extraction
+data/
 scratch/
 .corrupted_*
 extracted_media/
