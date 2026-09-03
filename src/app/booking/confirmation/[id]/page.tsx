@@ -76,8 +76,38 @@ export default function ConfirmationPage() {
   }
 
   return (
-    <div className="bg-[#FAF7F2] text-[#1A1715] min-h-screen py-12 sm:py-16 px-4 sm:px-6 lg:px-8 print:bg-white print:p-0">
-      <div className="max-w-3xl mx-auto space-y-6">
+    <div className="bg-[#FAF7F2] text-[#1A1715] min-h-screen py-12 sm:py-16 px-4 sm:px-6 lg:px-8 print:bg-white print:p-0 print:min-h-0 print:py-0 print:px-0">
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            @media print {
+              @page {
+                size: A4 portrait;
+                margin: 8mm 10mm;
+              }
+              html, body {
+                background: #FFFFFF !important;
+                color: #000000 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                height: auto !important;
+                overflow: visible !important;
+              }
+              .print-voucher-card {
+                page-break-after: avoid !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                margin: 0 auto !important;
+                max-width: 100% !important;
+                box-shadow: none !important;
+              }
+            }
+          `,
+        }}
+      />
+      <div className="max-w-3xl mx-auto space-y-6 print:max-w-none print:m-0 print:space-y-0">
         {/* Success Alert */}
         <div className="p-6 rounded-3xl bg-[#FFFFFF] border border-[#E6DED3] text-center space-y-2 shadow-sm print:hidden">
           <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-700 mx-auto flex items-center justify-center">
@@ -110,10 +140,10 @@ export default function ConfirmationPage() {
         </div>
 
         {/* Printable Voucher Card */}
-        <div className="p-8 sm:p-10 rounded-3xl bg-[#FFFFFF] border border-[#E6DED3] shadow-md space-y-8 print:border print:border-black print:rounded-none">
+        <div className="print-voucher-card p-6 sm:p-10 rounded-3xl bg-[#FFFFFF] border border-[#E6DED3] shadow-md space-y-5 print:p-5 print:space-y-3.5 print:border print:border-[#E6DED3] print:shadow-none print:rounded-2xl">
           {/* Header */}
-          <div className="flex justify-between items-center hairline-b pb-6">
-            <div className="relative h-12 w-48">
+          <div className="flex justify-between items-center hairline-b pb-4 print:pb-2.5">
+            <div className="relative h-10 w-44 sm:h-12 sm:w-48 print:h-9 print:w-40">
               <Image
                 src="/images/logo.png"
                 alt="Hotel Ambarish Grand Residency by Divine View"
@@ -134,10 +164,10 @@ export default function ConfirmationPage() {
           </div>
 
           {/* Matrix */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-xs">
-            <div className="p-4 rounded-2xl bg-[#FAF7F2] border border-[#EDE7DE] space-y-1.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs print:grid-cols-2 print:gap-3">
+            <div className="p-3.5 sm:p-4 rounded-2xl bg-[#FAF7F2] border border-[#EDE7DE] space-y-1.5 print:p-2.5 print:rounded-xl">
               <span className="font-semibold text-[10px] uppercase text-[#A27520] block">Guest & Corporate Details</span>
-              <p className="font-medium text-sm text-[#1A1715]">{reservation?.guestName}</p>
+              <p className="font-medium text-sm text-[#1A1715] capitalize">{reservation?.guestName}</p>
               <p className="text-[#4A443F]">Phone: {reservation?.guestPhone}</p>
               <p className="text-[#4A443F]">Email: {reservation?.guestEmail}</p>
               {reservation?.companyName && (
@@ -150,10 +180,10 @@ export default function ConfirmationPage() {
               )}
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#FAF7F2] border border-[#EDE7DE] space-y-2">
+            <div className="p-3.5 sm:p-4 rounded-2xl bg-[#FAF7F2] border border-[#EDE7DE] space-y-1.5 print:p-2.5 print:rounded-xl">
               <span className="font-semibold text-[10px] uppercase text-[#A27520] block">Stay & Reserved Rooms</span>
               {reservation?.bookedRooms && reservation.bookedRooms.length > 0 ? (
-                <div className="space-y-1.5 pb-1">
+                <div className="space-y-1 pb-1">
                   {reservation.bookedRooms.map((rm, idx) => (
                     <div key={idx} className="flex justify-between items-center text-xs">
                       <div>
@@ -180,7 +210,7 @@ export default function ConfirmationPage() {
           </div>
 
           {/* Pricing */}
-          <div className="p-5 rounded-2xl bg-[#FAF7F2] border border-[#EDE7DE] space-y-2 text-xs">
+          <div className="p-3.5 sm:p-4 rounded-2xl bg-[#FAF7F2] border border-[#EDE7DE] space-y-1.5 text-xs print:p-2.5 print:rounded-xl">
             <div className="flex justify-between text-[#4A443F]">
               <span>Base Tariff:</span>
               <span>{formatCurrencyINR(reservation?.baseAmount || 0)}</span>
@@ -195,21 +225,21 @@ export default function ConfirmationPage() {
               <span>Taxes (GST SAC 996311):</span>
               <span>{formatCurrencyINR(reservation?.taxAmount || 0)}</span>
             </div>
-            <div className="pt-2 hairline-t flex justify-between items-baseline font-bold text-sm text-[#1A1715]">
+            <div className="pt-1.5 hairline-t flex justify-between items-baseline font-bold text-sm text-[#1A1715]">
               <span>Grand Total</span>
-              <span className="font-serif text-lg text-[#A27520]">
+              <span className="font-serif text-base sm:text-lg text-[#A27520]">
                 {formatCurrencyINR(reservation?.totalAmount || 0)}
               </span>
             </div>
           </div>
 
-          {/* QR Code */}
-          <div className="pt-4 hairline-t flex justify-between items-center text-xs text-[#787069]">
-            <div className="flex items-center space-x-3">
-              <div className="p-1.5 bg-[#FAF7F2] rounded-lg border border-[#EDE7DE] text-[#1A1715]">
-                <QrCode className="w-10 h-10" />
+          {/* QR Code & Helpdesk */}
+          <div className="pt-3 hairline-t flex justify-between items-center text-xs text-[#787069] print:pt-2">
+            <div className="flex items-center space-x-2.5">
+              <div className="p-1 bg-[#FAF7F2] rounded-lg border border-[#EDE7DE] text-[#1A1715]">
+                <QrCode className="w-8 h-8 print:w-6 print:h-6" />
               </div>
-              <span>Present at front desk for instant express check-in</span>
+              <span className="text-[11px]">Present at front desk for instant express check-in</span>
             </div>
 
             <div className="text-right">

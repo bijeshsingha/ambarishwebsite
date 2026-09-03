@@ -24,11 +24,41 @@ export async function POST(request: Request) {
       );
     }
 
+    // Proxy to PMS API
+    const pmsUrl = process.env.PMS_API_URL || "http://localhost:3000/api/v1";
+    try {
+      const pmsRes = await fetch(`${pmsUrl}/events/enquiry`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": process.env.PMS_API_SECRET || "",
+        },
+        body: JSON.stringify({
+          eventType: eventType.toUpperCase().replace(/\s+/g, '_').substring(0, 50),
+          eventTitle: `${eventType} - ${name}`,
+          eventDate: eventDate,
+          durationDays: 1,
+          attendees: Number(attendees.split('-')[0] || attendees),
+          seatingLayout: seatingLayout.toUpperCase(),
+          organizerName: name,
+          organizerPhone: phone,
+          organizerEmail: email,
+          additionalNotes: notes,
+        }),
+      });
+
+      if (!pmsRes.ok) {
+        console.warn("Failed to sync event enquiry with PMS", await pmsRes.text());
+      }
+    } catch (pmsErr) {
+      console.warn("PMS sync error:", pmsErr);
+    }
+
     const recipientEmail = process.env.NOTIFICATION_EMAIL || HOTEL_INFO.email;
     const smtpHost = process.env.SMTP_HOST;
     const smtpPort = parseInt(process.env.SMTP_PORT || "587", 10);
-    const smtpUser = process.env.SMTP_USER;
-    const smtpPass = process.env.SMTP_PASS;
+    const smtpUser = (process.env.SMTP_USER || HOTEL_INFO.email).trim();
+    const smtpPass = process.env.SMTP_PASS?.replace(/^["']|["']$/g, "").replace(/\s+/g, "");
 
     // HTML Email Template for Hotel Management
     const htmlContent = `

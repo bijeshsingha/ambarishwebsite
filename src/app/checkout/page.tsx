@@ -177,8 +177,13 @@ function CheckoutContent() {
   const [guestEmail, setGuestEmail] = useState("");
   const [guestPhone, setGuestPhone] = useState("");
   const [guestCity, setGuestCity] = useState("");
+  const [guestState, setGuestState] = useState("");
   const [wantsGstInvoice, setWantsGstInvoice] = useState(false);
+  const [isB2bBooking, setIsB2bBooking] = useState(false);
   const [companyName, setCompanyName] = useState("");
+  const [corporateEmail, setCorporateEmail] = useState("");
+  const [poNumber, setPoNumber] = useState("");
+  const [billingInstruction, setBillingInstruction] = useState("BILL_TO_COMPANY");
   const [guestGstin, setGuestGstin] = useState("");
   const [specialRequests, setSpecialRequests] = useState("");
   const [agreeTerms, setAgreeTerms] = useState(true);
@@ -241,13 +246,20 @@ function CheckoutContent() {
           rooms: totalRoomsCount,
           adults,
           children,
-          bookingType: "INDIVIDUAL",
+          bookingType: isB2bBooking ? "CORPORATE" : "INDIVIDUAL",
           guestName,
           guestEmail,
           guestPhone,
           guestCity,
-          guestGstin: wantsGstInvoice ? guestGstin : undefined,
-          companyName: wantsGstInvoice ? companyName : undefined,
+          guestState,
+          guestGstin: (wantsGstInvoice || isB2bBooking) ? guestGstin : undefined,
+          b2b: isB2bBooking ? {
+            accountType: "CORPORATE",
+            companyName: companyName,
+            corporateEmail: corporateEmail || guestEmail,
+            poNumber: poNumber || undefined,
+            billingInstruction: billingInstruction
+          } : undefined,
           specialRequests,
           promoCode: appliedPromo?.code || undefined,
           discountAmount,
@@ -326,10 +338,10 @@ function CheckoutContent() {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Bijesh Sharma"
+                    placeholder="e.g. BIJESH SHARMA"
                     value={guestName}
-                    onChange={(e) => updateGuestName(e.target.value)}
-                    className="w-full p-3 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576]"
+                    onChange={(e) => updateGuestName(e.target.value.toUpperCase())}
+                    className="w-full p-3 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576] uppercase"
                   />
                 </div>
 
@@ -367,40 +379,74 @@ function CheckoutContent() {
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. Guwahati / Kolkata / Delhi"
+                    placeholder="e.g. GUWAHATI"
                     value={guestCity}
-                    onChange={(e) => updateGuestCity(e.target.value)}
-                    className="w-full p-3 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576]"
+                    onChange={(e) => updateGuestCity(e.target.value.toUpperCase())}
+                    className="w-full p-3 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576] uppercase"
+                  />
+                </div>
+
+                <div className="space-y-1.5 sm:col-span-2">
+                  <label className="block text-[10px] font-semibold uppercase tracking-wider text-[#A27520]">
+                    State
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. ASSAM"
+                    value={guestState}
+                    onChange={(e) => setGuestState(e.target.value.toUpperCase())}
+                    className="w-full p-3 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576] uppercase"
                   />
                 </div>
               </div>
 
-              {/* Optional GST Invoice */}
-              <div className="pt-3 border-t border-[#E6DED3]/60 space-y-3">
-                <label className="flex items-center space-x-2.5 cursor-pointer text-xs">
-                  <input
-                    type="checkbox"
-                    checked={wantsGstInvoice}
-                    onChange={(e) => setWantsGstInvoice(e.target.checked)}
-                    className="w-4 h-4 rounded text-[#B62576] focus:ring-[#B62576]"
-                  />
-                  <span className="text-[#4A443F] font-medium">
-                    I need a GST tax invoice for Input Tax Credit (Optional)
-                  </span>
-                </label>
+              {/* Optional GST Invoice / B2B */}
+              <div className="pt-3 border-t border-[#E6DED3]/60 space-y-4">
+                <div className="space-y-3">
+                  <label className="flex items-center space-x-2.5 cursor-pointer text-xs">
+                    <input
+                      type="checkbox"
+                      checked={wantsGstInvoice && !isB2bBooking}
+                      onChange={(e) => {
+                        setWantsGstInvoice(e.target.checked);
+                        if (e.target.checked) setIsB2bBooking(false);
+                      }}
+                      className="w-4 h-4 rounded text-[#B62576] focus:ring-[#B62576]"
+                    />
+                    <span className="text-[#4A443F] font-medium">
+                      I need a GST tax invoice for Input Tax Credit (Optional)
+                    </span>
+                  </label>
 
-                {wantsGstInvoice && (
+                  <label className="flex items-center space-x-2.5 cursor-pointer text-xs">
+                    <input
+                      type="checkbox"
+                      checked={isB2bBooking}
+                      onChange={(e) => {
+                        setIsB2bBooking(e.target.checked);
+                        if (e.target.checked) setWantsGstInvoice(false);
+                      }}
+                      className="w-4 h-4 rounded text-[#B62576] focus:ring-[#B62576]"
+                    />
+                    <span className="text-[#4A443F] font-medium">
+                      Booking on behalf of Company / Travel Agency (B2B)
+                    </span>
+                  </label>
+                </div>
+
+                {(wantsGstInvoice || isB2bBooking) && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs animate-in fade-in duration-200">
                     <div className="space-y-1">
                       <label className="text-[10px] uppercase font-semibold text-[#787069]">
-                        Company / Business Name
+                        Company / Business Name *
                       </label>
                       <input
                         type="text"
+                        required
                         placeholder="Company name"
                         value={companyName}
-                        onChange={(e) => updateCompanyName(e.target.value)}
-                        className="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715]"
+                        onChange={(e) => updateCompanyName(e.target.value.toUpperCase())}
+                        className="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] uppercase"
                       />
                     </div>
                     <div className="space-y-1">
@@ -415,6 +461,47 @@ function CheckoutContent() {
                         className="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] uppercase"
                       />
                     </div>
+                    {isB2bBooking && (
+                      <>
+                        <div className="space-y-1">
+                          <label className="text-[10px] uppercase font-semibold text-[#787069]">
+                            Corporate Email
+                          </label>
+                          <input
+                            type="email"
+                            placeholder="traveldesk@company.com"
+                            value={corporateEmail}
+                            onChange={(e) => setCorporateEmail(e.target.value)}
+                            className="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715]"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <label className="text-[10px] uppercase font-semibold text-[#787069]">
+                            PO Number (Optional)
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="e.g. PO-2026-8812"
+                            value={poNumber}
+                            onChange={(e) => setPoNumber(e.target.value.toUpperCase())}
+                            className="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] uppercase"
+                          />
+                        </div>
+                        <div className="space-y-1 sm:col-span-2">
+                          <label className="text-[10px] uppercase font-semibold text-[#787069]">
+                            Billing Instruction
+                          </label>
+                          <select
+                            value={billingInstruction}
+                            onChange={(e) => setBillingInstruction(e.target.value)}
+                            className="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715]"
+                          >
+                            <option value="BILL_TO_COMPANY">Bill to Company (BTC)</option>
+                            <option value="DIRECT_PAYMENT">Direct Payment by Guest</option>
+                          </select>
+                        </div>
+                      </>
+                    )}
                   </div>
                 )}
               </div>

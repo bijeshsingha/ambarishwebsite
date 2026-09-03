@@ -1,28 +1,43 @@
 import { NextResponse } from "next/server";
-import { getStayQuote } from "@/lib/hotel-os-client";
 import { getTodayDate, getTomorrowDate } from "@/lib/formatters";
 
 export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const checkIn = searchParams.get("checkIn") || getTodayDate();
+  const checkOut = searchParams.get("checkOut") || getTomorrowDate();
+  
+  const pmsUrl = process.env.PMS_API_URL || "http://localhost:3000/api/v1";
+
   try {
-    const { searchParams } = new URL(request.url);
-    const roomId = searchParams.get("roomId") || searchParams.get("room") || undefined;
-    const checkIn = searchParams.get("checkIn") || getTodayDate();
-    const checkOut = searchParams.get("checkOut") || getTomorrowDate();
-    const adults = parseInt(searchParams.get("adults") || "2", 10);
-    const children = parseInt(searchParams.get("children") || "0", 10);
-    const ratePlanCode = (searchParams.get("plan") as any) || "EP";
+    const res = await fetch(
+      `${pmsUrl}/availability/quote?arrivalDate=${checkIn}&departureDate=${checkOut}`,
+      {
+        headers: {
+          "x-api-key": process.env.PMS_API_SECRET || "",
+        },
+        next: { revalidate: 0 },
+      }
+    );
 
-    const quote = getStayQuote({
-      checkIn,
-      checkOut,
-      adults,
-      children,
-      roomId,
-      ratePlanCode,
+    if (res.ok) {
+      const data = await res.json();
+      return NextResponse.json(data);
+    }
+
+    console.warn("PMS availability responded with non-200:", res.status);
+    return NextResponse.json({
+      fallback: true,
+      arrivalDate: checkIn,
+      departureDate: checkOut,
+      categories: [],
     });
-
-    return NextResponse.json(quote);
   } catch (error: any) {
-    return NextResponse.json({ error: error.message || "Failed to calculate quote" }, { status: 500 });
+    console.warn("PMS Availability fetch error (using fallback):", error?.message);
+    return NextResponse.json({
+      fallback: true,
+      arrivalDate: checkIn,
+      departureDate: checkOut,
+      categories: [],
+    });
   }
 }

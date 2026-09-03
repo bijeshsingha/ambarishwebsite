@@ -63,6 +63,79 @@ function BookingContent() {
 
   const nights = Math.max(1, calculateNights(checkIn, checkOut));
 
+  // Live Inventory State
+  const [liveInventory, setLiveInventory] = useState<Record<string, Record<string, number>> | null>(null);
+  const [isLoadingInventory, setIsLoadingInventory] = useState(false);
+
+  // Fetch Live Inventory from PMS
+  useEffect(() => {
+    async function loadInventory() {
+      setIsLoadingInventory(true);
+      try {
+        const res = await fetch(`/api/v1/availability/quote?checkIn=${checkIn}&checkOut=${checkOut}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        
+        const categories = Array.isArray(data.categories)
+          ? data.categories
+          : Array.isArray(data.availableRooms)
+          ? data.availableRooms
+          : [];
+
+        if (categories.length > 0) {
+          const newInv: Record<string, Record<string, number>> = {
+            "deluxe-room": {
+              KING: getMaxRoomCapacity("deluxe-room", "KING"),
+              TWIN: getMaxRoomCapacity("deluxe-room", "TWIN"),
+            },
+            "executive-room": {
+              KING: getMaxRoomCapacity("executive-room", "KING"),
+              TWIN: getMaxRoomCapacity("executive-room", "TWIN"),
+            },
+            "suite-room": {
+              KING: getMaxRoomCapacity("suite-room", "KING"),
+              TWIN: getMaxRoomCapacity("suite-room", "TWIN"),
+            },
+          };
+
+          categories.forEach((cat: any) => {
+            const code = (cat.roomTypeCode || cat.category || cat.code || "").toUpperCase();
+            const count =
+              typeof cat.availableCount === "number"
+                ? cat.availableCount
+                : typeof cat.available === "number"
+                ? cat.available
+                : 0;
+
+            if (code === "DELUXE_KING") {
+              newInv["deluxe-room"].KING = count;
+            } else if (code === "DELUXE_TWIN") {
+              newInv["deluxe-room"].TWIN = count;
+            } else if (code === "EXEC_KING") {
+              newInv["executive-room"].KING = count;
+            } else if (code === "EXEC_TWIN") {
+              newInv["executive-room"].TWIN = count;
+            } else if (code === "SUITE") {
+              newInv["suite-room"].KING = count;
+              newInv["suite-room"].TWIN = count;
+            } else if (cat.bedType && cat.category) {
+              const slug = cat.category.toLowerCase() + "-room";
+              if (!newInv[slug]) newInv[slug] = {};
+              newInv[slug][cat.bedType] = count;
+            }
+          });
+
+          setLiveInventory(newInv);
+        }
+      } catch (err) {
+        console.error("Failed to fetch live inventory", err);
+      } finally {
+        setIsLoadingInventory(false);
+      }
+    }
+    loadInventory();
+  }, [checkIn, checkOut]);
+
   // Multi-room selection map: { [slug]: { planCode: "EP" | "CP", bedType: "KING" | "TWIN", quantity: number } }
   const [roomSelections, setRoomSelections] = useState<Record<string, RoomSelectionState>>(() => {
     const initial: Record<string, RoomSelectionState> = {};
@@ -142,7 +215,7 @@ function BookingContent() {
   const handleQuantityChange = (slug: string, delta: number) => {
     setRoomSelections((prev) => {
       const current = prev[slug] || { planCode: "EP", bedType: "KING", quantity: 0 };
-      const maxCapacity = getMaxRoomCapacity(slug, current.bedType);
+      const maxCapacity = liveInventory ? (liveInventory[slug]?.[current.bedType] || 0) : getMaxRoomCapacity(slug, current.bedType);
       const nextQty = Math.max(0, Math.min(maxCapacity, current.quantity + delta));
       return {
         ...prev,
@@ -154,7 +227,7 @@ function BookingContent() {
   const handleBedTypeChange = (slug: string, bedType: "KING" | "TWIN") => {
     setRoomSelections((prev) => {
       const current = prev[slug] || { planCode: "EP", bedType: "KING", quantity: 0 };
-      const maxCapacity = getMaxRoomCapacity(slug, bedType);
+      const maxCapacity = liveInventory ? (liveInventory[slug]?.[bedType] || 0) : getMaxRoomCapacity(slug, bedType);
       const nextQty = Math.min(current.quantity, maxCapacity);
       return {
         ...prev,
@@ -464,14 +537,20 @@ function BookingContent() {
               room.ratePlans.find((p) => p.code === currentSelection.planCode) || room.ratePlans[0];
             const isSelected = currentSelection.quantity > 0;
             const bedOptions = getBedTypeOptions(room.slug);
-            const maxAvailableForBed = getMaxRoomCapacity(room.slug, currentSelection.bedType);
+            const maxAvailableForBed = liveInventory 
+              ? (liveInventory[room.slug]?.[currentSelection.bedType] ?? getMaxRoomCapacity(room.slug, currentSelection.bedType)) 
+              : getMaxRoomCapacity(room.slug, currentSelection.bedType);
+              
+            const isEntireCategorySoldOut = liveInventory 
+              ? bedOptions.every(b => (liveInventory[room.slug]?.[b.type] ?? getMaxRoomCapacity(room.slug, b.type)) === 0)
+              : false;
 
             return (
               <div
                 key={room.id}
                 className={`bg-[#FFFFFF] rounded-2xl sm:rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border-2 ${
                   isSelected ? "border-[#B62576] ring-1 ring-[#B62576]/30" : "border-[#E6DED3]"
-                }`}
+                } ${isEntireCategorySoldOut ? "opacity-50 grayscale" : ""}`}
               >
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
                   {/* Left Column: Imagery (5 Cols) */}
@@ -542,23 +621,29 @@ function BookingContent() {
                         <div className="grid grid-cols-2 sm:grid-cols-2 gap-2">
                           {bedOptions.map((b) => {
                             const isBedActive = currentSelection.bedType === b.type;
+                            const bedCount = liveInventory 
+                              ? (liveInventory[room.slug]?.[b.type] ?? b.maxCapacity)
+                              : b.maxCapacity;
+                            const isBedSoldOut = bedCount === 0;
+
                             return (
                               <button
                                 key={b.type}
                                 type="button"
+                                disabled={isBedSoldOut}
                                 onClick={() => handleBedTypeChange(room.slug, b.type)}
                                 className={`p-2.5 rounded-xl text-left border-2 transition-all flex items-center justify-between ${
                                   isBedActive
                                     ? "border-[#B62576] bg-[#FFF8FA] text-[#1A1715] shadow-sm"
                                     : "border-[#E6DED3] bg-[#FAF7F2] text-[#4A443F] hover:border-[#A27520]"
-                                }`}
+                                } ${isBedSoldOut ? "opacity-40 cursor-not-allowed" : ""}`}
                               >
                                 <div className="flex items-center space-x-2">
                                   <Bed className={`w-4 h-4 ${isBedActive ? "text-[#B62576]" : "text-[#A27520]"}`} />
                                   <div>
                                     <span className="text-xs font-bold block">{b.label}</span>
                                     <span className="text-[9px] text-[#787069] block">
-                                      Max {b.maxCapacity} rooms
+                                      {isBedSoldOut ? "Sold Out" : `${bedCount} available`}
                                     </span>
                                   </div>
                                 </div>
@@ -645,11 +730,12 @@ function BookingContent() {
                         {currentSelection.quantity === 0 ? (
                           <button
                             type="button"
+                            disabled={maxAvailableForBed === 0}
                             onClick={() => handleQuantityChange(room.slug, 1)}
-                            className="px-5 py-2.5 rounded-full bg-[#1A1715] hover:bg-[#B62576] text-white text-xs font-bold uppercase tracking-wider transition-all flex items-center space-x-1 shadow-sm"
+                            className="px-5 py-2.5 rounded-full bg-[#1A1715] hover:bg-[#B62576] text-white text-xs font-bold uppercase tracking-wider transition-all flex items-center space-x-1 shadow-sm disabled:opacity-30 disabled:cursor-not-allowed"
                           >
                             <Plus className="w-3.5 h-3.5" />
-                            <span>Add Room</span>
+                            <span>{maxAvailableForBed === 0 ? "Sold Out" : "Add Room"}</span>
                           </button>
                         ) : (
                           <div className="flex items-center space-x-1.5 bg-[#FAF7F2] p-1 rounded-full border border-[#E6DED3]">
