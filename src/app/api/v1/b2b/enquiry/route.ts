@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { submitPmsB2bEnquiry } from "@/lib/hotel-os-client";
 import { sendB2bEnquiryNotificationEmail } from "@/lib/email";
 
 export async function POST(request: Request) {
@@ -14,7 +13,6 @@ export async function POST(request: Request) {
     }
 
     const payload = {
-      enquiryType: body.enquiryType || "CORPORATE_RATE_CONTRACT",
       companyName: body.companyName,
       accountType: body.accountType || "CORPORATE",
       contactPerson: body.contactPerson,
@@ -30,21 +28,14 @@ export async function POST(request: Request) {
       message: body.message,
     };
 
-    // Forward to PMS CRM
-    try {
-      await submitPmsB2bEnquiry(payload);
-    } catch (pmsErr: any) {
-      console.warn("[B2B Enquiry] PMS sync warning:", pmsErr.message);
-    }
-
-    // Send email notification to sales/management
+    // Send email notification to hotel management
     sendB2bEnquiryNotificationEmail(payload).catch((mailErr) => {
-      console.warn("[B2B Enquiry] Email dispatch warning:", mailErr.message);
+      console.warn("[B2B Enquiry] Email dispatch warning:", mailErr?.message);
     });
 
     return NextResponse.json({
       success: true,
-      message: "B2B Enquiry submitted successfully",
+      message: "B2B Corporate enquiry submitted successfully. Our sales team will reach out shortly.",
     });
   } catch (error: any) {
     console.error("[B2B Enquiry] Error:", error?.message);

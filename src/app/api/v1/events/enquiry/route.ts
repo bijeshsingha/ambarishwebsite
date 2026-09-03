@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { submitPmsEventEnquiry } from "@/lib/hotel-os-client";
 import { sendEventEnquiryNotificationEmail } from "@/lib/email";
 
 export async function POST(request: Request) {
@@ -24,29 +23,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const paxNumber = typeof attendees === "number"
-      ? attendees
-      : Number(String(attendees).split("-")[0] || 50);
-
-    // 1. Sync with PMS CRM
-    try {
-      await submitPmsEventEnquiry({
-        eventType: eventType.toUpperCase().replace(/\s+/g, "_").substring(0, 50),
-        eventTitle: `${eventType} - ${name}`,
-        eventDate,
-        durationDays: 1,
-        attendees: paxNumber,
-        seatingLayout: seatingLayout.toUpperCase(),
-        organizerName: name,
-        organizerPhone: phone,
-        organizerEmail: email,
-        additionalNotes: notes,
-      });
-    } catch (pmsErr: any) {
-      console.warn("[Event Enquiry] PMS sync warning:", pmsErr.message);
-    }
-
-    // 2. Dispatch Email Notification
+    // Dispatch Email Notification directly to hotel management
     sendEventEnquiryNotificationEmail({
       eventType,
       eventDate,
@@ -62,7 +39,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: "Enquiry submitted successfully",
+      message: "Banquet / Event proposal submitted successfully. Our events team will contact you shortly.",
     });
   } catch (error: any) {
     console.error("[Event Enquiry] Submission error:", error);

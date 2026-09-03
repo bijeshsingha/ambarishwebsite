@@ -154,11 +154,6 @@ export async function sendReservationNotificationEmails(payload: ReservationEmai
         </div>
         <div class="content">
           <span class="badge">${payload.bookingType === "CORPORATE" ? "🏢 Corporate Booking (B2B)" : "🌟 Retail Direct Booking"}</span>
-          ${payload.offlineFallback ? `
-            <div style="background: #FFFBEB; border: 1px solid #FCD34D; color: #92400E; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 13px;">
-              ⚠️ <strong>Front Desk Action Required:</strong> PMS gateway was offline/unreachable when this direct booking was placed. Please verify and record this booking in Hotel OS PMS under reference <strong>${payload.confirmationNo}</strong>.
-            </div>
-          ` : ""}
           <h2 class="title">New Reservation Confirmed: ${formatCurrencyINR(payload.totalAmount || 0)}</h2>
 
           <div class="card">
