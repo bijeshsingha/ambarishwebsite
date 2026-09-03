@@ -50,8 +50,28 @@ export default function LocationPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           {/* Map */}
           <div className="lg:col-span-8 rounded-3xl overflow-hidden border border-[#E6DED3] min-h-[420px] bg-[#FFFFFF] shadow-md relative">
+            {/* Floating Hotel Location Identifier Badge */}
+            <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10 bg-white/95 backdrop-blur-md px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-2xl shadow-lg border border-[#0C0B0B]/10 flex items-center space-x-2.5 sm:space-x-3">
+              <div className="w-8 h-8 rounded-xl bg-[#B62576]/10 text-[#B62576] flex items-center justify-center shrink-0">
+                <MapPin className="w-4 h-4 text-[#B62576]" />
+              </div>
+              <div>
+                <h4 className="font-serif text-xs sm:text-sm font-bold text-[#0C0B0B]">Hotel Ambarish Grand Residency</h4>
+                <p className="text-[10px] text-[#787069]">MD Shah Road, Paltan Bazaar • 250m from Railway Station</p>
+              </div>
+              <a
+                href="https://maps.google.com/?q=Hotel+Ambarish+Grand+Residency+Paltan+Bazaar+Guwahati"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hidden sm:inline-flex ml-1.5 px-3 py-1.5 rounded-full bg-[#B62576] text-white text-[10px] font-bold uppercase tracking-wider hover:bg-[#9A1D62] transition-colors items-center gap-1 shadow-sm shrink-0"
+              >
+                <span>Directions</span>
+                <Navigation className="w-3 h-3" />
+              </a>
+            </div>
+
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3580.457814881026!2d91.7516!3d26.1824!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a597a7e800001%3A0x29f5f0b5d92a0000!2sHotel%20Ambarish%20Grand%20Residency!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+              src="https://maps.google.com/maps?q=Hotel+Ambarish+Grand+Residency,+Md+Shah+Road,+Paltan+Bazaar,+Guwahati,+Assam+781008&t=&z=16&ie=UTF8&iwloc=&output=embed"
               width="100%"
               height="100%"
               style={{ border: 0, minHeight: "450px" }}
