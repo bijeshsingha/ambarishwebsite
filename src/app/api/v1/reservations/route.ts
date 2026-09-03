@@ -19,6 +19,7 @@ export async function POST(request: Request) {
     // Asynchronously dispatch email notification
     sendReservationNotificationEmails({
       confirmationNo,
+      offlineFallback: pmsResult.offlineFallback,
       ...body,
     }).catch((mailErr) => {
       console.warn("[Reservation API] Email dispatch warning:", mailErr?.message);
