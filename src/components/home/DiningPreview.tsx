@@ -4,7 +4,7 @@ import React, { useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { ArrowUpRight, Clock, UtensilsCrossed, PhoneCall, Sparkles } from "lucide-react";
+import { ArrowUpRight, Clock, UtensilsCrossed, PhoneCall, Sparkles, Wine } from "lucide-react";
 import { DINING_INFO } from "@/data/dining";
 
 const restaurantAngles = [
@@ -268,6 +268,65 @@ export default function DiningPreview() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Pavillion Bar Showcase Banner */}
+        <div className="mt-16 bg-[#141211] text-[#F5EBDD] rounded-3xl p-8 sm:p-12 border border-[#2D2825] shadow-xl">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            <div className="lg:col-span-7 space-y-4">
+              <div className="inline-flex items-center space-x-2 bg-[#26211E] border border-[#B4872F]/30 px-3.5 py-1.5 rounded-full">
+                <Wine className="w-3.5 h-3.5 text-[#B4872F]" />
+                <span className="text-[10px] uppercase font-mono tracking-widest text-[#B4872F] font-semibold">
+                  Lobby Lounge &amp; Bar
+                </span>
+              </div>
+
+              <h3 className="font-serif text-3xl sm:text-4xl text-white font-normal">
+                Pavillion Bar
+              </h3>
+
+              <p className="text-xs sm:text-sm text-[#B3A89F] font-light leading-relaxed">
+                An intimate lounge setting for premium spirits, chilled draughts, and evening relaxation. Savor fine single malts, classic cocktails, and cold beers paired with sizzling tandoori and Chinese bar appetizers.
+              </p>
+
+              <div className="flex flex-wrap items-center gap-4 text-xs pt-2">
+                <div className="flex items-center text-[#B4872F] font-mono">
+                  <Clock className="w-3.5 h-3.5 mr-1.5" />
+                  <span>11:00 AM – 11:00 PM Daily</span>
+                </div>
+                <span className="text-white/20">•</span>
+                <span className="text-[#A89F96]">Lobby Level, Hotel Ambarish</span>
+              </div>
+
+              <div className="pt-2">
+                <Link
+                  href="/dining#pavillion-bar"
+                  className="inline-flex items-center px-6 py-3 text-xs font-bold uppercase tracking-[0.12em] text-white bg-[#B4872F] hover:bg-[#966E22] rounded-full transition-all shadow-md active:scale-[0.98]"
+                >
+                  <span>Explore Pavillion Bar &amp; Photos</span>
+                  <ArrowUpRight className="w-3.5 h-3.5 ml-2" />
+                </Link>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5">
+              <div className="relative aspect-[16/10] sm:aspect-[4/3] rounded-2xl overflow-hidden border border-[#332C28] shadow-lg group">
+                <Image
+                  src="/images/bar/bar1-lounge-seating.webp"
+                  alt="Pavillion Bar Lounge - Hotel Ambarish Guwahati"
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  sizes="(max-width: 1024px) 100vw, 40vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute bottom-3 left-3">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-white/90 bg-black/60 px-2.5 py-1 rounded-full backdrop-blur-sm border border-white/10">
+                    Plush Lounge Seating
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

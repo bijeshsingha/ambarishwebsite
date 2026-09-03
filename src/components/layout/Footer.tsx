@@ -45,6 +45,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/dining#pavillion-bar" className="hover:text-[#F5EBDD] transition-colors">
+                  Pavillion Bar
+                </Link>
+              </li>
+              <li>
                 <Link href="/meetings-events" className="hover:text-[#F5EBDD] transition-colors">
                   Meetings & Banquets
                 </Link>

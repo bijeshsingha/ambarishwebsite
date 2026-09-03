@@ -69,7 +69,7 @@ export default function Header() {
 
   const navLinks = [
     { label: "Rooms & Suites", href: "/rooms" },
-    { label: "Dining", href: "/dining" },
+    { label: "Dining & Bar", href: "/dining" },
     { label: "Banquets", href: "/meetings-events" },
     { label: "Offers & Promos", href: "/booking" },
     { label: "Gallery", href: "/gallery" },

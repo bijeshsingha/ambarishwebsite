@@ -263,3 +263,92 @@ export const DINING_INFO: DiningInfo = {
     { name: "Mix Raita", category: "Salads & Raita", isVeg: true, price: 90 },
   ],
 };
+
+export interface BarHighlight {
+  name: string;
+  category: string;
+  description: string;
+}
+
+export interface BarInfo {
+  name: string;
+  tagline: string;
+  description: string;
+  hours: string;
+  location: string;
+  ambiance: string;
+  features: string[];
+  images: {
+    src: string;
+    alt: string;
+    caption: string;
+  }[];
+  highlights: BarHighlight[];
+}
+
+export const PAVILLION_BAR_INFO: BarInfo = {
+  name: "Pavillion Bar",
+  tagline: "An intimate, sophisticated lounge for fine spirits, chilled draughts, and evening unwinding.",
+  description:
+    "Located on the lobby level at Hotel Ambarish Grand Residency, Pavillion Bar provides a welcoming retreat for corporate travelers, transit guests, and friends. Featuring an extensive collection of premium whiskeys, single malts, spirits, chilled beers, and classic cocktails, accompanied by sizzling hot tandoori and Chinese appetizers freshly prepared from our kitchen.",
+  hours: "11:00 AM – 11:00 PM Daily",
+  location: "Lobby Level, Hotel Ambarish Grand Residency, Paltan Bazaar, Guwahati",
+  ambiance: "Warm mood lighting, plush leather lounge seating, ambient music, and attentive personalized service.",
+  features: [
+    "Extensive domestic & imported spirits, single malts & scotch",
+    "Chilled beers, fine wines, and classic cocktail creations",
+    "Sizzling bar bites: Chicken Tikka, Chilli Paneer, Crispy Corn & Kebabs",
+    "Plush air-conditioned lounge setting with privacy and comfort",
+    "Dedicated table service for business catch-ups or quiet evening relaxation",
+  ],
+  images: [
+    {
+      src: "/images/bar/bar1-lounge-seating.webp",
+      alt: "Pavillion Bar Plush Lounge Seating - Hotel Ambarish Guwahati",
+      caption: "Intimate lounge seating with warm ambient lighting",
+    },
+    {
+      src: "/images/bar/bar2-lounge-wide.webp",
+      alt: "Pavillion Bar Wide Hall View - Hotel Ambarish",
+      caption: "Spacious air-conditioned lounge ambiance",
+    },
+    {
+      src: "/images/bar/bar3-counter-view.webp",
+      alt: "Pavillion Bar Counter & Spirits Display - Hotel Ambarish",
+      caption: "Curated spirits display and full bar service counter",
+    },
+    {
+      src: "/images/bar/bar4-lounge-angle.webp",
+      alt: "Pavillion Bar Corner Seating Angle - Hotel Ambarish",
+      caption: "Comfortable booth and corner arrangements for private discussions",
+    },
+    {
+      src: "/images/bar/bar5-entrance-sign.webp",
+      alt: "Pavillion Bar Entrance & Signage - Hotel Ambarish",
+      caption: "Welcoming lobby entrance to Pavillion Bar",
+    },
+  ],
+  highlights: [
+    {
+      name: "Fine Spirits & Single Malts",
+      category: "Premium Spirits",
+      description: "Carefully curated labels across single malts, blended Scotch, premium vodkas, and aged rums.",
+    },
+    {
+      name: "Chilled Brews & Frosted Glasses",
+      category: "Beers & Ciders",
+      description: "Ice-cold bottled beers and lagers served at optimal temperature for refreshing evenings.",
+    },
+    {
+      name: "Handcrafted Mixed Drinks",
+      category: "Cocktails & Coolers",
+      description: "Classics including Mojitos, Gin & Tonics, Whiskey Sours, and refreshing mocktails.",
+    },
+    {
+      name: "Hot Sizzling Starters",
+      category: "Kitchen Starters",
+      description: "Freshly tossed tandoori kebabs, spicy chilli chicken, and crispy bites from our restaurant kitchen.",
+    },
+  ],
+};
+
