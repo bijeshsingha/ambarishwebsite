@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import {
   Building2,
   Briefcase,
@@ -62,6 +63,9 @@ const corporateBenefits = [
 ];
 
 export default function B2bCorporatePage() {
+  // B2B page is currently disabled by admin request
+  redirect("/");
+
   const [formData, setFormData] = useState({
     companyName: "",
     accountType: "CORPORATE",
