@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { sendReservationNotificationEmails } from "@/lib/email";
+import { getNextReservationReference } from "@/lib/sequence";
 
 // In-memory server store for confirmed web reservations
 const globalReservationStore = new Map<string, any>();
@@ -15,10 +16,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // Generate guaranteed unique direct booking confirmation number
-    const dateStamp = new Date().toISOString().slice(2, 10).replace(/-/g, "");
-    const randomSeq = Math.floor(1000 + Math.random() * 9000);
-    const confirmationNo = `RES-${dateStamp}-${randomSeq}`;
+    // Generate guaranteed unique sequential serial number (starting from HAGR-0000)
+    const confirmationNo = getNextReservationReference();
 
     const reservation = {
       bookingReference: confirmationNo,
