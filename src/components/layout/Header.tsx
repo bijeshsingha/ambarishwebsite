@@ -71,6 +71,7 @@ export default function Header() {
     { label: "Rooms & Suites", href: "/rooms" },
     { label: "Dining & Bar", href: "/dining" },
     { label: "Banquets", href: "/meetings-events" },
+    { label: "Corporate (B2B)", href: "/b2b" },
     { label: "Offers & Promos", href: "/booking" },
     { label: "Gallery", href: "/gallery" },
     { label: "Location", href: "/location" },

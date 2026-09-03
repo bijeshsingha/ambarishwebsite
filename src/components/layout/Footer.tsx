@@ -55,6 +55,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/b2b" className="hover:text-[#F5EBDD] transition-colors text-[#B4872F] font-medium">
+                  Corporate &amp; B2B Rates
+                </Link>
+              </li>
+              <li>
                 <Link href="/booking" className="hover:text-[#F5EBDD] transition-colors">
                   Special Offers & Direct Rates
                 </Link>
