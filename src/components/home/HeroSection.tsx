@@ -2,8 +2,14 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
 import BookingBar from "@/components/booking/BookingBar";
+
+const HeroScene3D = dynamic(() => import("@/components/3d/HeroScene3D"), {
+  ssr: false,
+  loading: () => null,
+});
 
 export default function HeroSection() {
   const [imgIndex, setImgIndex] = useState(0);
@@ -63,6 +69,9 @@ export default function HeroSection() {
         <div className="absolute inset-0 bg-radial from-transparent via-[#0C0B0B]/40 to-[#0C0B0B]/85" />
       </div>
 
+      {/* 3D Ambient WebGL Luxury Rings & Particles */}
+      <HeroScene3D />
+
       {/* Top Slide Switcher */}
       <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-4 flex justify-end items-center">
         <div className="flex items-center space-x-1.5 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
@@ -79,24 +88,44 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Center Zone: Clean, Classic Editorial Headline */}
+      {/* Center Zone: Clean, Classic Editorial Headline with Smooth Stagger Motion */}
       <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-2 flex flex-col justify-center text-center items-center">
-        <div className="max-w-3xl space-y-3">
-          <p className="text-xs uppercase tracking-[0.3em] text-[#B4872F] font-semibold">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="max-w-3xl space-y-3"
+        >
+          <motion.p
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="text-xs uppercase tracking-[0.3em] text-[#B4872F] font-semibold"
+          >
             Paltan Bazaar • Guwahati
-          </p>
+          </motion.p>
 
-          <h1 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-normal text-[#F5EBDD] leading-[1.08] tracking-tight">
+          <motion.h1
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="font-serif text-4xl sm:text-6xl lg:text-7xl font-normal text-[#F5EBDD] leading-[1.08] tracking-tight"
+          >
             Hotel Ambarish Grand Residency
             <span className="block text-xl sm:text-2xl lg:text-3xl text-[#B4872F] font-serif italic mt-2 font-normal tracking-wide drop-shadow-sm">
               by Divine View
             </span>
-          </h1>
+          </motion.h1>
 
-          <p className="text-[#F5EBDD]/80 text-xs sm:text-sm md:text-base font-light max-w-xl mx-auto leading-relaxed pt-1">
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="text-[#F5EBDD]/80 text-xs sm:text-sm md:text-base font-light max-w-xl mx-auto leading-relaxed pt-1"
+          >
             A comfortable Guwahati stay, made simple. 250m from Guwahati Railway Station with clean AC rooms, in-house multi-cuisine dining, and 24/7 front desk hospitality.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
       </div>
 
       {/* Bottom Zone: Booking Bar fully visible */}

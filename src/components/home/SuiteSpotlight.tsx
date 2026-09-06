@@ -7,6 +7,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight, Layers, Wind, Tv, ShieldCheck } from "lucide-react";
 import { ROOMS } from "@/data/rooms";
 import { formatCurrencyINR } from "@/lib/formatters";
+import CardTilt3D from "@/components/3d/CardTilt3D";
 
 export default function SuiteSpotlight() {
   const suite = ROOMS.find((r) => r.slug === "suite-room");
@@ -34,26 +35,27 @@ export default function SuiteSpotlight() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           {/* Left Column: Multi-Layer Parallax Imagery (7 Cols) */}
           <div className="lg:col-span-7 relative">
-            {/* Primary Large Image: Living Salon */}
-            <motion.div
-              style={{ y: parallaxY }}
-              className="relative aspect-[16/10] sm:aspect-[16/9] rounded-3xl overflow-hidden shadow-2xl border border-white/10"
-            >
-              <Image
-                src="/images/polished/suite-living-wide.webp"
-                alt="Presidential Luxury Suite Living Salon"
-                fill
-                className="object-cover transition-transform duration-700 hover:scale-105"
-                sizes="(max-width: 1024px) 100vw, 60vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0C0B0B]/80 via-transparent to-transparent" />
+            {/* Primary Large Image: Living Salon with 3D Tilt */}
+            <motion.div style={{ y: parallaxY }}>
+              <CardTilt3D maxTilt={5}>
+                <div className="relative aspect-[16/10] sm:aspect-[16/9] rounded-3xl overflow-hidden shadow-2xl border border-white/10">
+                  <Image
+                    src="/images/polished/suite-living-wide.webp"
+                    alt="Presidential Luxury Suite Living Salon"
+                    fill
+                    className="object-cover transition-transform duration-700 hover:scale-105"
+                    sizes="(max-width: 1024px) 100vw, 60vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0C0B0B]/80 via-transparent to-transparent" />
 
-              {/* In-Image Tag */}
-              <div className="absolute bottom-6 left-6">
-                <span className="text-[10px] font-mono uppercase tracking-widest text-[#B4872F] bg-black/60 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10">
-                  Private Living Drawing Room
-                </span>
-              </div>
+                  {/* In-Image Tag */}
+                  <div className="absolute bottom-6 left-6">
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-[#B4872F] bg-black/60 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10">
+                      Private Living Drawing Room
+                    </span>
+                  </div>
+                </div>
+              </CardTilt3D>
             </motion.div>
 
             {/* Overlapping Floating Bedroom Card */}

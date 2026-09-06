@@ -2,9 +2,16 @@
 
 import React from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { MapPin, Train, Bus, Plane, Compass, Navigation, Phone, ArrowUpRight } from "lucide-react";
 import { HOTEL_INFO } from "@/data/hotel-info";
+import CardTilt3D from "@/components/3d/CardTilt3D";
+
+const TransitCompass3D = dynamic(() => import("@/components/3d/TransitCompass3D"), {
+  ssr: false,
+  loading: () => null,
+});
 
 const landmarks = [
   { icon: Train, name: "Guwahati Railway Station", distance: "250 meters", time: "3 min walk" },
@@ -67,22 +74,53 @@ export default function LocationPreview() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="p-6 rounded-2xl bg-[#FFFFFF] border border-[#0C0B0B]/8 hover:border-[#B4872F]/30 shadow-sm transition-all duration-200 space-y-4"
               >
-                <div className="w-10 h-10 rounded-xl bg-[#FAF7F4] flex items-center justify-center text-[#B4872F]">
-                  <Icon className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="font-serif text-lg text-[#0C0B0B] font-normal leading-snug">{l.name}</h4>
-                  <div className="flex items-center space-x-2 text-xs text-[#7A7067] font-mono mt-1">
-                    <span className="font-semibold text-[#B4872F]">{l.distance}</span>
-                    <span>•</span>
-                    <span>{l.time}</span>
+                <CardTilt3D maxTilt={7} className="h-full">
+                  <div className="p-6 rounded-2xl bg-[#FFFFFF] border border-[#0C0B0B]/8 hover:border-[#B4872F]/30 shadow-sm transition-all duration-200 space-y-4 h-full flex flex-col justify-between">
+                    <div className="w-10 h-10 rounded-xl bg-[#FAF7F4] flex items-center justify-center text-[#B4872F]">
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="font-serif text-lg text-[#0C0B0B] font-normal leading-snug">{l.name}</h4>
+                      <div className="flex items-center space-x-2 text-xs text-[#7A7067] font-mono mt-1">
+                        <span className="font-semibold text-[#B4872F]">{l.distance}</span>
+                        <span>•</span>
+                        <span>{l.time}</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                </CardTilt3D>
               </motion.div>
             );
           })}
+        </div>
+
+        {/* Interactive 3D Transit Proximity Highlight */}
+        <div className="p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-[#0C0B0B] via-[#141212] to-[#0C0B0B] text-[#F5EBDD] border border-white/10 shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-8">
+          <div className="space-y-3 text-center lg:text-left max-w-xl">
+            <span className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#B4872F]/15 border border-[#B4872F]/30 text-[10px] font-mono font-semibold uppercase tracking-wider text-[#B4872F]">
+              <Train className="w-3 h-3" />
+              <span>Direct Railway Transit Link</span>
+            </span>
+            <h3 className="font-serif text-2xl sm:text-4xl text-white font-normal">
+              250 Meters from Guwahati Railway Station
+            </h3>
+            <p className="text-xs sm:text-sm text-[#D1C7BD] font-light leading-relaxed">
+              Arrive by train and check straight into your room in just 3 minutes on foot. No hailing surge-priced taxis, no traffic jams, and total transit peace of mind.
+            </p>
+            <div className="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs font-mono text-[#B4872F]">
+              <span>✓ 3-Min Walking Route</span>
+              <span>•</span>
+              <span>✓ 24/7 Porter &amp; Luggage Support</span>
+            </div>
+          </div>
+
+          <div className="shrink-0 flex flex-col items-center">
+            <TransitCompass3D />
+            <span className="text-[10px] font-mono text-[#A89F96] tracking-wider uppercase mt-1">
+              Interactive 3D Compass &bull; Drag to Orbit
+            </span>
+          </div>
         </div>
 
         {/* Address Card with Direct Assistance */}
