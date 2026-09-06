@@ -2,30 +2,24 @@
 
 import React from "react";
 import Link from "next/link";
-import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
-import { MapPin, Train, Bus, Plane, Compass, Navigation, Phone, ArrowUpRight } from "lucide-react";
+import { MapPin, Train, Bus, Plane, Navigation, Phone, ArrowUpRight, Clock, Footprints } from "lucide-react";
 import { HOTEL_INFO } from "@/data/hotel-info";
 import CardTilt3D from "@/components/3d/CardTilt3D";
 
-const TransitCompass3D = dynamic(() => import("@/components/3d/TransitCompass3D"), {
-  ssr: false,
-  loading: () => null,
-});
-
 const landmarks = [
-  { icon: Train, name: "Guwahati Railway Station", distance: "250 meters", time: "3 min walk" },
-  { icon: Bus, name: "ASTC Central Bus Stand", distance: "500 meters", time: "5 min walk" },
-  { icon: Compass, name: "Kamakhya Devi Temple", distance: "7.5 km", time: "20 min drive" },
-  { icon: Plane, name: "LGBI Airport (GAU)", distance: "22 km", time: "40 min drive" },
+  { icon: Train, name: "Guwahati Railway Station", distance: "250 meters", time: "3 min walk", detail: "Direct level walkway from Paltan Bazaar Exit" },
+  { icon: Bus, name: "ASTC Central Bus Stand", distance: "500 meters", time: "5 min walk", detail: "Inter-district & airport bus connection" },
+  { icon: Navigation, name: "Kamakhya Devi Temple", distance: "7.5 km", time: "20 min drive", detail: "Sacred corridor via MG Road" },
+  { icon: Plane, name: "LGBI Airport (GAU)", distance: "22 km", time: "40 min drive", detail: "Airport prepaid cabs & pickup service" },
 ];
 
 export default function LocationPreview() {
   return (
-    <section className="bg-[#FAF7F4] py-24 sm:py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <section className="bg-[#FAF8F5] py-24 sm:py-32 px-4 sm:px-6 lg:px-8 overflow-hidden text-[#1F1D1A]">
       <div className="max-w-7xl mx-auto space-y-16">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-4 border-b border-[#0C0B0B]/10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-[#0C0B0A]/10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -33,15 +27,15 @@ export default function LocationPreview() {
             transition={{ duration: 0.6 }}
             className="space-y-3"
           >
-            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#B4872F] font-semibold flex items-center">
-              <MapPin className="w-3.5 h-3.5 mr-2 text-[#B4872F]" />
-              Strategic Location
+            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#9E8255] font-semibold flex items-center">
+              <MapPin className="w-3.5 h-3.5 mr-2 text-[#9E8255]" />
+              Strategic Transit Position
             </span>
-            <h2 className="font-serif text-3xl sm:text-5xl font-normal text-[#0C0B0B] leading-tight">
+            <h2 className="font-serif text-3xl sm:text-5xl font-normal text-[#0C0B0A] leading-tight">
               In the Heart of Paltan Bazaar
             </h2>
-            <p className="text-[#7A7067] text-sm sm:text-base font-light max-w-xl leading-relaxed">
-              Immediate access to Assam&apos;s premier transit hub, commercial shopping lanes, and pilgrimage corridors.
+            <p className="text-[#6B635B] text-sm sm:text-base font-light max-w-xl leading-relaxed">
+              Immediate access to Assam&apos;s primary railway terminus, commercial banking lanes, and cultural pilgrimage routes.
             </p>
           </motion.div>
 
@@ -55,15 +49,15 @@ export default function LocationPreview() {
               href="https://maps.google.com/?q=Hotel+Ambarish+Grand+Residency+Paltan+Bazaar+Guwahati"
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-[0.14em] text-[#0C0B0B] hover:text-[#B62576] transition-colors"
+              className="group inline-flex items-center space-x-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#0C0B0A] hover:text-[#9E8255] transition-colors"
             >
               <span>Open in Google Maps</span>
-              <Navigation className="w-4 h-4 text-[#B4872F] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              <Navigation className="w-4 h-4 text-[#9E8255] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
           </motion.div>
         </div>
 
-        {/* Transit Cards Grid */}
+        {/* Transit Cards Grid with Subtle 3D Tilt */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {landmarks.map((l, idx) => {
             const Icon = l.icon;
@@ -75,16 +69,17 @@ export default function LocationPreview() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
               >
-                <CardTilt3D maxTilt={7} className="h-full">
-                  <div className="p-6 rounded-2xl bg-[#FFFFFF] border border-[#0C0B0B]/8 hover:border-[#B4872F]/30 shadow-sm transition-all duration-200 space-y-4 h-full flex flex-col justify-between">
-                    <div className="w-10 h-10 rounded-xl bg-[#FAF7F4] flex items-center justify-center text-[#B4872F]">
+                <CardTilt3D maxTilt={6} className="h-full">
+                  <div className="p-6 rounded-2xl bg-white border border-[#0C0B0A]/8 hover:border-[#9E8255]/40 shadow-sm transition-all duration-200 space-y-4 h-full flex flex-col justify-between">
+                    <div className="w-10 h-10 rounded-xl bg-[#FAF8F5] flex items-center justify-center text-[#9E8255] border border-[#0C0B0A]/5">
                       <Icon className="w-5 h-5" />
                     </div>
-                    <div>
-                      <h4 className="font-serif text-lg text-[#0C0B0B] font-normal leading-snug">{l.name}</h4>
-                      <div className="flex items-center space-x-2 text-xs text-[#7A7067] font-mono mt-1">
-                        <span className="font-semibold text-[#B4872F]">{l.distance}</span>
-                        <span>•</span>
+                    <div className="space-y-1.5">
+                      <h4 className="font-serif text-lg text-[#0C0B0A] font-normal leading-snug">{l.name}</h4>
+                      <p className="text-xs text-[#7A7067] font-light leading-relaxed">{l.detail}</p>
+                      <div className="flex items-center space-x-2 text-xs text-[#6B635B] font-mono pt-2 border-t border-[#0C0B0A]/5">
+                        <span className="font-semibold text-[#9E8255]">{l.distance}</span>
+                        <span>&bull;</span>
                         <span>{l.time}</span>
                       </div>
                     </div>
@@ -95,31 +90,71 @@ export default function LocationPreview() {
           })}
         </div>
 
-        {/* Interactive 3D Transit Proximity Highlight */}
-        <div className="p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-[#0C0B0B] via-[#141212] to-[#0C0B0B] text-[#F5EBDD] border border-white/10 shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-8">
-          <div className="space-y-3 text-center lg:text-left max-w-xl">
-            <span className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#B4872F]/15 border border-[#B4872F]/30 text-[10px] font-mono font-semibold uppercase tracking-wider text-[#B4872F]">
-              <Train className="w-3 h-3" />
-              <span>Direct Railway Transit Link</span>
-            </span>
-            <h3 className="font-serif text-2xl sm:text-4xl text-white font-normal">
-              250 Meters from Guwahati Railway Station
-            </h3>
-            <p className="text-xs sm:text-sm text-[#D1C7BD] font-light leading-relaxed">
-              Arrive by train and check straight into your room in just 3 minutes on foot. No hailing surge-priced taxis, no traffic jams, and total transit peace of mind.
-            </p>
-            <div className="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs font-mono text-[#B4872F]">
-              <span>✓ 3-Min Walking Route</span>
-              <span>•</span>
-              <span>✓ 24/7 Porter &amp; Luggage Support</span>
+        {/* Architectural Walking Guide (Zero Gimmicks, Pure Clarity) */}
+        <div className="p-8 sm:p-12 rounded-3xl bg-[#0C0B0A] text-[#FAF8F5] border border-white/10 shadow-2xl">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-6 space-y-4">
+              <span className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#9E8255]/15 border border-[#9E8255]/30 text-[10px] font-mono font-semibold uppercase tracking-wider text-[#BFA058]">
+                <Footprints className="w-3.5 h-3.5" />
+                <span>Effortless Arrival</span>
+              </span>
+              <h3 className="font-serif text-2xl sm:text-4xl text-white font-normal leading-snug">
+                Step-Free 250m Walk From Guwahati Railway Station
+              </h3>
+              <p className="text-xs sm:text-sm text-[#D1C7BD] font-light leading-relaxed">
+                Step off Platform 1 through the Paltan Bazaar South Entrance. Avoid cab negotiations, surge pricing, and peak-hour city bottlenecks — your room awaits just a brief 3-minute stroll away.
+              </p>
+              <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-[#BFA058] pt-1">
+                <span className="flex items-center">
+                  <Clock className="w-3.5 h-3.5 mr-1" />
+                  Average walk: 3 minutes
+                </span>
+                <span>&bull;</span>
+                <span>Paved flat terrain</span>
+                <span>&bull;</span>
+                <span>24/7 Porter luggage assistance</span>
+              </div>
             </div>
-          </div>
 
-          <div className="shrink-0 flex flex-col items-center">
-            <TransitCompass3D />
-            <span className="text-[10px] font-mono text-[#A89F96] tracking-wider uppercase mt-1">
-              Interactive 3D Compass &bull; Drag to Orbit
-            </span>
+            {/* Architectural Timeline Diagram */}
+            <div className="lg:col-span-6 bg-[#171412] p-6 sm:p-8 rounded-2xl border border-white/5 space-y-6">
+              <div className="flex items-start space-x-4">
+                <div className="w-7 h-7 rounded-full bg-[#9E8255]/20 text-[#BFA058] flex items-center justify-center font-mono text-xs font-bold shrink-0 border border-[#9E8255]/40">
+                  1
+                </div>
+                <div className="space-y-0.5">
+                  <span className="text-xs font-mono uppercase tracking-wider text-[#9E8255] font-semibold">Station Exit</span>
+                  <p className="text-sm text-white font-serif">Paltan Bazaar South Gate (Platform 1)</p>
+                  <p className="text-xs text-[#A89F96] font-light">Well-lit pedestrian passage with regional transit signboards.</p>
+                </div>
+              </div>
+
+              <div className="w-px h-6 bg-[#9E8255]/30 ml-3.5" />
+
+              <div className="flex items-start space-x-4">
+                <div className="w-7 h-7 rounded-full bg-[#9E8255]/20 text-[#BFA058] flex items-center justify-center font-mono text-xs font-bold shrink-0 border border-[#9E8255]/40">
+                  2
+                </div>
+                <div className="space-y-0.5">
+                  <span className="text-xs font-mono uppercase tracking-wider text-[#9E8255] font-semibold">Corridor Walk</span>
+                  <p className="text-sm text-white font-serif">Md. Shah Road (120 meters)</p>
+                  <p className="text-xs text-[#A89F96] font-light">Direct street connection past local artisan shops and pharmacies.</p>
+                </div>
+              </div>
+
+              <div className="w-px h-6 bg-[#9E8255]/30 ml-3.5" />
+
+              <div className="flex items-start space-x-4">
+                <div className="w-7 h-7 rounded-full bg-[#9E8255] text-[#0C0B0A] flex items-center justify-center font-mono text-xs font-bold shrink-0 shadow-md">
+                  3
+                </div>
+                <div className="space-y-0.5">
+                  <span className="text-xs font-mono uppercase tracking-wider text-[#BFA058] font-bold">Arrival</span>
+                  <p className="text-sm text-white font-serif font-semibold">Hotel Ambarish Grand Residency</p>
+                  <p className="text-xs text-[#A89F96] font-light">Private portico drop-off, luggage handling, and front desk check-in.</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -129,33 +164,33 @@ export default function LocationPreview() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="p-8 sm:p-10 rounded-3xl bg-[#0C0B0B] text-[#F5EBDD] flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl"
+          className="p-8 sm:p-10 rounded-3xl bg-[#0C0B0A] text-[#FAF8F5] flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl border border-white/5"
         >
           <div className="space-y-2 text-center md:text-left">
-            <span className="text-[10px] font-mono uppercase tracking-widest text-[#B4872F]">
-              Hotel Address
+            <span className="text-[10px] font-mono uppercase tracking-widest text-[#9E8255]">
+              Hotel Address &bull; Reception 24/7
             </span>
             <h3 className="font-serif text-2xl sm:text-3xl font-normal">
               {HOTEL_INFO.address.street}, {HOTEL_INFO.address.city}, {HOTEL_INFO.address.state} {HOTEL_INFO.address.pincode}
             </h3>
-            <p className="text-xs text-[#F5EBDD]/60 font-light">
-              Need driving directions or station pickup assistance? Our reception desk is available 24/7.
+            <p className="text-xs text-[#FAF8F5]/60 font-light">
+              Need walking guidance or luggage escort from the railway platform? Ring our reception desk anytime.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3 shrink-0">
             <a
               href={`tel:${HOTEL_INFO.phoneRaw}`}
-              className="px-6 py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-xs font-semibold uppercase tracking-wider text-[#F5EBDD] border border-white/10 transition-colors flex items-center"
+              className="px-6 py-3.5 rounded-full bg-white/5 hover:bg-white/10 text-xs font-semibold uppercase tracking-wider text-[#FAF8F5] border border-white/10 transition-colors flex items-center"
             >
-              <Phone className="w-3.5 h-3.5 mr-2 text-[#B4872F]" />
+              <Phone className="w-3.5 h-3.5 mr-2 text-[#9E8255]" />
               <span>Call Reception</span>
             </a>
             <Link
               href="/location"
-              className="px-7 py-3.5 rounded-full bg-[#B62576] hover:bg-[#9A1D62] text-xs font-bold uppercase tracking-[0.14em] text-white shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all"
+              className="px-7 py-3.5 rounded-full bg-[#9E8255] hover:bg-[#BFA058] text-xs font-semibold uppercase tracking-[0.14em] text-[#0C0B0A] shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all"
             >
-              Location Details &rarr;
+              <span>Full Transit Guide &rarr;</span>
             </Link>
           </div>
         </motion.div>

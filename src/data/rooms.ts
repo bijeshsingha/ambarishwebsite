@@ -208,6 +208,7 @@ export const ROOMS: RoomCategory[] = [
       "/images/polished/suite-living-wide.webp",
       "/images/polished/suite-bedroom-wide.webp",
       "/images/polished/suite-bedroom-full.webp",
+      "/images/floorplan-suite.jpg",
       "/images/polished/suite-bedroom-close.webp",
       "/images/polished/suite-living-portrait.webp",
       "/images/polished/suite-bathroom.webp",

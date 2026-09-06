@@ -80,7 +80,7 @@ export default function BookingBar({
 
   return (
     <div className={`w-full max-w-6xl mx-auto ${className}`}>
-      <div className="bg-[#FFFFFF] border border-[#0C0B0B]/10 rounded-2xl lg:rounded-full p-3 sm:p-3.5 lg:p-2.5 shadow-2xl shadow-black/25">
+      <div className="bg-[#FFFFFF] border border-[#0C0B0B]/10 rounded-2xl lg:rounded-full p-3 sm:p-3.5 lg:p-2.5 shadow-xl shadow-black/10">
         <form onSubmit={handleSearch}>
           {/* Desktop View (>= lg): Single Fluid Strip */}
           <div className="hidden lg:flex items-center divide-x divide-black/10">

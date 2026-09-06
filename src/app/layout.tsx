@@ -142,7 +142,7 @@ export default function RootLayout({
       </head>
       <body className="font-sans min-h-screen flex flex-col justify-between bg-[#0C0B0B] text-[#F5EBDD] selection:bg-[#B4872F] selection:text-white">
         <Header />
-        <main className="flex-1 pb-16 sm:pb-0">{children}</main>
+        <main className="flex-1">{children}</main>
         <Footer />
         <MobileStickyBar />
       </body>

@@ -24,7 +24,7 @@ export default function ClosingCTA() {
         <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
           <Link
             href="/booking"
-            className="group inline-flex items-center justify-center px-9 py-4 text-xs font-semibold uppercase tracking-[0.16em] text-white bg-[#B62576] hover:bg-[#9A1D62] rounded-full transition-all duration-200 shadow-xl active:scale-[0.98]"
+            className="group inline-flex items-center justify-center px-9 py-4 text-xs font-semibold uppercase tracking-[0.16em] text-[#0C0B0A] bg-[#9E8255] hover:bg-[#BFA058] rounded-full transition-all duration-200 shadow-xl shadow-[#9E8255]/20 hover:scale-[1.02] active:scale-[0.98]"
           >
             <span>Check Availability &amp; Rates</span>
             <ArrowUpRight className="w-4 h-4 ml-2 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

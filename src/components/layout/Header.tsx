@@ -100,7 +100,7 @@ export default function Header() {
       <header
         className={`sticky top-0 z-50 w-full transition-all duration-300 ${
           isScrolled
-            ? "bg-[#0A0909]/95 backdrop-blur-2xl border-b border-[#B4872F]/30 shadow-xl shadow-black/80 py-2 sm:py-2.5"
+            ? "bg-[#0A0909]/95 backdrop-blur-2xl border-b border-[#9E8255]/20 shadow-sm py-2 sm:py-2.5"
             : "bg-[#0A0909]/90 backdrop-blur-xl border-b border-white/10 py-2.5 sm:py-3"
         }`}
       >
@@ -148,21 +148,17 @@ export default function Header() {
             {/* Phone Hotline Pill */}
             <a
               href={`tel:${HOTEL_INFO.phoneRaw}`}
-              className="px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#F5EBDD] hover:text-[#B4872F] hover:bg-white/5 border border-white/20 transition-all flex items-center whitespace-nowrap shadow-sm group"
+              className="px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#FAF8F5] hover:text-[#BFA058] hover:bg-white/5 border border-white/20 transition-all flex items-center whitespace-nowrap shadow-sm group"
               aria-label="Call front desk"
             >
-              <span className="relative flex h-2 w-2 mr-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#B4872F] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#B4872F]"></span>
-              </span>
-              <Phone className="w-3.5 h-3.5 mr-1.5 text-[#B4872F] group-hover:rotate-12 transition-transform" />
+              <Phone className="w-3.5 h-3.5 mr-1.5 text-[#9E8255] group-hover:rotate-12 transition-transform" />
               <span>{HOTEL_INFO.phone}</span>
             </a>
 
             {/* Primary Book Direct Button */}
             <Link
               href="/booking"
-              className="group inline-flex items-center justify-center px-4.5 py-2 sm:px-5 sm:py-2 text-xs font-bold uppercase tracking-[0.12em] text-white bg-gradient-to-r from-[#B62576] to-[#92185C] hover:from-[#C72E84] hover:to-[#A71C67] rounded-full transition-all duration-200 shadow-md shadow-[#B62576]/30 hover:shadow-lg hover:shadow-[#B62576]/40 hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap border border-white/15"
+              className="group inline-flex items-center justify-center px-5 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-[#0C0B0A] bg-[#9E8255] hover:bg-[#BFA058] rounded-full transition-all duration-200 shadow-md shadow-[#9E8255]/20 hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap"
             >
               <span>Book Direct</span>
               <ArrowUpRight className="w-3.5 h-3.5 ml-1 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -174,17 +170,17 @@ export default function Header() {
             {!isCheckoutOrConfirmation && (
               <button
                 onClick={() => setShowQuickBookModal(true)}
-                className="px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white bg-[#B62576] rounded-full sm:hidden shadow-sm"
+                className="px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#0C0B0A] bg-[#9E8255] rounded-full sm:hidden shadow-sm"
               >
                 Book Now
               </button>
             )}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-[#F5EBDD] hover:text-[#B4872F] transition-colors rounded-xl bg-white/5 border border-white/10"
+              className="p-2 text-[#FAF8F5] hover:text-[#9E8255] transition-colors rounded-xl bg-white/5 border border-white/10"
               aria-label="Toggle navigation menu"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5 text-[#B4872F]" />}
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5 text-[#9E8255]" />}
             </button>
           </div>
         </div>
@@ -198,56 +194,26 @@ export default function Header() {
             : "translate-y-10 opacity-0 scale-90 pointer-events-none"
         }`}
       >
-        <div className="flex items-center gap-1.5 p-1 rounded-full bg-[#0A0909]/95 backdrop-blur-xl border border-[#B4872F]/40 shadow-2xl shadow-black/90">
+        <div className="flex items-center gap-1.5 p-1 rounded-full bg-[#0A0909]/95 backdrop-blur-xl border border-[#9E8255]/40 shadow-lg shadow-black/20">
           <button
             onClick={() => setShowQuickBookModal(true)}
-            className="px-4 py-2.5 rounded-full bg-gradient-to-r from-[#B62576] to-[#92185C] hover:from-[#C72E84] hover:to-[#A71C67] text-white text-xs font-bold uppercase tracking-wider flex items-center space-x-2 shadow-lg shadow-[#B62576]/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
+            className="px-4 py-2.5 rounded-full bg-[#9E8255] hover:bg-[#BFA058] text-[#0C0B0A] text-xs font-semibold uppercase tracking-wider flex items-center space-x-2 shadow-lg shadow-[#9E8255]/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
           >
-            <Calendar className="w-3.5 h-3.5 text-[#F5EBDD]" />
+            <Calendar className="w-3.5 h-3.5 text-[#0C0B0A]" />
             <span>Check Rates &amp; Book</span>
             <ArrowUpRight className="w-3.5 h-3.5 ml-0.5" />
           </button>
 
           <a
             href={`tel:${HOTEL_INFO.phoneRaw}`}
-            className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-[#B4872F] text-[#F5EBDD] hover:text-white transition-all border border-white/10 shrink-0"
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-[#9E8255] text-[#FAF8F5] hover:text-[#0C0B0A] transition-all border border-white/10 shrink-0"
             title="Call Front Desk 24/7"
             aria-label="Call Front Desk"
           >
-            <Phone className="w-3.5 h-3.5 text-[#B4872F] hover:text-white" />
+            <Phone className="w-3.5 h-3.5 text-[#9E8255] hover:text-[#0C0B0A]" />
           </a>
         </div>
       </div>
-
-      {/* MOBILE STICKY FLOATING QUICK BOOK DOCK */}
-      {!isCheckoutOrConfirmation && (
-        <div
-          className={`sm:hidden fixed bottom-3 left-3 right-3 z-40 transition-all duration-500 ease-out transform ${
-            showScrollDock
-              ? "translate-y-0 opacity-100 scale-100 pointer-events-auto"
-              : "translate-y-12 opacity-0 scale-95 pointer-events-none"
-          }`}
-        >
-          <div className="flex items-center justify-between gap-2 p-1.5 rounded-full bg-[#0A0909]/95 backdrop-blur-2xl border border-[#B4872F]/50 shadow-2xl shadow-black/90">
-            <button
-              onClick={() => setShowQuickBookModal(true)}
-              className="flex-1 py-3 px-4 rounded-full bg-gradient-to-r from-[#B62576] to-[#92185C] text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center space-x-2 shadow-lg shadow-[#B62576]/30 active:scale-[0.98]"
-            >
-              <Calendar className="w-3.5 h-3.5 text-[#F5EBDD]" />
-              <span>Quick Book Direct</span>
-              <ArrowUpRight className="w-3.5 h-3.5 ml-0.5" />
-            </button>
-
-            <a
-              href={`tel:${HOTEL_INFO.phoneRaw}`}
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 text-[#B4872F] border border-white/10 shrink-0 active:scale-95"
-              title="Call Front Desk"
-            >
-              <Phone className="w-4 h-4" />
-            </a>
-          </div>
-        </div>
-      )}
 
       {/* INSTANT RESERVATION & DATES POP-UP MODAL (Mobile Bottom Sheet + Desktop Modal) */}
       {showQuickBookModal && !isCheckoutOrConfirmation && (
@@ -385,7 +351,7 @@ export default function Header() {
               {/* Instant Action Button */}
               <button
                 type="submit"
-                className="w-full py-4 rounded-full bg-gradient-to-r from-[#B62576] to-[#92185C] hover:from-[#C72E84] hover:to-[#A71C67] text-white text-xs font-bold uppercase tracking-[0.14em] shadow-xl transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center space-x-2"
+                className="w-full py-4 rounded-full bg-[#9E8255] hover:bg-[#BFA058] text-[#0C0B0A] text-xs font-semibold uppercase tracking-[0.14em] shadow-xl transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center space-x-2"
               >
                 <span>Proceed to Quick Checkout</span>
                 <ArrowUpRight className="w-4 h-4" />
@@ -464,7 +430,7 @@ export default function Header() {
                 setMobileMenuOpen(false);
                 setShowQuickBookModal(true);
               }}
-              className="w-full flex items-center justify-center py-4 text-xs font-bold uppercase tracking-[0.14em] text-white bg-gradient-to-r from-[#B62576] to-[#92185C] rounded-full shadow-xl"
+              className="w-full flex items-center justify-center py-4 text-xs font-semibold uppercase tracking-[0.14em] text-[#0C0B0A] bg-[#9E8255] rounded-full shadow-xl"
             >
               <span>Instant Quick Rates</span>
               <ArrowUpRight className="w-4 h-4 ml-1.5" />

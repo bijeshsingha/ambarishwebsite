@@ -7,7 +7,7 @@ import { HOTEL_INFO } from "@/data/hotel-info";
 export default function Footer() {
   return (
     <footer className="bg-[#0C0B0B] text-[#F5EBDD] hairline-dark-t">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-28 sm:py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8">
           {/* Col 1: Logo & Statement (5 Cols) */}
           <div className="lg:col-span-5 space-y-6">

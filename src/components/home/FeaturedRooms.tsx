@@ -41,7 +41,7 @@ export default function FeaturedRooms() {
           >
             <Link
               href="/rooms"
-              className="group inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-[0.14em] text-[#0C0B0B] hover:text-[#B62576] transition-colors"
+              className="group inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-[0.14em] text-[#0C0B0B] hover:text-[#9E8255] transition-colors"
             >
               <span>View all room details</span>
               <ArrowUpRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

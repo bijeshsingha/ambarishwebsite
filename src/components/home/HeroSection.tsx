@@ -6,10 +6,6 @@ import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
 import BookingBar from "@/components/booking/BookingBar";
 
-const HeroScene3D = dynamic(() => import("@/components/3d/HeroScene3D"), {
-  ssr: false,
-  loading: () => null,
-});
 
 export default function HeroSection() {
   const [imgIndex, setImgIndex] = useState(0);
@@ -64,27 +60,31 @@ export default function HeroSection() {
           </motion.div>
         </AnimatePresence>
 
-        {/* Seamless Gradients */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0C0B0B] via-[#0C0B0B]/50 to-[#0C0B0B]/70" />
-        <div className="absolute inset-0 bg-radial from-transparent via-[#0C0B0B]/40 to-[#0C0B0B]/85" />
+        {/* Clean Contrast Scrim */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0C0B0A]/85 via-black/25 to-black/30" />
       </div>
 
-      {/* 3D Ambient WebGL Luxury Rings & Particles */}
-      <HeroScene3D />
-
-      {/* Top Slide Switcher */}
-      <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-4 flex justify-end items-center">
-        <div className="flex items-center space-x-1.5 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
-          {heroSlides.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setImgIndex(i)}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                i === imgIndex ? "bg-[#B4872F] w-5" : "bg-white/30 hover:bg-white/60 w-1.5"
-              }`}
-              aria-label={`Slide ${i + 1}`}
-            />
-          ))}
+      {/* Top Editorial Slide Counter */}
+      <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-5 flex justify-between items-center text-xs font-mono tracking-widest uppercase">
+        <span className="text-[#9E8255] font-medium hidden sm:inline-block">
+          Est. Paltan Bazaar &bull; 250m to Railway Station
+        </span>
+        <div className="flex items-center space-x-3 bg-black/50 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/10 text-[11px] text-[#F5EBDD]/80">
+          <span className="text-[#D4AF37] font-bold">{String(imgIndex + 1).padStart(2, "0")}</span>
+          <span className="text-white/30">/</span>
+          <span>{String(heroSlides.length).padStart(2, "0")}</span>
+          <div className="flex space-x-1 pl-1.5">
+            {heroSlides.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setImgIndex(i)}
+                className={`h-1 rounded-full transition-all duration-300 ${
+                  i === imgIndex ? "bg-[#D4AF37] w-4" : "bg-white/30 hover:bg-white/60 w-1.5"
+                }`}
+                aria-label={`Slide ${i + 1}`}
+              />
+            ))}
+          </div>
         </div>
       </div>
 

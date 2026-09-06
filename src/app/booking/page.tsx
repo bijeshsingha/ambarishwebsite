@@ -773,20 +773,20 @@ function BookingContent() {
 
       {/* Floating Multi-Room Cart Sticky Checkout Dock */}
       {cartSummary.totalRoomsCount > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 z-50 bg-[#0C0B0B] border-t-2 border-[#B4872F]/50 text-white px-4 sm:px-6 py-3.5 sm:py-4 pb-[calc(0.875rem+env(safe-area-inset-bottom,0px))] shadow-[0_-12px_40px_rgba(0,0,0,0.95)] animate-in slide-in-from-bottom duration-300">
+        <div className="fixed bottom-0 left-0 right-0 z-50 bg-[#0C0B0B]/95 backdrop-blur-xl border-t border-[#9E8255]/40 text-white px-4 sm:px-6 py-3.5 sm:py-4 pb-[calc(0.875rem+env(safe-area-inset-bottom,0px))] shadow-lg shadow-black/20 animate-in slide-in-from-bottom duration-300">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-6">
             {/* Left side: Selected rooms summary */}
             <div className="space-y-1">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded-full bg-[#B62576] text-white text-[10px] font-mono font-bold uppercase tracking-wider">
+                <span className="px-2.5 py-0.5 rounded-full bg-[#9E8255] text-[#0C0B0A] text-[10px] font-mono font-semibold uppercase tracking-wider">
                   {cartSummary.totalRoomsCount} {cartSummary.totalRoomsCount === 1 ? "Room Selected" : "Rooms Selected"}
                 </span>
-                <span className="text-xs text-[#F5EBDD] font-medium">
+                <span className="text-xs text-[#FAF8F5] font-medium">
                   &bull; {nights} {nights === 1 ? "Night" : "Nights"} ({checkIn} &rarr; {checkOut}) &bull; {adults} {parseInt(adults, 10) === 1 ? "Adult" : "Adults"}
                   {parsedChildren > 0 ? `, ${parsedChildren} ${parsedChildren === 1 ? "Child" : "Children"}` : ""}
                 </span>
                 {cartSummary.extraPaxCount > 0 && (
-                  <span className="px-2 py-0.5 rounded-md bg-[#B4872F] text-white text-[10px] font-bold">
+                  <span className="px-2 py-0.5 rounded-md bg-[#9E8255]/20 text-[#D4AF37] border border-[#9E8255]/40 text-[10px] font-bold">
                     +{cartSummary.extraPaxCount} Extra Pax (+₹500/nt)
                   </span>
                 )}
@@ -802,17 +802,17 @@ function BookingContent() {
             </div>
 
             {/* Right side: Price & Direct Checkout Button */}
-            <div className="flex items-center justify-between md:justify-end gap-4 pt-2 sm:pt-0 border-t sm:border-t-0 border-white/15">
+            <div className="flex items-center justify-between md:justify-end gap-4 pt-2 sm:pt-0 border-t sm:border-t-0 border-white/10">
               <div className="text-left md:text-right">
                 <div className="flex items-baseline space-x-1.5">
-                  <span className="text-[10px] uppercase font-mono tracking-wider text-[#A27520] font-bold">
+                  <span className="text-[10px] uppercase font-mono tracking-wider text-[#BFA058] font-semibold">
                     Total:
                   </span>
-                  <span className="font-serif text-2xl sm:text-3xl font-bold text-[#F5EBDD]">
+                  <span className="font-serif text-2xl sm:text-3xl font-medium text-[#FAF8F5]">
                     {formatCurrencyINR(cartSummary.grandTotal)}
                   </span>
                 </div>
-                <span className="text-[10px] text-[#C4B9A9] block">
+                <span className="text-[10px] text-[#A89F96] block">
                   (Incl. GST &bull; Best Rate Guarantee)
                 </span>
               </div>
@@ -820,7 +820,7 @@ function BookingContent() {
               <button
                 type="button"
                 onClick={handleProceedToCheckout}
-                className="px-7 py-3 sm:px-9 sm:py-3.5 rounded-full bg-gradient-to-r from-[#B62576] to-[#92185C] hover:from-[#C72E84] hover:to-[#A71C67] text-white text-xs font-bold uppercase tracking-[0.14em] flex items-center space-x-2 shadow-xl shadow-[#B62576]/30 active:scale-95 transition-all shrink-0 border border-white/10"
+                className="px-7 py-3 sm:px-9 sm:py-3.5 rounded-full bg-[#9E8255] hover:bg-[#BFA058] text-[#0C0B0A] text-xs font-semibold uppercase tracking-[0.14em] flex items-center space-x-2 shadow-md hover:scale-[1.02] active:scale-95 transition-all shrink-0"
               >
                 <span>Checkout</span>
                 <ArrowUpRight className="w-4 h-4" />
