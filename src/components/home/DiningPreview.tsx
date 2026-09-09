@@ -104,7 +104,7 @@ export default function DiningPreview() {
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <Link
                 href="/dining"
-                className="group inline-flex items-center justify-center px-7 py-3.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#0C0B0A] bg-[#9E8255] hover:bg-[#BFA058] rounded-full transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98]"
+                className="group btn-luxury-gold inline-flex items-center justify-center px-7 py-3.5 text-xs font-bold uppercase tracking-[0.14em] rounded-full"
               >
                 <span>View Full 70+ Item Menu</span>
                 <ArrowUpRight className="w-4 h-4 ml-2 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -304,7 +304,7 @@ export default function DiningPreview() {
               <div className="pt-2">
                 <Link
                   href="/dining#pavillion-bar"
-                  className="inline-flex items-center px-6 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-[#0C0B0A] bg-[#9E8255] hover:bg-[#BFA058] rounded-full transition-all shadow-md active:scale-[0.98]"
+                  className="btn-luxury-gold inline-flex items-center px-6 py-3 text-xs font-bold uppercase tracking-[0.14em] rounded-full"
                 >
                   <span>Explore Pavillion Bar &amp; Photos</span>
                   <ArrowUpRight className="w-3.5 h-3.5 ml-2" />

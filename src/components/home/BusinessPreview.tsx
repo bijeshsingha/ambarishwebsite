@@ -50,7 +50,7 @@ export default function BusinessPreview() {
           >
             <Link
               href="/meetings-events#rfp-form"
-              className="group inline-flex items-center justify-center px-8 py-4 text-xs font-semibold uppercase tracking-[0.14em] text-[#0C0B0A] bg-[#9E8255] hover:bg-[#BFA058] rounded-full transition-all duration-200 shadow-xl shadow-[#9E8255]/20 hover:scale-[1.02] active:scale-[0.98]"
+              className="group btn-luxury-gold inline-flex items-center justify-center px-8 py-4 text-xs font-bold uppercase tracking-[0.14em] rounded-full"
             >
               <span>Request Availability &amp; Quote</span>
               <ArrowUpRight className="w-4 h-4 ml-2 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

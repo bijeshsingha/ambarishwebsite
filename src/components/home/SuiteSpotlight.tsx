@@ -213,7 +213,7 @@ export default function SuiteSpotlight() {
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <Link
                 href={`/booking?room=${suite.slug}`}
-                className="group inline-flex items-center justify-center px-8 py-4 text-xs font-semibold uppercase tracking-[0.16em] text-[#0C0B0A] bg-[#9E8255] hover:bg-[#BFA058] rounded-full transition-all duration-200 shadow-lg shadow-[#9E8255]/20 hover:scale-[1.02] active:scale-[0.98]"
+                className="group btn-luxury-gold inline-flex items-center justify-center px-8 py-4 text-xs font-bold uppercase tracking-[0.16em] rounded-full"
               >
                 <span>Reserve Presidential Suite</span>
                 <ArrowUpRight className="w-4 h-4 ml-2 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

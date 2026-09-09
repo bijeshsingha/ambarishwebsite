@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import React, { useEffect, useState, Suspense } from "react";
+import { useParams, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -14,14 +14,17 @@ import {
   Calendar,
   Clock,
   Download,
+  Lock,
 } from "lucide-react";
 import { HOTEL_INFO } from "@/data/hotel-info";
 import { ReservationData } from "@/lib/hotel-os-client";
 import { formatCurrencyINR } from "@/lib/formatters";
 
-export default function ConfirmationPage() {
+function ConfirmationContent() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const reference = (params?.id as string) || "";
+  const token = searchParams.get("token") || "";
 
   const [reservation, setReservation] = useState<ReservationData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -34,25 +37,14 @@ export default function ConfirmationPage() {
       return;
     }
 
-    // 1. Check local session cache first for instant render
-    let cachedRes: ReservationData | null = null;
-    if (typeof window !== "undefined") {
-      try {
-        const stored = sessionStorage.getItem(`hag_res_${reference}`);
-        if (stored) {
-          cachedRes = JSON.parse(stored);
-          setReservation(cachedRes);
-          setLoading(false);
-        }
-      } catch {
-        // Ignore JSON or session errors
-      }
-    }
-
-    // 2. Query official server API
+    // SEC 07: Query official server API with high-entropy token
     async function fetchReservation() {
       try {
-        const res = await fetch(`/api/v1/reservations?reference=${encodeURIComponent(reference)}`);
+        const queryUrl = token
+          ? `/api/v1/reservations?reference=${encodeURIComponent(reference)}&token=${encodeURIComponent(token)}`
+          : `/api/v1/reservations?reference=${encodeURIComponent(reference)}`;
+
+        const res = await fetch(queryUrl);
         if (res.ok) {
           const data = await res.json();
           if (data.reservation) {
@@ -61,23 +53,17 @@ export default function ConfirmationPage() {
             return;
           }
         }
-        
-        // If not in API and not in session cache, mark not found
-        if (!cachedRes) {
-          setNotFound(true);
-        }
+        setNotFound(true);
       } catch (err) {
         console.error("Failed to load reservation from server:", err);
-        if (!cachedRes) {
-          setNotFound(true);
-        }
+        setNotFound(true);
       } finally {
         setLoading(false);
       }
     }
 
     fetchReservation();
-  }, [reference]);
+  }, [reference, token]);
 
   const handlePrint = () => {
     window.print();
@@ -216,18 +202,79 @@ export default function ConfirmationPage() {
       />
 
       <div className="max-w-3xl mx-auto space-y-5 print:max-w-none print:m-0 print:space-y-0">
-        {/* Success Alert */}
-        <div className="print-hide p-5 sm:p-6 rounded-3xl bg-[#FFFFFF] border border-[#E6DED3] text-center space-y-2 shadow-sm">
-          <div className="w-11 h-11 rounded-full bg-emerald-50 text-emerald-700 mx-auto flex items-center justify-center">
-            <CheckCircle className="w-6 h-6" />
-          </div>
-          <h1 className="font-serif text-2xl sm:text-3xl font-normal text-[#1A1715]">
-            Booking Confirmed &amp; Guaranteed
-          </h1>
-          <p className="text-xs text-[#787069] max-w-md mx-auto font-light leading-relaxed">
-            Your reservation reference is confirmed. An email copy has been sent to{" "}
-            <strong className="text-[#1A1715]">{reservation.guestEmail}</strong>.
-          </p>
+        {/* Success / Pending Alert */}
+        <div className="print-hide p-5 sm:p-6 rounded-3xl bg-[#FFFFFF] border border-[#E6DED3] text-center space-y-3 shadow-sm">
+          {reservation.status === "CONFIRMED" ? (
+            <>
+              <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-700 mx-auto flex items-center justify-center border border-emerald-200">
+                <CheckCircle className="w-6 h-6 text-emerald-700" />
+              </div>
+              <div className="space-y-1">
+                <span className="text-[10px] font-mono uppercase tracking-widest px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 font-bold border border-emerald-300">
+                  ✓ Official Reservation Confirmed &bull; Guaranteed
+                </span>
+                <h1 className="font-serif text-2xl sm:text-3xl font-normal text-[#1A1715] pt-1">
+                  Booking Confirmed &amp; Guaranteed
+                </h1>
+              </div>
+              <p className="text-xs text-[#524B46] max-w-lg mx-auto font-light leading-relaxed">
+                Your reservation reference <strong className="text-[#1A1715] font-mono">#{reservation.bookingReference}</strong> is officially guaranteed by Hotel Ambarish Grand Residency. Please present this voucher or reference code at the front desk upon check-in.
+              </p>
+            </>
+          ) : reservation.status === "CANCELLED" ? (
+            <>
+              <div className="w-12 h-12 rounded-full bg-rose-50 text-rose-700 mx-auto flex items-center justify-center border border-rose-200">
+                <AlertCircle className="w-6 h-6 text-rose-700" />
+              </div>
+              <div className="space-y-1">
+                <span className="text-[10px] font-mono uppercase tracking-widest px-3 py-1 rounded-full bg-rose-100 text-rose-900 font-bold border border-rose-300">
+                  ✗ Reservation Cancelled
+                </span>
+                <h1 className="font-serif text-2xl sm:text-3xl font-normal text-[#1A1715] pt-1">
+                  Reservation Cancelled / Unavailable
+                </h1>
+              </div>
+              <p className="text-xs text-[#524B46] max-w-lg mx-auto font-light leading-relaxed">
+                This booking request could not be accommodated and has been marked as cancelled. Zero charges have been billed.
+              </p>
+            </>
+          ) : (
+            <>
+              <div className="w-12 h-12 rounded-full bg-amber-50 text-amber-700 mx-auto flex items-center justify-center border border-amber-200">
+                <PhoneCall className="w-6 h-6 text-amber-700" />
+              </div>
+              <div className="space-y-1">
+                <span className="text-[10px] font-mono uppercase tracking-widest px-3 py-1 rounded-full bg-amber-100/80 text-amber-900 font-bold border border-amber-300">
+                  Confirmation Pending &bull; Call Verification
+                </span>
+                <h1 className="font-serif text-2xl sm:text-3xl font-normal text-[#1A1715] pt-1">
+                  Booking Request Received
+                </h1>
+              </div>
+              <p className="text-xs text-[#524B46] max-w-lg mx-auto font-light leading-relaxed">
+                Thank you for choosing Hotel Ambarish Grand Residency. Your booking request reference is{" "}
+                <strong className="text-[#1A1715] font-mono">{reservation.bookingReference}</strong>. Our front desk team will call you shortly at{" "}
+                <strong className="text-[#1A1715]">{reservation.guestPhone}</strong> to verify live room availability and confirm your reservation &amp; payment details over the phone.
+              </p>
+
+              {/* Direct Call to Hotel Box */}
+              <div className="p-3.5 rounded-2xl bg-[#FAF7F2] border border-[#EDE7DE] flex flex-col sm:flex-row items-center justify-between gap-3 max-w-lg mx-auto text-xs text-left">
+                <div className="space-y-0.5 text-center sm:text-left">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-[#A27520] font-bold block">
+                    Prefer Instant Confirmation?
+                  </span>
+                  <span className="text-[#4A443F]">Call our 24/7 Hotel Front Desk directly:</span>
+                </div>
+                <a
+                  href={`tel:${HOTEL_INFO.phoneRaw || HOTEL_INFO.phone}`}
+                  className="px-4 py-2 rounded-full bg-[#1A1715] text-white text-xs font-semibold hover:bg-[#A27520] transition-colors flex items-center gap-2 shadow-sm shrink-0"
+                >
+                  <PhoneCall className="w-3.5 h-3.5 text-[#BFA058]" />
+                  <span>Call {HOTEL_INFO.phone}</span>
+                </a>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Actions Bar */}
@@ -327,7 +374,7 @@ export default function ConfirmationPage() {
               )}
 
               <p className="text-[#4A443F] text-xs pt-1 border-t border-[#EDE7DE] voucher-compact-text">
-                {reservation.checkIn} &rarr; {reservation.checkOut} ({reservation.nights} {reservation.nights === 1 ? "Night" : "Nights"})
+                {reservation.checkIn} &rarr; {reservation.checkOut} ({reservation.nights || 1} {(reservation.nights || 1) === 1 ? "Night" : "Nights"})
               </p>
 
               {/* Official Hotel Policy Times */}
@@ -344,31 +391,73 @@ export default function ConfirmationPage() {
           </div>
 
           {/* Pricing Summary */}
-          <div className="p-3.5 sm:p-4 rounded-2xl bg-[#FAF7F2] border border-[#EDE7DE] space-y-1.5 text-xs print:p-2.5 print:rounded-xl">
+          <div className="p-3.5 sm:p-4 rounded-2xl bg-[#FAF7F2] border border-[#EDE7DE] space-y-2 text-xs print:p-2.5 print:rounded-xl">
+            <div className="text-[10px] font-mono uppercase tracking-widest text-[#A27520] font-bold pb-1 border-b border-[#EDE7DE] flex justify-between items-center">
+              <span>Detailed Tariff &amp; Price Breakup</span>
+              <span>{reservation.rooms || 1} Room(s) &bull; {reservation.nights || 1} {(reservation.nights || 1) === 1 ? "Night" : "Nights"}</span>
+            </div>
+
+            {/* Base Room Tariff */}
             <div className="flex justify-between text-[#4A443F] voucher-compact-text">
               <span>Base Room Tariff:</span>
-              <span>{formatCurrencyINR(reservation.baseAmount || 0)}</span>
+              <span className="font-medium text-[#1A1715]">{formatCurrencyINR(reservation.baseAmount || 0)}</span>
             </div>
-            {reservation.promoCode && (reservation.discountAmount || 0) > 0 && (
-              <div className="flex justify-between text-emerald-700 font-medium voucher-compact-text">
-                <span>Promo Discount ({reservation.promoCode}):</span>
+
+            {/* Promo / Discount Line */}
+            {(reservation.discountAmount || 0) > 0 && (
+              <div className="flex justify-between text-emerald-700 font-semibold voucher-compact-text">
+                <span>Special Promo Discount {reservation.promoCode ? `(${reservation.promoCode})` : ""}:</span>
                 <span>-{formatCurrencyINR(reservation.discountAmount || 0)}</span>
               </div>
             )}
+
+            {/* Net Taxable Subtotal */}
+            {(reservation.discountAmount || 0) > 0 && (
+              <div className="flex justify-between text-[#787069] text-[11px] voucher-compact-text">
+                <span>Net Taxable Room Tariff:</span>
+                <span>{formatCurrencyINR((reservation.baseAmount || 0) - (reservation.discountAmount || 0))}</span>
+              </div>
+            )}
+
+            {/* Taxes */}
             <div className="flex justify-between text-[#4A443F] voucher-compact-text">
-              <span>Taxes (GST SAC 996311):</span>
-              <span>{formatCurrencyINR(reservation.taxAmount || 0)}</span>
+              <span>Taxes (GST 12% SAC 996311):</span>
+              <span className="font-medium text-[#1A1715]">{formatCurrencyINR(reservation.taxAmount || 0)}</span>
             </div>
+
+            {/* Grand Total */}
             <div className="pt-1.5 hairline-t flex justify-between items-baseline font-bold text-sm text-[#1A1715]">
-              <span>Grand Total</span>
+              <span>Total Amount Payable</span>
               <span className="font-serif text-base sm:text-lg text-[#A27520]">
                 {formatCurrencyINR(reservation.totalAmount || 0)}
               </span>
             </div>
+
+            {/* Payment & Booking Status Badge */}
             <div className="pt-1.5 border-t border-[#EDE7DE] flex justify-between items-center text-[11px] voucher-compact-text">
-              <span className="text-[#787069]">Payment Mode &amp; Status:</span>
+              <span className="text-[#787069]">Payment &amp; Booking Status:</span>
               <div className="text-right">
-                {reservation.paymentMethod === "RAZORPAY" ? (
+                {reservation.status === "CONFIRMED" ? (
+                  <div>
+                    <span className="px-2.5 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-bold border border-emerald-300">
+                      ✓ Confirmed &amp; Guaranteed {reservation.paymentMethod === "RAZORPAY" ? "(Paid Online)" : "(Pay at Hotel)"}
+                    </span>
+                    <span className="block text-[10px] text-emerald-700 mt-0.5">
+                      {reservation.paymentMethod === "RAZORPAY"
+                        ? `Payment settled via Razorpay (Ref: ${reservation.paymentId || "Online"})`
+                        : `Guaranteed by Front Desk • Pay ${formatCurrencyINR(reservation.totalAmount || 0)} at check-in`}
+                    </span>
+                  </div>
+                ) : reservation.status === "CANCELLED" ? (
+                  <div>
+                    <span className="px-2.5 py-0.5 rounded-md bg-rose-100 text-rose-800 font-bold border border-rose-300">
+                      ✗ Cancelled / Unavailable
+                    </span>
+                    <span className="block text-[10px] text-rose-600 mt-0.5">
+                      Reservation cancelled • Zero charges billed
+                    </span>
+                  </div>
+                ) : reservation.paymentMethod === "RAZORPAY" ? (
                   <div>
                     <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">
                       ✓ Paid Online (Razorpay)
@@ -380,9 +469,14 @@ export default function ConfirmationPage() {
                     )}
                   </div>
                 ) : (
-                  <span className="px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 font-bold border border-amber-200">
-                    Pay at Hotel (Front Desk Settlement)
-                  </span>
+                  <div>
+                    <span className="px-2.5 py-0.5 rounded-md bg-amber-50 text-amber-800 font-bold border border-amber-300">
+                      ⏳ Confirmation Pending (Pay at Hotel)
+                    </span>
+                    <span className="block text-[10px] text-[#787069] mt-0.5">
+                      Front desk will call to verify availability &bull; Pay at Hotel
+                    </span>
+                  </div>
                 )}
               </div>
             </div>
@@ -407,5 +501,22 @@ export default function ConfirmationPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ConfirmationPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center">
+          <div className="text-center space-y-3">
+            <div className="w-10 h-10 border-2 border-[#B4872F] border-t-transparent rounded-full animate-spin mx-auto" />
+            <p className="text-sm font-medium text-[#787069]">Loading your secure reservation voucher...</p>
+          </div>
+        </div>
+      }
+    >
+      <ConfirmationContent />
+    </Suspense>
   );
 }

@@ -6,7 +6,6 @@ import Link from "next/link";
 import { ArrowUpRight, ChevronLeft, ChevronRight, Users, Maximize2, BedDouble, Wind, Wifi, Tv } from "lucide-react";
 import { RoomCategory } from "@/data/rooms";
 import { formatCurrencyINR } from "@/lib/formatters";
-import CardTilt3D from "@/components/3d/CardTilt3D";
 
 interface RoomCardProps {
   room: RoomCategory;
@@ -31,8 +30,7 @@ export default function RoomCard({ room, featured = false }: RoomCardProps) {
   if (featured) {
     // Wide Horizon Editorial Layout for the Lead Room
     return (
-      <CardTilt3D maxTilt={4} className="w-full">
-        <div className="group bg-[#FFFFFF] rounded-3xl border border-[#0C0B0A]/10 hover:border-[#9E8255]/40 p-6 sm:p-8 transition-all duration-300 shadow-sm hover:shadow-2xl hover:shadow-black/5 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      <div className="w-full group bg-[#FFFFFF] rounded-3xl border border-[#0C0B0A]/10 hover:border-[#9E8255]/50 p-6 sm:p-8 transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-[#0C0B0A]/5 hover:-translate-y-1 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Large Image Showcase (7 Cols) */}
           <div className="lg:col-span-7 relative aspect-[16/10] sm:aspect-[16/9] overflow-hidden rounded-2xl bg-[#ECE1D0]">
             <Link href={`/rooms/${room.slug}`} className="block w-full h-full relative">
@@ -156,7 +154,7 @@ export default function RoomCard({ room, featured = false }: RoomCardProps) {
                 </Link>
                 <Link
                   href={`/booking?room=${room.slug}`}
-                  className="px-6 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-[#0C0B0A] bg-[#9E8255] hover:bg-[#BFA058] rounded-full transition-all duration-200 shadow-md hover:scale-[1.02] active:scale-[0.98]"
+                  className="btn-luxury-gold px-6 py-2.5 text-xs font-bold uppercase tracking-[0.14em] rounded-full whitespace-nowrap"
                 >
                   Book Direct
                 </Link>
@@ -164,14 +162,12 @@ export default function RoomCard({ room, featured = false }: RoomCardProps) {
             </div>
           </div>
         </div>
-      </CardTilt3D>
     );
   }
 
   // Standard 2-Column Card Layout
   return (
-    <CardTilt3D maxTilt={5} className="h-full">
-      <div className="group bg-[#FFFFFF] rounded-3xl border border-[#0C0B0A]/10 hover:border-[#9E8255]/40 p-5 sm:p-6 transition-all duration-300 shadow-sm hover:shadow-2xl hover:shadow-black/5 flex flex-col justify-between space-y-5 h-full">
+    <div className="h-full group bg-[#FFFFFF] rounded-3xl border border-[#0C0B0A]/10 hover:border-[#9E8255]/50 p-5 sm:p-6 transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-[#0C0B0A]/5 hover:-translate-y-1 flex flex-col justify-between space-y-5">
         {/* Large Image Showcase */}
         <div className="relative w-full aspect-[16/10] overflow-hidden rounded-2xl bg-[#ECE1D0]">
           <Link href={`/rooms/${room.slug}`} className="block w-full h-full relative">
@@ -265,13 +261,12 @@ export default function RoomCard({ room, featured = false }: RoomCardProps) {
 
             <Link
               href={`/booking?room=${room.slug}`}
-              className="px-5 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-[#0C0B0A] bg-[#9E8255] hover:bg-[#BFA058] rounded-full transition-all duration-150 shadow-sm hover:scale-[1.02] active:scale-[0.98]"
+              className="btn-luxury-gold px-5 py-2 text-xs font-bold uppercase tracking-[0.12em] rounded-full whitespace-nowrap"
             >
-              Book direct
+              Book Direct
             </Link>
           </div>
         </div>
       </div>
-    </CardTilt3D>
   );
 }

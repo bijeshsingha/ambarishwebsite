@@ -49,17 +49,29 @@ export default function LocationPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           {/* Map */}
-          <div className="lg:col-span-8 rounded-3xl overflow-hidden border border-[#E6DED3] min-h-[420px] bg-[#FFFFFF] shadow-md relative">
+          <div className="lg:col-span-8 rounded-3xl overflow-hidden border border-[#E6DED3] min-h-[450px] bg-[#FAF7F2] shadow-md relative">
             <iframe
+              title="Hotel Ambarish Grand Residency Location Map"
               src="https://maps.google.com/maps?q=Hotel+Ambarish+Grand+Residency,+Md+Shah+Road,+Paltan+Bazaar,+Guwahati,+Assam+781008&t=&z=16&ie=UTF8&iwloc=&output=embed"
               width="100%"
               height="100%"
               style={{ border: 0, minHeight: "450px" }}
-              allowFullScreen={false}
+              allowFullScreen={true}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               className="w-full h-full"
             />
+            <div className="absolute top-4 right-4 z-10">
+              <a
+                href="https://maps.google.com/?q=Hotel+Ambarish+Grand+Residency+Paltan+Bazaar+Guwahati"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/95 text-[#1A1715] hover:text-[#A27520] hover:bg-white text-xs font-medium shadow-md backdrop-blur-sm border border-black/5 transition-all"
+              >
+                <ExternalLink className="w-3.5 h-3.5 text-[#A27520]" />
+                <span>Open in Google Maps</span>
+              </a>
+            </div>
           </div>
 
           {/* Address Card */}

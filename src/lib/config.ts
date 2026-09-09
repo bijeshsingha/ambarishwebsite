@@ -12,8 +12,8 @@ function sanitizeSecret(val?: string): string {
 
 export const serverConfig = {
   pms: {
-    apiUrl: (process.env.PMS_API_URL || "http://localhost:3000/api/v1").replace(/\/+$/, ""),
-    apiKey: process.env.PMS_API_SECRET || "ambarish_pms_secret_2026",
+    apiUrl: (process.env.PMS_API_URL || "https://api.hotelos.in/api/v1").replace(/\/+$/, ""),
+    apiKey: sanitizeSecret(process.env.PMS_API_SECRET),
     propertyId: process.env.PMS_PROPERTY_ID || "prop_ambarish",
   },
   mail: {

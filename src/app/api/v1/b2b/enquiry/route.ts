@@ -1,34 +1,45 @@
 import { NextResponse } from "next/server";
 import { sendB2bEnquiryNotificationEmail } from "@/lib/email";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 export async function POST(request: Request) {
+  const clientIp = getClientIp(request);
+
+  // SEC 09 & Table 3: 3 inquiries per hour per source
+  const rate = checkRateLimit("b2b_enquiry", clientIp, 3, 3600);
+  if (!rate.allowed) {
+    return NextResponse.json(
+      { error: "TOO_MANY_REQUESTS", message: "Rate limit exceeded. Please try again later." },
+      { status: 429, headers: { "Retry-After": String(rate.resetInSeconds) } }
+    );
+  }
+
   try {
     const body = await request.json();
 
-    if (!body.companyName || !body.contactPerson || !body.phone) {
+    if (!body.companyName || !body.contactPerson || !body.phone || !body.email) {
       return NextResponse.json(
-        { error: "Company name, contact person, and phone number are required" },
+        { error: "INVALID_FIELDS", message: "Company name, contact person, email, and phone number are required" },
         { status: 400 }
       );
     }
 
     const payload = {
-      companyName: body.companyName,
-      accountType: body.accountType || "CORPORATE",
-      contactPerson: body.contactPerson,
-      designation: body.designation,
-      email: body.email,
-      phone: body.phone,
-      gstin: body.gstin,
-      city: body.city,
-      state: body.state,
-      estimatedMonthlyRoomNights: Number(body.estimatedMonthlyRoomNights || 0),
-      requiredMealPlans: body.requiredMealPlans || [],
+      companyName: String(body.companyName).slice(0, 100),
+      accountType: body.accountType === "TRAVEL_AGENT" ? "TRAVEL_AGENT" : "CORPORATE",
+      contactPerson: String(body.contactPerson).slice(0, 100),
+      designation: body.designation ? String(body.designation).slice(0, 100) : undefined,
+      email: String(body.email).slice(0, 100),
+      phone: String(body.phone).replace(/[^0-9+]/g, "").slice(0, 20),
+      gstin: body.gstin ? String(body.gstin).slice(0, 20) : undefined,
+      city: body.city ? String(body.city).slice(0, 100) : undefined,
+      state: body.state ? String(body.state).slice(0, 100) : undefined,
+      estimatedMonthlyRoomNights: Math.max(0, Math.min(1000, Number(body.estimatedMonthlyRoomNights || 0))),
+      requiredMealPlans: Array.isArray(body.requiredMealPlans) ? body.requiredMealPlans.slice(0, 5) : [],
       billingPreference: body.billingPreference || "BILL_TO_COMPANY",
-      message: body.message,
+      message: body.message ? String(body.message).slice(0, 500) : undefined,
     };
 
-    // Await email notification so serverless lambda does not terminate early
     try {
       await sendB2bEnquiryNotificationEmail(payload);
     } catch (mailErr: any) {
@@ -42,7 +53,7 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.error("[B2B Enquiry] Error:", error?.message);
     return NextResponse.json(
-      { error: error.message || "Failed to process B2B enquiry" },
+      { error: "INTERNAL_ERROR", message: "Failed to process B2B enquiry" },
       { status: 500 }
     );
   }

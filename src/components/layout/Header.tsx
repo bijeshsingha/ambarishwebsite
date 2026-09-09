@@ -158,7 +158,7 @@ export default function Header() {
             {/* Primary Book Direct Button */}
             <Link
               href="/booking"
-              className="group inline-flex items-center justify-center px-5 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-[#0C0B0A] bg-[#9E8255] hover:bg-[#BFA058] rounded-full transition-all duration-200 shadow-md shadow-[#9E8255]/20 hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap"
+              className="group btn-luxury-gold inline-flex items-center justify-center px-5 py-2 text-xs font-bold uppercase tracking-[0.14em] rounded-full whitespace-nowrap"
             >
               <span>Book Direct</span>
               <ArrowUpRight className="w-3.5 h-3.5 ml-1 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -170,7 +170,7 @@ export default function Header() {
             {!isCheckoutOrConfirmation && (
               <button
                 onClick={() => setShowQuickBookModal(true)}
-                className="px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#0C0B0A] bg-[#9E8255] rounded-full sm:hidden shadow-sm"
+                className="btn-luxury-gold px-4 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full sm:hidden"
               >
                 Book Now
               </button>
@@ -197,9 +197,9 @@ export default function Header() {
         <div className="flex items-center gap-1.5 p-1 rounded-full bg-[#0A0909]/95 backdrop-blur-xl border border-[#9E8255]/40 shadow-lg shadow-black/20">
           <button
             onClick={() => setShowQuickBookModal(true)}
-            className="px-4 py-2.5 rounded-full bg-[#9E8255] hover:bg-[#BFA058] text-[#0C0B0A] text-xs font-semibold uppercase tracking-wider flex items-center space-x-2 shadow-lg shadow-[#9E8255]/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+            className="btn-luxury-gold px-4 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider flex items-center space-x-2"
           >
-            <Calendar className="w-3.5 h-3.5 text-[#0C0B0A]" />
+            <Calendar className="w-3.5 h-3.5 text-[#120E05]" />
             <span>Check Rates &amp; Book</span>
             <ArrowUpRight className="w-3.5 h-3.5 ml-0.5" />
           </button>
@@ -351,7 +351,7 @@ export default function Header() {
               {/* Instant Action Button */}
               <button
                 type="submit"
-                className="w-full py-4 rounded-full bg-[#9E8255] hover:bg-[#BFA058] text-[#0C0B0A] text-xs font-semibold uppercase tracking-[0.14em] shadow-xl transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center space-x-2"
+                className="w-full py-4 rounded-full btn-luxury-gold text-xs font-bold uppercase tracking-[0.14em] flex items-center justify-center space-x-2"
               >
                 <span>Proceed to Quick Checkout</span>
                 <ArrowUpRight className="w-4 h-4" />
@@ -430,7 +430,7 @@ export default function Header() {
                 setMobileMenuOpen(false);
                 setShowQuickBookModal(true);
               }}
-              className="w-full flex items-center justify-center py-4 text-xs font-semibold uppercase tracking-[0.14em] text-[#0C0B0A] bg-[#9E8255] rounded-full shadow-xl"
+              className="w-full flex items-center justify-center py-4 text-xs font-bold uppercase tracking-[0.14em] btn-luxury-gold rounded-full"
             >
               <span>Instant Quick Rates</span>
               <ArrowUpRight className="w-4 h-4 ml-1.5" />

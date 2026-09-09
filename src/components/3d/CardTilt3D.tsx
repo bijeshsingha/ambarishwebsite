@@ -58,20 +58,22 @@ export default function CardTilt3D({
         transformStyle: "preserve-3d",
         rotateX,
         rotateY,
+        WebkitFontSmoothing: "subpixel-antialiased",
+        backfaceVisibility: "hidden",
       }}
-      whileHover={{ scale: 1.018 }}
+      whileHover={{ y: -4 }}
       transition={{ duration: 0.2 }}
-      className={`relative perspective-1000 transform-gpu ${className}`}
+      className={`relative perspective-1000 ${className}`}
     >
       {children}
 
-      {/* Dynamic Specular Sheen Effect on Hover */}
+      {/* Subtle Specular Sheen Effect on Hover */}
       <motion.div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 rounded-[inherit] overflow-hidden opacity-0 transition-opacity duration-300 z-30"
+        className="pointer-events-none absolute inset-0 rounded-[inherit] overflow-hidden transition-opacity duration-300 z-10"
         style={{
-          opacity: isHovered ? 0.35 : 0,
-          background: `radial-gradient(circle 280px at ${glareX} ${glareY}, rgba(255, 235, 180, 0.45), transparent 70%)`,
+          opacity: isHovered ? 0.08 : 0,
+          background: `radial-gradient(circle 320px at ${glareX} ${glareY}, rgba(255, 255, 255, 0.4), transparent 70%)`,
         }}
       />
     </motion.div>

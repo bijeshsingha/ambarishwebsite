@@ -25,6 +25,7 @@ import {
   MapPin,
   Check,
   ChevronRight,
+  Phone,
 } from "lucide-react";
 import { ROOMS, RoomCategory } from "@/data/rooms";
 import { HOTEL_INFO } from "@/data/hotel-info";
@@ -32,7 +33,7 @@ import { calculateRoomGST } from "@/lib/gst";
 import { formatCurrencyINR, calculateNights, getTodayDate, getTomorrowDate } from "@/lib/formatters";
 import { AVAILABLE_PROMOS, validateAndApplyPromo, PromoCode } from "@/data/promos";
 import { BookedRoomItem } from "@/lib/hotel-os-client";
-import { saveGuestSession, getGuestSession } from "@/lib/session";
+import { purgeLegacyGuestPII } from "@/lib/session";
 
 function CheckoutContent() {
   const router = useRouter();
@@ -188,106 +189,23 @@ function CheckoutContent() {
   const [guestGstin, setGuestGstin] = useState("");
   const [specialRequests, setSpecialRequests] = useState("");
   const [agreeTerms, setAgreeTerms] = useState(true);
-  const [paymentMethod, setPaymentMethod] = useState<"ONLINE" | "PAY_AT_HOTEL">("ONLINE");
+  const [paymentMethod, setPaymentMethod] = useState<"ONLINE" | "PAY_AT_HOTEL">("PAY_AT_HOTEL");
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  // Load saved guest profile on mount
+  // SEC 10: Purge any legacy PII cookies on mount
   useEffect(() => {
-    const saved = getGuestSession();
-    if (saved) {
-      if (saved.guestName) setGuestName(saved.guestName);
-      if (saved.guestEmail) setGuestEmail(saved.guestEmail);
-      if (saved.guestPhone) setGuestPhone(saved.guestPhone);
-      if (saved.guestCity) setGuestCity(saved.guestCity);
-      if (saved.companyName) {
-        setCompanyName(saved.companyName);
-        setWantsGstInvoice(true);
-      }
-      if (saved.gstin) {
-        setGuestGstin(saved.gstin);
-        setWantsGstInvoice(true);
-      }
-      if (saved.specialRequests) setSpecialRequests(saved.specialRequests);
-    }
+    purgeLegacyGuestPII();
   }, []);
 
-  // Sync guest inputs to session cookie
-  const updateGuestName = (val: string) => { setGuestName(val); saveGuestSession({ guestName: val }); };
-  const updateGuestEmail = (val: string) => { setGuestEmail(val); saveGuestSession({ guestEmail: val }); };
-  const updateGuestPhone = (val: string) => { setGuestPhone(val); saveGuestSession({ guestPhone: val }); };
-  const updateGuestCity = (val: string) => { setGuestCity(val); saveGuestSession({ guestCity: val }); };
-  const updateCompanyName = (val: string) => { setCompanyName(val); saveGuestSession({ companyName: val }); };
-  const updateGuestGstin = (val: string) => { setGuestGstin(val); saveGuestSession({ gstin: val }); };
-  const updateSpecialRequests = (val: string) => { setSpecialRequests(val); saveGuestSession({ specialRequests: val }); };
-
-  const createFinalReservation = async (verifiedPaymentId: string) => {
-    try {
-      const primaryRoom = bookedRoomsList[0];
-      const res = await fetch("/api/v1/reservations", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          roomSlug: primaryRoom.roomSlug,
-          roomName: primaryRoom.roomName,
-          ratePlanCode: primaryRoom.ratePlanCode,
-          ratePlanName: primaryRoom.ratePlanName,
-          bookedRooms: bookedRoomsList,
-          checkIn,
-          checkOut,
-          nights,
-          rooms: totalRoomsCount,
-          adults,
-          children,
-          bookingType: isB2bBooking ? "CORPORATE" : "INDIVIDUAL",
-          guestName,
-          guestEmail,
-          guestPhone,
-          guestCity,
-          guestState,
-          guestGstin: wantsGstInvoice || isB2bBooking ? guestGstin : undefined,
-          b2b: isB2bBooking
-            ? {
-                accountType: "CORPORATE",
-                companyName: companyName,
-                corporateEmail: corporateEmail || guestEmail,
-                poNumber: poNumber || undefined,
-                billingInstruction: billingInstruction,
-              }
-            : undefined,
-          specialRequests,
-          promoCode: appliedPromo?.code || undefined,
-          discountAmount,
-          baseAmount: netBaseAmount,
-          taxAmount,
-          totalAmount,
-          paymentMethod: paymentMethod === "ONLINE" ? "RAZORPAY" : "PAY_AT_HOTEL",
-          paymentId: verifiedPaymentId,
-        }),
-      });
-
-      const data = await res.json();
-      if (data.success && data.reservation) {
-        if (typeof window !== "undefined") {
-          try {
-            sessionStorage.setItem(
-              `hag_res_${data.reservation.bookingReference}`,
-              JSON.stringify(data.reservation)
-            );
-          } catch {
-            // Ignore sessionStorage quota errors
-          }
-        }
-        router.push(`/booking/confirmation/${data.reservation.bookingReference}`);
-      } else {
-        setErrorMsg(data.error || "Reservation failed. Please try again or call our front desk.");
-        setIsProcessing(false);
-      }
-    } catch (err: any) {
-      setErrorMsg(err.message || "A network error occurred. Please try again.");
-      setIsProcessing(false);
-    }
-  };
+  // Update guest inputs in local component state only (no PII written to cookies/localStorage)
+  const updateGuestName = (val: string) => setGuestName(val);
+  const updateGuestEmail = (val: string) => setGuestEmail(val);
+  const updateGuestPhone = (val: string) => setGuestPhone(val);
+  const updateGuestCity = (val: string) => setGuestCity(val);
+  const updateCompanyName = (val: string) => setCompanyName(val);
+  const updateGuestGstin = (val: string) => setGuestGstin(val);
+  const updateSpecialRequests = (val: string) => setSpecialRequests(val);
 
   const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -295,41 +213,108 @@ function CheckoutContent() {
       setErrorMsg("Please accept the booking and cancellation policy to proceed.");
       return;
     }
+    if (!guestName.trim() || !guestEmail.trim() || !guestPhone.trim()) {
+      setErrorMsg("Please enter guest name, valid email, and contact phone number.");
+      return;
+    }
     setErrorMsg("");
     setIsProcessing(true);
 
     try {
+      // 1. Initialize server-authoritative checkout session and atomic inventory hold
+      const checkoutItems = bookedRoomsList.map((rm) => ({
+        roomTypeId: rm.roomSlug,
+        ratePlanCode: rm.ratePlanCode,
+        quantity: rm.quantity || 1,
+      }));
+
+      const checkoutRes = await fetch("/api/v1/checkouts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          checkIn,
+          checkOut,
+          occupancy: { adults, children, rooms: totalRoomsCount },
+          items: checkoutItems,
+          promoCode: appliedPromo?.code || undefined,
+          bookingType: isB2bBooking ? "CORPORATE" : "INDIVIDUAL",
+        }),
+      });
+
+      const checkoutData = await checkoutRes.json();
+      if (!checkoutRes.ok || !checkoutData.checkoutId) {
+        throw new Error(
+          checkoutData.message || checkoutData.error || "Failed to reserve inventory. Room may no longer be available."
+        );
+      }
+
+      const { checkoutId, accessToken } = checkoutData;
+
+      const guestPayload = {
+        name: guestName.trim(),
+        email: guestEmail.trim(),
+        phone: guestPhone.trim(),
+        city: guestCity.trim() || undefined,
+        state: guestState.trim() || undefined,
+        gstin: wantsGstInvoice || isB2bBooking ? guestGstin.trim() : undefined,
+        companyName: isB2bBooking ? companyName.trim() : undefined,
+        specialRequests: specialRequests.trim() || undefined,
+      };
+
+      // 2. Online Payment Flow via Razorpay
       if (paymentMethod === "ONLINE") {
-        // 1. Create official Razorpay Order on server
         const orderRes = await fetch("/api/v1/payment/order", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            amount: totalAmount,
-            currency: "INR",
-            receipt: `rcpt_${Date.now()}`,
-            notes: {
-              hotel: "Hotel Ambarish Grand Residency",
-              guestName,
-              guestPhone,
-              checkIn,
-              checkOut,
-            },
-          }),
+          body: JSON.stringify({ checkoutId, accessToken }),
         });
 
         const orderData = await orderRes.json();
         if (!orderRes.ok || !orderData.orderId) {
-          throw new Error(orderData.error || "Failed to initialize payment gateway. Please try again.");
+          throw new Error(orderData.message || orderData.error || "Failed to initialize payment gateway.");
         }
 
-        if (typeof window === "undefined" || !(window as any).Razorpay) {
-          throw new Error("Payment gateway is still loading. Please wait a few seconds and try again.");
+        // If in dev simulation mode (credentials not yet set)
+        if (orderData.orderId.startsWith("order_sim_") || typeof window === "undefined" || !(window as any).Razorpay) {
+          // Dev simulated payment verification
+          const verifyRes = await fetch("/api/v1/payment/verify", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              checkoutId,
+              accessToken,
+              razorpay_order_id: orderData.orderId,
+              razorpay_payment_id: `pay_sim_${Date.now()}`,
+              razorpay_signature: "simulation",
+            }),
+          });
+
+          if (!verifyRes.ok) {
+            throw new Error("Payment verification failed.");
+          }
+
+          // Finalize reservation
+          const finRes = await fetch("/api/v1/reservations/finalize", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              checkoutId,
+              accessToken,
+              guest: guestPayload,
+              paymentMethod: "RAZORPAY",
+            }),
+          });
+
+          const finData = await finRes.json();
+          if (finData.success && finData.reservation) {
+            router.push(`/booking/confirmation/${finData.reservation.bookingReference}?token=${finData.reservation.lookupToken}`);
+            return;
+          } else {
+            throw new Error(finData.message || finData.error || "Reservation finalization failed.");
+          }
         }
 
         const primaryRoom = bookedRoomsList[0];
-
-        // 2. Launch Razorpay Checkout Modal
         const options = {
           key: orderData.keyId,
           amount: orderData.amount,
@@ -344,7 +329,7 @@ function CheckoutContent() {
             contact: guestPhone,
           },
           notes: {
-            hotel: "Hotel Ambarish Grand Residency",
+            checkoutId,
             city: guestCity,
           },
           theme: {
@@ -361,19 +346,42 @@ function CheckoutContent() {
             razorpay_signature: string;
           }) => {
             try {
-              // 3. Cryptographically verify signature
+              // 3. Verify cryptographic HMAC signature
               const verifyRes = await fetch("/api/v1/payment/verify", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(response),
+                body: JSON.stringify({
+                  checkoutId,
+                  accessToken,
+                  ...response,
+                }),
               });
+
               const verifyData = await verifyRes.json();
               if (!verifyData.success || !verifyData.verified) {
-                throw new Error(verifyData.error || "Payment verification failed.");
+                throw new Error(verifyData.message || "Payment verification failed.");
               }
 
-              // 4. Create confirmed reservation
-              await createFinalReservation(response.razorpay_payment_id);
+              // 4. Finalize reservation atomically
+              const finRes = await fetch("/api/v1/reservations/finalize", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  checkoutId,
+                  accessToken,
+                  guest: guestPayload,
+                  paymentMethod: "RAZORPAY",
+                }),
+              });
+
+              const finData = await finRes.json();
+              if (finData.success && finData.reservation) {
+                router.push(
+                  `/booking/confirmation/${finData.reservation.bookingReference}?token=${finData.reservation.lookupToken}`
+                );
+              } else {
+                throw new Error(finData.message || finData.error || "Finalization failed.");
+              }
             } catch (vErr: any) {
               setErrorMsg(vErr.message || "Payment verification failed. Please contact our front desk.");
               setIsProcessing(false);
@@ -390,8 +398,26 @@ function CheckoutContent() {
         return;
       }
 
-      // If Pay at Hotel
-      await createFinalReservation("PAY_AT_HOTEL");
+      // 3. Pay at Hotel Flow
+      const finRes = await fetch("/api/v1/reservations/finalize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          checkoutId,
+          accessToken,
+          guest: guestPayload,
+          paymentMethod: "PAY_AT_HOTEL",
+        }),
+      });
+
+      const finData = await finRes.json();
+      if (finData.success && finData.reservation) {
+        router.push(
+          `/booking/confirmation/${finData.reservation.bookingReference}?token=${finData.reservation.lookupToken}`
+        );
+      } else {
+        throw new Error(finData.message || finData.error || "Reservation finalization failed.");
+      }
     } catch (err: any) {
       setErrorMsg(err.message || "A network error occurred. Please try again.");
       setIsProcessing(false);
@@ -636,60 +662,63 @@ function CheckoutContent() {
 
             {/* 3. Payment Method */}
             <div className="bg-[#FFFFFF] p-6 sm:p-8 rounded-3xl border border-[#E6DED3] shadow-md space-y-5">
-              <h3 className="font-serif text-xl font-normal text-[#1A1715]">
-                3. Select Payment Option
-              </h3>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <h3 className="font-serif text-xl font-normal text-[#1A1715]">
+                  3. Payment &amp; Confirmation Option
+                </h3>
+                <span className="text-[10px] uppercase font-mono tracking-wider px-3 py-1 rounded-full bg-amber-50 text-amber-800 font-semibold border border-amber-200 inline-flex items-center gap-1.5 w-fit">
+                  <Phone className="w-3 h-3 text-amber-700" />
+                  <span>Call Confirmation Required</span>
+                </span>
+              </div>
+
+              {/* Status Notice */}
+              <div className="p-4 rounded-2xl bg-amber-50/80 border border-amber-200 text-xs space-y-1.5 text-[#4A443F]">
+                <p className="font-semibold text-amber-900 flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 text-amber-700 shrink-0" />
+                  <span>Confirmation Pending &bull; Live Verification via Call</span>
+                </p>
+                <p className="text-[11px] leading-relaxed text-amber-900/90">
+                  Online card/UPI payment is temporarily disabled. You can submit your reservation request with <strong>zero advance payment</strong>. Our hotel front desk will call you directly at <strong>{guestPhone || "your contact number"}</strong> to verify live room availability and confirm your booking and payment details over the phone.
+                </p>
+              </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <button
-                  type="button"
-                  onClick={() => setPaymentMethod("ONLINE")}
-                  className={`p-4 rounded-2xl border-2 text-left transition-all space-y-2 ${
-                    paymentMethod === "ONLINE"
-                      ? "border-[#B62576] bg-[#FFF8FA] shadow-sm"
-                      : "border-[#E6DED3] bg-[#FAF7F2] hover:border-[#A27520]"
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <CreditCard className="w-4 h-4 text-[#B62576]" />
-                      <span className="text-xs font-bold text-[#1A1715]">Pay Online (Instant)</span>
-                    </div>
-                    {paymentMethod === "ONLINE" && (
-                      <span className="w-4 h-4 rounded-full bg-[#B62576] text-white flex items-center justify-center text-[10px]">
-                        ✓
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-[11px] text-[#787069] font-light leading-relaxed">
-                    UPI (GPay / PhonePe / Paytm), Debit/Credit Cards, Net Banking. Instant reservation lock.
-                  </p>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setPaymentMethod("PAY_AT_HOTEL")}
-                  className={`p-4 rounded-2xl border-2 text-left transition-all space-y-2 ${
-                    paymentMethod === "PAY_AT_HOTEL"
-                      ? "border-[#B62576] bg-[#FFF8FA] shadow-sm"
-                      : "border-[#E6DED3] bg-[#FAF7F2] hover:border-[#A27520]"
-                  }`}
+                {/* Active: Pay at Hotel with Phone Confirmation */}
+                <div
+                  className="p-4 rounded-2xl border-2 border-[#A27520] bg-[#FDFBF7] shadow-sm space-y-2 text-left"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <Building className="w-4 h-4 text-[#A27520]" />
-                      <span className="text-xs font-bold text-[#1A1715]">Pay at Hotel</span>
+                      <span className="text-xs font-bold text-[#1A1715]">Pay at Hotel (Call to Confirm)</span>
                     </div>
-                    {paymentMethod === "PAY_AT_HOTEL" && (
-                      <span className="w-4 h-4 rounded-full bg-[#B62576] text-white flex items-center justify-center text-[10px]">
-                        ✓
-                      </span>
-                    )}
+                    <span className="w-4 h-4 rounded-full bg-[#A27520] text-white flex items-center justify-center text-[10px]">
+                      ✓
+                    </span>
                   </div>
                   <p className="text-[11px] text-[#787069] font-light leading-relaxed">
-                    Zero advance payment. Pay directly at the front desk upon check-in with Cash, UPI, or Card.
+                    Zero advance payment required. Our front desk will call you to confirm room availability and payment terms. Pay at front desk upon check-in.
                   </p>
-                </button>
+                </div>
+
+                {/* Disabled: Online Payment */}
+                <div
+                  className="p-4 rounded-2xl border border-gray-200 bg-gray-50/70 text-left space-y-2 opacity-50 cursor-not-allowed select-none"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <CreditCard className="w-4 h-4 text-gray-400" />
+                      <span className="text-xs font-bold text-gray-400">Pay Online (Instant)</span>
+                    </div>
+                    <span className="text-[9px] uppercase font-mono tracking-wider px-2 py-0.5 rounded bg-gray-200 text-gray-600 font-semibold">
+                      Disabled
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-gray-400 font-light leading-relaxed">
+                    UPI, Credit/Debit cards, and NetBanking are temporarily disabled. Bookings are processed via phone call confirmation.
+                  </p>
+                </div>
               </div>
 
               {/* Policy agreement */}
@@ -700,7 +729,7 @@ function CheckoutContent() {
                     required
                     checked={agreeTerms}
                     onChange={(e) => setAgreeTerms(e.target.checked)}
-                    className="w-4 h-4 mt-0.5 rounded text-[#B62576] focus:ring-[#B62576]"
+                    className="w-4 h-4 mt-0.5 rounded text-[#A27520] focus:ring-[#A27520]"
                   />
                   <span className="text-[#787069] leading-relaxed">
                     I agree to the hotel check-in policy (Check-in: 11:00 AM, Check-out: 12:00 PM) and free cancellation up to 24 hours prior to arrival. Valid Government Photo ID required for all adult guests.
@@ -709,20 +738,26 @@ function CheckoutContent() {
               </div>
 
               {/* Submit CTA */}
-              <button
-                type="submit"
-                disabled={isProcessing}
-                className="w-full py-4 rounded-full bg-gradient-to-r from-[#B62576] to-[#92185C] hover:from-[#C72E84] hover:to-[#A71C67] text-white text-xs font-bold uppercase tracking-[0.14em] shadow-xl shadow-[#B62576]/30 transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center space-x-2 disabled:opacity-60"
-              >
-                {isProcessing ? (
-                  <span>Processing Reservation...</span>
-                ) : (
-                  <>
-                    <span>Confirm &amp; Book {totalRoomsCount} {totalRoomsCount === 1 ? "Room" : "Rooms"} &bull; {formatCurrencyINR(totalAmount)}</span>
-                    <ArrowUpRight className="w-4 h-4" />
-                  </>
-                )}
-              </button>
+              <div className="space-y-2 pt-1">
+                <button
+                  type="submit"
+                  disabled={isProcessing}
+                  className="w-full py-4 rounded-full bg-[#1A1715] hover:bg-[#A27520] text-white text-xs font-bold uppercase tracking-[0.14em] shadow-xl transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center space-x-2 disabled:opacity-60"
+                >
+                  {isProcessing ? (
+                    <span>Submitting Booking Request...</span>
+                  ) : (
+                    <>
+                      <span>Submit Request &bull; Pay at Hotel &bull; {formatCurrencyINR(totalAmount)}</span>
+                      <ArrowUpRight className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+                <p className="text-center text-[11px] text-[#787069] flex items-center justify-center gap-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#A27520]" />
+                  <span>Zero advance payment. Front desk will call to confirm live availability and payment.</span>
+                </p>
+              </div>
             </div>
           </div>
 

@@ -29,9 +29,9 @@ export default function MobileStickyBar() {
 
       <Link
         href="/booking"
-        className="flex-1 flex items-center justify-center py-2.5 px-3 text-xs font-semibold uppercase tracking-wider text-[#0C0B0A] bg-[#9E8255] hover:bg-[#BFA058] rounded-full transition-all shadow-md active:scale-95"
+        className="btn-luxury-gold flex-1 flex items-center justify-center py-2.5 px-3 text-xs font-bold uppercase tracking-wider rounded-full active:scale-95"
       >
-        <CalendarCheck className="w-3.5 h-3.5 mr-1.5 text-[#0C0B0A]" />
+        <CalendarCheck className="w-3.5 h-3.5 mr-1.5 text-[#120E05]" />
         <span>Book Direct</span>
       </Link>
     </aside>

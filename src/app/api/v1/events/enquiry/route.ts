@@ -1,7 +1,19 @@
 import { NextResponse } from "next/server";
 import { sendEventEnquiryNotificationEmail } from "@/lib/email";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 export async function POST(request: Request) {
+  const clientIp = getClientIp(request);
+
+  // SEC 09 & Table 3: 3 inquiries per hour per source
+  const rate = checkRateLimit("events_enquiry", clientIp, 3, 3600);
+  if (!rate.allowed) {
+    return NextResponse.json(
+      { error: "TOO_MANY_REQUESTS", message: "Rate limit exceeded. Please try again later." },
+      { status: 429, headers: { "Retry-After": String(rate.resetInSeconds) } }
+    );
+  }
+
   try {
     const body = await request.json();
     const {
@@ -18,22 +30,21 @@ export async function POST(request: Request) {
     // Validate required fields
     if (!name || !email || !phone || !eventDate || !eventType) {
       return NextResponse.json(
-        { error: "Missing required fields (name, email, phone, eventDate, eventType)" },
+        { error: "INVALID_FIELDS", message: "Missing required fields (name, email, phone, eventDate, eventType)" },
         { status: 400 }
       );
     }
 
-    // Await email notification so serverless lambda does not terminate early
     try {
       await sendEventEnquiryNotificationEmail({
-        eventType,
-        eventDate,
-        attendees,
-        seatingLayout,
-        name,
-        email,
-        phone,
-        notes,
+        eventType: String(eventType).slice(0, 100),
+        eventDate: String(eventDate).slice(0, 30),
+        attendees: String(attendees).slice(0, 10),
+        seatingLayout: String(seatingLayout).slice(0, 50),
+        name: String(name).slice(0, 100),
+        email: String(email).slice(0, 100),
+        phone: String(phone).replace(/[^0-9+]/g, "").slice(0, 20),
+        notes: String(notes).slice(0, 500),
       });
     } catch (mailErr: any) {
       console.warn("[Event Enquiry] Email dispatch warning:", mailErr.message);
@@ -46,7 +57,7 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.error("[Event Enquiry] Submission error:", error);
     return NextResponse.json(
-      { error: error.message || "Failed to process enquiry" },
+      { error: "INTERNAL_ERROR", message: "Failed to process enquiry" },
       { status: 500 }
     );
   }

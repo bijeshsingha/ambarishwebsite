@@ -820,10 +820,10 @@ function BookingContent() {
               <button
                 type="button"
                 onClick={handleProceedToCheckout}
-                className="px-7 py-3 sm:px-9 sm:py-3.5 rounded-full bg-[#9E8255] hover:bg-[#BFA058] text-[#0C0B0A] text-xs font-semibold uppercase tracking-[0.14em] flex items-center space-x-2 shadow-md hover:scale-[1.02] active:scale-95 transition-all shrink-0"
+                className="btn-luxury-gold px-7 py-3 sm:px-9 sm:py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.14em] flex items-center space-x-2 shrink-0"
               >
                 <span>Checkout</span>
-                <ArrowUpRight className="w-4 h-4" />
+                <ArrowUpRight className="w-4 h-4 ml-1" />
               </button>
             </div>
           </div>

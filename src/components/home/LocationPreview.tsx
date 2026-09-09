@@ -188,7 +188,7 @@ export default function LocationPreview() {
             </a>
             <Link
               href="/location"
-              className="px-7 py-3.5 rounded-full bg-[#9E8255] hover:bg-[#BFA058] text-xs font-semibold uppercase tracking-[0.14em] text-[#0C0B0A] shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all"
+              className="btn-luxury-gold px-7 py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.14em]"
             >
               <span>Full Transit Guide &rarr;</span>
             </Link>
