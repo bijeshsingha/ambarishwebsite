@@ -52,7 +52,7 @@ export default function TrustStrip() {
                 <p className="text-xs font-semibold uppercase tracking-wider text-[#B4872F]">
                   {pillar.subtitle}
                 </p>
-                <h3 className="font-serif text-xl text-[#F5EBDD] font-normal">
+                <h3 className="font-serif text-xl text-[#F5EBDD] font-medium">
                   {pillar.title}
                 </h3>
                 <p className="text-xs text-[#F5EBDD]/65 font-light leading-relaxed">

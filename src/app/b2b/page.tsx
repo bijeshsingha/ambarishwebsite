@@ -139,12 +139,12 @@ export default function B2bCorporatePage() {
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-5">
           <div className="inline-flex items-center space-x-2 bg-white/10 border border-[#B4872F]/40 px-4 py-1.5 rounded-full backdrop-blur-md">
             <Building2 className="w-3.5 h-3.5 text-[#B4872F]" />
-            <span className="text-[11px] font-mono tracking-widest uppercase text-[#F5EBDD] font-semibold">
+            <span className="text-[11px] font-sans tracking-widest uppercase text-[#F5EBDD] font-semibold">
               Corporate &bull; Travel Agents &bull; Government Tie-ups
             </span>
           </div>
 
-          <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-normal leading-tight max-w-4xl mx-auto text-white">
+          <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-medium leading-tight max-w-4xl mx-auto text-white">
             B2B &amp; Corporate Travel Partnerships
           </h1>
 
@@ -173,19 +173,19 @@ export default function B2bCorporatePage() {
           {/* Key Stat Badges */}
           <div className="pt-10 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto text-left text-xs">
             <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
-              <span className="text-[#B4872F] font-mono text-base font-bold block">200m</span>
+              <span className="text-[#B4872F] font-sans text-base font-bold block">200m</span>
               <span className="text-[#A89F96] text-[11px]">From Guwahati Railway Station</span>
             </div>
             <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
-              <span className="text-[#B4872F] font-mono text-base font-bold block">SAC 996311</span>
+              <span className="text-[#B4872F] font-sans text-base font-bold block">SAC 996311</span>
               <span className="text-[#A89F96] text-[11px]">Direct GST ITC Invoicing</span>
             </div>
             <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
-              <span className="text-[#B4872F] font-mono text-base font-bold block">BTC Credit</span>
+              <span className="text-[#B4872F] font-sans text-base font-bold block">BTC Credit</span>
               <span className="text-[#A89F96] text-[11px]">Monthly Billing Facilities</span>
             </div>
             <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
-              <span className="text-[#B4872F] font-mono text-base font-bold block">150 Pax</span>
+              <span className="text-[#B4872F] font-sans text-base font-bold block">150 Pax</span>
               <span className="text-[#A89F96] text-[11px]">Banquet &amp; Seminar Halls</span>
             </div>
           </div>
@@ -195,10 +195,10 @@ export default function B2bCorporatePage() {
       {/* 2. Corporate Benefits Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-12">
         <div className="text-center space-y-3">
-          <span className="text-[10px] font-mono tracking-widest text-[#A27520] uppercase font-semibold block">
+          <span className="text-[10px] font-sans tracking-widest text-[#A27520] uppercase font-semibold block">
             Why Corporates Choose Hotel Ambarish
           </span>
-          <h2 className="font-serif text-3xl sm:text-4xl text-[#1A1715] font-normal">
+          <h2 className="font-serif text-3xl sm:text-4xl text-[#1A1715] font-medium">
             Designed for Seamless Business Travel
           </h2>
           <p className="text-xs sm:text-sm text-[#787069] max-w-xl mx-auto font-light">
@@ -230,10 +230,10 @@ export default function B2bCorporatePage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div className="space-y-2">
-              <span className="text-[10px] font-mono tracking-widest text-[#A27520] uppercase font-semibold block">
+              <span className="text-[10px] font-sans tracking-widest text-[#A27520] uppercase font-semibold block">
                 Executive Accommodations
               </span>
-              <h2 className="font-serif text-2xl sm:text-3xl text-[#1A1715]">
+              <h2 className="font-serif text-2xl sm:text-3xl text-[#1A1715] font-medium">
                 Tailored for Single Executives &amp; Project Teams
               </h2>
             </div>
@@ -259,7 +259,7 @@ export default function B2bCorporatePage() {
                     fill
                     className="object-cover"
                   />
-                  <div className="absolute top-3 right-3 bg-[#0C0B0B]/85 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-mono font-bold text-[#F5EBDD]">
+                  <div className="absolute top-3 right-3 bg-[#0C0B0B]/85 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-sans font-bold text-[#F5EBDD]">
                     {room.bedType}
                   </div>
                 </div>
@@ -273,7 +273,7 @@ export default function B2bCorporatePage() {
                   <div className="pt-2 border-t border-[#EDE7DE] flex items-center justify-between">
                     <div>
                       <span className="text-[10px] text-[#787069] block">Standard Rate</span>
-                      <strong className="font-mono text-sm text-[#A27520]">
+                      <strong className="font-sans text-sm font-bold text-[#A27520]">
                         {formatCurrencyINR(room.basePrice)}/nt
                       </strong>
                     </div>
@@ -295,7 +295,7 @@ export default function B2bCorporatePage() {
             <div className="w-12 h-12 rounded-2xl bg-[#FFF8FA] text-[#B62576] flex items-center justify-center mx-auto mb-2">
               <FileCheck className="w-6 h-6" />
             </div>
-            <h2 className="font-serif text-2xl sm:text-3xl font-normal text-[#1A1715]">
+            <h2 className="font-serif text-2xl sm:text-3xl font-medium text-[#1A1715]">
               Request a Corporate Rate Contract
             </h2>
             <p className="text-xs text-[#787069] max-w-md mx-auto font-light">
@@ -384,7 +384,7 @@ export default function B2bCorporatePage() {
                       placeholder="18AAAAA0000A1Z5"
                       value={formData.gstin}
                       onChange={(e) => setFormData({ ...formData, gstin: e.target.value.toUpperCase() })}
-                      className="w-full p-3 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-mono font-bold uppercase text-[#1A1715] focus:outline-none focus:border-[#B62576]"
+                      className="w-full p-3 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-sans font-bold uppercase text-[#1A1715] focus:outline-none focus:border-[#B62576]"
                     />
                   </div>
 
@@ -591,7 +591,7 @@ export default function B2bCorporatePage() {
       {/* 5. Direct Helpdesk Strip */}
       <section className="py-12 bg-[#0C0B0B] text-[#F5EBDD] border-t border-white/10 text-center">
         <div className="max-w-4xl mx-auto px-4 space-y-3">
-          <h3 className="font-serif text-xl sm:text-2xl font-normal text-white">
+          <h3 className="font-serif text-xl sm:text-2xl font-medium text-white">
             Need an Immediate Corporate Room Block for Tonight or Tomorrow?
           </h3>
           <p className="text-xs text-[#A89F96] font-light max-w-lg mx-auto">

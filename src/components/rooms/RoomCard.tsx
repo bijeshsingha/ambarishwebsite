@@ -90,7 +90,7 @@ export default function RoomCard({ room, featured = false }: RoomCardProps) {
                 <span className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#9E8255] font-semibold">
                   Featured Accommodation
                 </span>
-                <h3 className="font-serif text-3xl sm:text-4xl font-normal text-[#0C0B0A] group-hover:text-[#9E8255] transition-colors">
+                <h3 className="font-serif text-3xl sm:text-4xl font-medium text-[#0C0B0A] group-hover:text-[#9E8255] transition-colors">
                   <Link href={`/rooms/${room.slug}`}>{room.name}</Link>
                 </h3>
               </div>
@@ -225,7 +225,7 @@ export default function RoomCard({ room, featured = false }: RoomCardProps) {
           <div>
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h3 className="font-serif text-2xl sm:text-3xl font-normal text-[#0C0B0A] group-hover:text-[#9E8255] transition-colors">
+                <h3 className="font-serif text-2xl sm:text-3xl font-medium text-[#0C0B0A] group-hover:text-[#9E8255] transition-colors">
                   <Link href={`/rooms/${room.slug}`}>{room.name}</Link>
                 </h3>
                 <p className="text-[11px] uppercase tracking-wider text-[#7A7067] font-sans mt-1">

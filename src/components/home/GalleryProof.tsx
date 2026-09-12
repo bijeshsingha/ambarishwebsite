@@ -49,7 +49,7 @@ export default function GalleryProof() {
             <p className="text-xs uppercase tracking-[0.28em] text-[#9E8255] font-semibold">
               Visual Archive
             </p>
-            <h2 className="font-serif text-3xl sm:text-5xl font-normal leading-tight text-[#FAF8F5]">
+            <h2 className="font-serif text-3xl sm:text-5xl font-medium leading-tight text-[#FAF8F5]">
               Authentic Hotel Photography
             </h2>
             <p className="text-[#FAF8F5]/65 text-sm sm:text-base font-light max-w-xl leading-relaxed">
@@ -93,7 +93,7 @@ export default function GalleryProof() {
                     <span className="text-[10px] font-sans uppercase tracking-widest text-[#BFA058] block mb-1">
                       {img.category}
                     </span>
-                    <h3 className="font-serif text-lg sm:text-xl text-white font-normal leading-snug">
+                    <h3 className="font-serif text-lg sm:text-xl text-white font-medium leading-snug">
                       {img.title}
                     </h3>
                   </div>

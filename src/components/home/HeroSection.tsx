@@ -109,10 +109,10 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="font-serif text-4xl sm:text-6xl lg:text-7xl font-normal text-[#F5EBDD] leading-[1.08] tracking-tight"
+            className="font-serif text-4xl sm:text-6xl lg:text-7xl font-medium text-[#F5EBDD] leading-[1.08] tracking-tight"
           >
             Hotel Ambarish Grand Residency
-            <span className="block text-xl sm:text-2xl lg:text-3xl text-[#B4872F] font-serif italic mt-2 font-normal tracking-wide drop-shadow-sm">
+            <span className="block text-xl sm:text-2xl lg:text-3xl text-[#D4AF37] font-serif italic mt-2 font-medium tracking-wide drop-shadow-sm">
               by Divine View
             </span>
           </motion.h1>

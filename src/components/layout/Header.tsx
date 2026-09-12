@@ -239,10 +239,10 @@ export default function Header() {
             {/* Modal Header */}
             <div className="flex justify-between items-start border-b border-[#E6DED3] pb-3.5">
               <div>
-                <span className="text-[10px] font-mono font-bold tracking-widest text-[#B4872F] uppercase block">
+                <span className="text-[10px] font-sans font-bold tracking-widest text-[#B4872F] uppercase block">
                   Best Direct Rate Guarantee
                 </span>
-                <h3 className="font-serif text-2xl font-normal text-[#1A1715]">
+                <h3 className="font-serif text-2xl font-medium text-[#1A1715]">
                   Quick Reservation
                 </h3>
               </div>

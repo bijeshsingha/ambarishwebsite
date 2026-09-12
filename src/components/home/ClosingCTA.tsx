@@ -13,7 +13,7 @@ export default function ClosingCTA() {
           Direct Reservations
         </p>
 
-        <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-normal leading-tight text-[#F5EBDD]">
+        <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-medium leading-tight text-[#F5EBDD]">
           Plan Your Stay in Guwahati
         </h2>
 

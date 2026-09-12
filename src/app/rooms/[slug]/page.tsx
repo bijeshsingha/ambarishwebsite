@@ -96,7 +96,7 @@ export default function RoomDetailPage() {
                   <Expand className="w-3 h-3 mr-1.5 text-[#B4872F]" />
                   Photo {activeImgIndex + 1} / {room.images.length}
                 </span>
-                <span className="text-[10px] font-mono uppercase tracking-widest text-[#F5EBDD] bg-[#0C0B0B]/80 px-3 py-1.5 rounded-full border border-white/10">
+                <span className="text-[10px] font-sans uppercase tracking-widest text-[#F5EBDD] bg-[#0C0B0B]/80 px-3 py-1.5 rounded-full border border-white/10">
                   {room.categoryCode}
                 </span>
               </div>
@@ -126,7 +126,7 @@ export default function RoomDetailPage() {
               <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#B4872F] block">
                 Verified Category
               </span>
-              <h1 className="font-serif text-3xl sm:text-5xl font-normal text-[#0C0B0B]">
+              <h1 className="font-serif text-3xl sm:text-5xl font-medium text-[#0C0B0B]">
                 {room.name}
               </h1>
               <p className="text-xs text-[#3D3734] font-light leading-relaxed">
@@ -228,7 +228,7 @@ export default function RoomDetailPage() {
         {/* Narrative & Amenities */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 pt-12 hairline-t">
           <div className="lg:col-span-7 space-y-6">
-            <h3 className="font-serif text-2xl font-normal text-[#0C0B0B]">Room overview</h3>
+            <h3 className="font-serif text-2xl font-medium text-[#0C0B0B]">Room overview</h3>
             <p className="text-xs sm:text-sm text-[#3D3734] font-light leading-relaxed">
               {room.fullDescription}
             </p>
@@ -249,7 +249,7 @@ export default function RoomDetailPage() {
           </div>
 
           <div className="lg:col-span-5 space-y-4">
-            <h3 className="font-serif text-2xl font-normal text-[#0C0B0B]">Included amenities</h3>
+            <h3 className="font-serif text-2xl font-medium text-[#0C0B0B]">Included amenities</h3>
             <div className="grid grid-cols-2 gap-3 p-5 rounded-2xl bg-[#FFFFFF] border border-[#0C0B0B]/10 text-xs text-[#3D3734] shadow-sm">
               {room.amenities.map((a, idx) => (
                 <div key={idx} className="flex items-center space-x-2">
@@ -263,7 +263,7 @@ export default function RoomDetailPage() {
 
         {/* Other Rooms */}
         <div className="pt-12 hairline-t space-y-8">
-          <h3 className="font-serif text-2xl sm:text-3xl font-normal text-[#0C0B0B]">Alternative rooms</h3>
+          <h3 className="font-serif text-2xl sm:text-3xl font-medium text-[#0C0B0B]">Alternative rooms</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             {relatedRooms.map((r) => (
               <RoomCard key={r.id} room={r} />

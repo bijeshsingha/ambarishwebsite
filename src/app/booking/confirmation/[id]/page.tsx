@@ -89,10 +89,10 @@ function ConfirmationContent() {
           </div>
 
           <div className="space-y-1">
-            <h1 className="font-serif text-2xl font-normal text-[#1A1715]">Reservation Lookup</h1>
+            <h1 className="font-serif text-2xl font-medium text-[#1A1715]">Reservation Lookup</h1>
             <p className="text-xs text-[#787069]">
               We could not find active records for reference{" "}
-              <strong className="font-mono text-[#A27520]">{reference}</strong>.
+              <strong className="font-sans font-bold text-[#A27520]">{reference}</strong>.
             </p>
           </div>
 
@@ -210,15 +210,15 @@ function ConfirmationContent() {
                 <CheckCircle className="w-6 h-6 text-emerald-700" />
               </div>
               <div className="space-y-1">
-                <span className="text-[10px] font-mono uppercase tracking-widest px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 font-bold border border-emerald-300">
+                <span className="text-[10px] font-sans uppercase tracking-widest px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 font-bold border border-emerald-300">
                   ✓ Official Reservation Confirmed &bull; Guaranteed
                 </span>
-                <h1 className="font-serif text-2xl sm:text-3xl font-normal text-[#1A1715] pt-1">
+                <h1 className="font-serif text-2xl sm:text-3xl font-medium text-[#1A1715] pt-1">
                   Booking Confirmed &amp; Guaranteed
                 </h1>
               </div>
               <p className="text-xs text-[#524B46] max-w-lg mx-auto font-light leading-relaxed">
-                Your reservation reference <strong className="text-[#1A1715] font-mono">#{reservation.bookingReference}</strong> is officially guaranteed by Hotel Ambarish Grand Residency. Please present this voucher or reference code at the front desk upon check-in.
+                Your reservation reference <strong className="text-[#1A1715] font-sans font-bold">#{reservation.bookingReference}</strong> is officially guaranteed by Hotel Ambarish Grand Residency. Please present this voucher or reference code at the front desk upon check-in.
               </p>
             </>
           ) : reservation.status === "CANCELLED" ? (
@@ -227,10 +227,10 @@ function ConfirmationContent() {
                 <AlertCircle className="w-6 h-6 text-rose-700" />
               </div>
               <div className="space-y-1">
-                <span className="text-[10px] font-mono uppercase tracking-widest px-3 py-1 rounded-full bg-rose-100 text-rose-900 font-bold border border-rose-300">
+                <span className="text-[10px] font-sans uppercase tracking-widest px-3 py-1 rounded-full bg-rose-100 text-rose-900 font-bold border border-rose-300">
                   ✗ Reservation Cancelled
                 </span>
-                <h1 className="font-serif text-2xl sm:text-3xl font-normal text-[#1A1715] pt-1">
+                <h1 className="font-serif text-2xl sm:text-3xl font-medium text-[#1A1715] pt-1">
                   Reservation Cancelled / Unavailable
                 </h1>
               </div>
@@ -244,23 +244,23 @@ function ConfirmationContent() {
                 <PhoneCall className="w-6 h-6 text-amber-700" />
               </div>
               <div className="space-y-1">
-                <span className="text-[10px] font-mono uppercase tracking-widest px-3 py-1 rounded-full bg-amber-100/80 text-amber-900 font-bold border border-amber-300">
+                <span className="text-[10px] font-sans uppercase tracking-widest px-3 py-1 rounded-full bg-amber-100/80 text-amber-900 font-bold border border-amber-300">
                   Confirmation Pending &bull; Call Verification
                 </span>
-                <h1 className="font-serif text-2xl sm:text-3xl font-normal text-[#1A1715] pt-1">
+                <h1 className="font-serif text-2xl sm:text-3xl font-medium text-[#1A1715] pt-1">
                   Booking Request Received
                 </h1>
               </div>
               <p className="text-xs text-[#524B46] max-w-lg mx-auto font-light leading-relaxed">
                 Thank you for choosing Hotel Ambarish Grand Residency. Your booking request reference is{" "}
-                <strong className="text-[#1A1715] font-mono">{reservation.bookingReference}</strong>. Our front desk team will call you shortly at{" "}
+                <strong className="text-[#1A1715] font-sans font-bold">{reservation.bookingReference}</strong>. Our front desk team will call you shortly at{" "}
                 <strong className="text-[#1A1715]">{reservation.guestPhone}</strong> to verify live room availability and confirm your reservation &amp; payment details over the phone.
               </p>
 
               {/* Direct Call to Hotel Box */}
               <div className="p-3.5 rounded-2xl bg-[#FAF7F2] border border-[#EDE7DE] flex flex-col sm:flex-row items-center justify-between gap-3 max-w-lg mx-auto text-xs text-left">
                 <div className="space-y-0.5 text-center sm:text-left">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-[#A27520] font-bold block">
+                  <span className="text-[10px] font-sans uppercase tracking-wider text-[#A27520] font-bold block">
                     Prefer Instant Confirmation?
                   </span>
                   <span className="text-[#4A443F]">Call our 24/7 Hotel Front Desk directly:</span>
@@ -318,10 +318,10 @@ function ConfirmationContent() {
             </div>
 
             <div className="text-right">
-              <span className="text-[10px] uppercase font-mono tracking-widest text-[#A27520] block font-semibold">
+              <span className="text-[10px] uppercase font-sans tracking-widest text-[#A27520] block font-semibold">
                 Booking Reference
               </span>
-              <strong className="font-mono text-base sm:text-lg font-bold text-[#1A1715]">
+              <strong className="font-sans text-base sm:text-lg font-bold text-[#1A1715]">
                 {reservation.bookingReference || reference}
               </strong>
             </div>
@@ -341,7 +341,7 @@ function ConfirmationContent() {
                 <div className="pt-1.5 border-t border-[#EDE7DE] text-[11px] voucher-compact-text">
                   <p className="font-semibold text-[#1A1715]">🏢 {reservation.companyName || reservation.b2b?.companyName}</p>
                   {reservation.guestGstin && (
-                    <p className="font-mono text-[#A27520]">GSTIN: {reservation.guestGstin}</p>
+                    <p className="font-sans font-semibold text-[#A27520]">GSTIN: {reservation.guestGstin}</p>
                   )}
                 </div>
               )}
@@ -360,7 +360,7 @@ function ConfirmationContent() {
                         <span className="font-medium text-[#1A1715]">{rm.quantity}&times; {rm.roomName}</span>
                         <span className="text-[10px] text-[#787069] block">{rm.ratePlanName}</span>
                       </div>
-                      <span className="font-mono text-[#A27520] font-semibold">
+                      <span className="font-sans text-[#A27520] font-semibold">
                         {formatCurrencyINR((rm.pricePerNight || 0) * (rm.quantity || 1))}/n
                       </span>
                     </div>
@@ -397,7 +397,7 @@ function ConfirmationContent() {
 
           {/* Pricing Summary */}
           <div className="p-3.5 sm:p-4 rounded-2xl bg-[#FAF7F2] border border-[#EDE7DE] space-y-2 text-xs print:p-2.5 print:rounded-xl">
-            <div className="text-[10px] font-mono uppercase tracking-widest text-[#A27520] font-bold pb-1 border-b border-[#EDE7DE] flex justify-between items-center">
+            <div className="text-[10px] font-sans uppercase tracking-widest text-[#A27520] font-bold pb-1 border-b border-[#EDE7DE] flex justify-between items-center">
               <span>Detailed Tariff &amp; Price Breakup</span>
               <span>{reservation.rooms || 1} Room(s) &bull; {reservation.nights || 1} {(reservation.nights || 1) === 1 ? "Night" : "Nights"}</span>
             </div>
@@ -468,7 +468,7 @@ function ConfirmationContent() {
                       ✓ Paid Online (Razorpay)
                     </span>
                     {reservation.paymentId && (
-                      <span className="block font-mono text-[10px] text-[#787069] mt-0.5">
+                      <span className="block font-sans text-[10px] text-[#787069] mt-0.5">
                         Ref: {reservation.paymentId}
                       </span>
                     )}
@@ -500,7 +500,7 @@ function ConfirmationContent() {
 
             <div className="text-right voucher-compact-text">
               <span className="block font-medium text-[#1A1715]">Hotel Helpdesk</span>
-              <span className="font-mono text-xs">{HOTEL_INFO.phone}</span>
+              <span className="font-sans font-semibold text-xs">{HOTEL_INFO.phone}</span>
             </div>
           </div>
         </div>

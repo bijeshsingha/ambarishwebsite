@@ -66,7 +66,7 @@ export default function DiningPreview() {
                 In-House Gastronomy
               </span>
 
-              <h2 className="font-serif text-3xl sm:text-5xl font-normal text-[#0C0B0A] leading-tight">
+              <h2 className="font-serif text-3xl sm:text-5xl font-medium text-[#0C0B0A] leading-tight">
                 {DINING_INFO.name}
               </h2>
 
@@ -87,8 +87,8 @@ export default function DiningPreview() {
                   </div>
                   <div className="flex-1 space-y-1">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                      <h4 className="font-serif text-lg text-[#0C0B0A] font-normal">{t.meal}</h4>
-                      <span className="font-mono text-xs font-semibold text-[#9E8255] bg-[#FAF8F5] px-2.5 py-0.5 rounded-full self-start">
+                      <h4 className="font-serif text-lg text-[#0C0B0A] font-medium">{t.meal}</h4>
+                      <span className="font-sans text-xs font-semibold text-[#9E8255] bg-[#FAF8F5] px-2.5 py-0.5 rounded-full self-start">
                         {t.hours}
                       </span>
                     </div>
@@ -110,7 +110,7 @@ export default function DiningPreview() {
                 <ArrowUpRight className="w-4 h-4 ml-2 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </Link>
 
-              <span className="text-xs text-[#6B635B] flex items-center font-mono">
+              <span className="text-xs text-[#6B635B] flex items-center font-sans">
                 <PhoneCall className="w-3.5 h-3.5 mr-1.5 text-[#9E8255]" />
                 In-Room Dining: Dial Ext 9
               </span>
@@ -149,10 +149,10 @@ export default function DiningPreview() {
 
                 <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between pointer-events-auto">
                   <div>
-                    <span className="text-[10px] font-mono uppercase tracking-widest text-[#BFA058] block">
+                    <span className="text-[10px] font-sans uppercase tracking-widest text-[#BFA058] block">
                       {restaurantAngles[activeIdx].subtitle}
                     </span>
-                    <h3 className="font-serif text-xl sm:text-2xl text-[#FAF8F5] font-normal">
+                    <h3 className="font-serif text-xl sm:text-2xl text-[#FAF8F5] font-medium">
                       {restaurantAngles[activeIdx].title}
                     </h3>
                   </div>
@@ -201,7 +201,7 @@ export default function DiningPreview() {
               <span className="text-xs uppercase tracking-[0.2em] text-[#9E8255] font-semibold block mb-1">
                 Gastronomic Highlights
               </span>
-              <h3 className="font-serif text-2xl sm:text-4xl text-[#0C0B0A] font-normal">
+              <h3 className="font-serif text-2xl sm:text-4xl text-[#0C0B0A] font-medium">
                 Popular House Specialties
               </h3>
             </div>
@@ -227,7 +227,7 @@ export default function DiningPreview() {
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />
                     <div className="absolute top-3 left-3">
-                      <span className="text-[10px] font-mono font-semibold uppercase tracking-wider bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-full text-[#0C0B0A] shadow-sm border border-black/5">
+                      <span className="text-[10px] font-sans font-semibold uppercase tracking-wider bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-full text-[#0C0B0A] shadow-sm border border-black/5">
                         {dish.tag}
                       </span>
                     </div>
@@ -249,10 +249,10 @@ export default function DiningPreview() {
 
                   <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
                     <div>
-                      <span className="text-[10px] font-mono text-[#9E8255] uppercase tracking-wider font-semibold block">
+                      <span className="text-[10px] font-sans text-[#9E8255] uppercase tracking-wider font-semibold block">
                         {dish.category}
                       </span>
-                      <h4 className="font-serif text-lg font-normal text-[#0C0B0A] mt-0.5">
+                      <h4 className="font-serif text-lg font-medium text-[#0C0B0A] mt-0.5">
                         {dish.name}
                       </h4>
                       <p className="text-xs text-[#6B635B] font-light leading-relaxed mt-1">
@@ -279,12 +279,12 @@ export default function DiningPreview() {
             <div className="lg:col-span-7 space-y-4">
               <div className="inline-flex items-center space-x-2 bg-[#171412] border border-[#9E8255]/30 px-3.5 py-1.5 rounded-full">
                 <Wine className="w-3.5 h-3.5 text-[#9E8255]" />
-                <span className="text-[10px] uppercase font-mono tracking-widest text-[#BFA058] font-semibold">
+                <span className="text-[10px] uppercase font-sans tracking-widest text-[#BFA058] font-semibold">
                   Hotel Lounge &amp; Bar &bull; 2nd Floor
                 </span>
               </div>
 
-              <h3 className="font-serif text-3xl sm:text-4xl text-white font-normal">
+              <h3 className="font-serif text-3xl sm:text-4xl text-white font-medium">
                 Pavillion Bar
               </h3>
 
@@ -293,7 +293,7 @@ export default function DiningPreview() {
               </p>
 
               <div className="flex flex-wrap items-center gap-4 text-xs pt-2">
-                <div className="flex items-center text-[#BFA058] font-mono">
+                <div className="flex items-center text-[#BFA058] font-sans">
                   <Clock className="w-3.5 h-3.5 mr-1.5" />
                   <span>11:00 AM – 11:00 PM Daily</span>
                 </div>
@@ -324,7 +324,7 @@ export default function DiningPreview() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
                   <div className="absolute bottom-3 left-3">
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-white/90 bg-black/60 px-2.5 py-1 rounded-full backdrop-blur-sm border border-white/10">
+                    <span className="text-[10px] font-sans uppercase tracking-wider text-white/90 bg-black/60 px-2.5 py-1 rounded-full backdrop-blur-sm border border-white/10">
                       Plush Lounge Seating
                     </span>
                   </div>

@@ -404,7 +404,7 @@ function SuiteArchitecturalModel({
 
                 {isSelected && (
                   <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-52 p-3 rounded-xl bg-[#0C0B0A]/95 text-[#FAF8F5] border border-[#9E8255]/50 shadow-xl backdrop-blur-xl text-left z-50 animate-in fade-in zoom-in-95 duration-200">
-                    <span className="text-[10px] font-mono text-[#BFA058] uppercase font-bold block mb-1">
+                    <span className="text-[10px] font-sans text-[#BFA058] uppercase font-bold block mb-1">
                       {h.title}
                     </span>
                     <p className="text-[11px] text-[#D1C7BD] font-light leading-snug">
@@ -430,12 +430,12 @@ export default function RoomSpatial3D() {
       <div className="absolute top-4 left-4 right-4 z-10 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
         <div className="flex items-center space-x-2 bg-black/60 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10">
           <span className="w-2 h-2 rounded-full bg-[#BFA058] animate-pulse" />
-          <span className="text-[10px] font-mono tracking-wider uppercase text-[#FAF8F5] font-semibold">
+          <span className="text-[10px] font-sans tracking-wider uppercase text-[#FAF8F5] font-semibold">
             3D Cutaway Suite Floorplan
           </span>
         </div>
 
-        <div className="bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-mono text-[#A89F96] border border-white/10 hidden sm:block">
+        <div className="bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-sans text-[#A89F96] border border-white/10 hidden sm:block">
           Rotate 360&deg; &bull; Click (+) Hotspots to Discover
         </div>
       </div>
@@ -469,7 +469,7 @@ export default function RoomSpatial3D() {
             key={h.id}
             type="button"
             onClick={() => setActiveHotspot(activeHotspot === h.id ? null : h.id)}
-            className={`px-3 py-1.5 rounded-full text-[10px] font-mono uppercase tracking-wider transition-all duration-200 border ${
+            className={`px-3 py-1.5 rounded-full text-[10px] font-sans uppercase tracking-wider transition-all duration-200 border ${
               activeHotspot === h.id
                 ? "bg-[#9E8255] text-[#0C0B0A] border-white shadow-md font-bold scale-105"
                 : "bg-black/60 text-[#FAF8F5]/80 border-white/10 hover:border-[#9E8255] hover:text-[#BFA058]"

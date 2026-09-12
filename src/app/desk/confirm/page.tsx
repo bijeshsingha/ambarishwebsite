@@ -203,7 +203,7 @@ function DeskConfirmContent() {
           <div className="w-12 h-12 rounded-full bg-rose-50 text-rose-700 mx-auto flex items-center justify-center">
             <AlertCircle className="w-6 h-6" />
           </div>
-          <h2 className="font-serif text-xl font-normal text-[#1A1715]">Front Desk Verification</h2>
+          <h2 className="font-serif text-xl font-medium text-[#1A1715]">Front Desk Verification</h2>
           <p className="text-xs text-[#7D756E] leading-relaxed">
             {error || "Unable to authorize confirmation for this booking."}
           </p>
@@ -237,10 +237,10 @@ function DeskConfirmContent() {
             />
           </div>
           <div>
-            <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#9A7228] block">
+            <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-[#9A7228] block">
               Front Desk Operations Portal
             </span>
-            <h1 className="font-serif text-xl sm:text-2xl font-normal text-[#1A1715] pt-0.5">
+            <h1 className="font-serif text-xl sm:text-2xl font-medium text-[#1A1715] pt-0.5">
               Reservation Confirmation Desk
             </h1>
           </div>
@@ -332,15 +332,15 @@ function DeskConfirmContent() {
             <div className="bg-white rounded-3xl p-6 sm:p-7 border border-[#E6DFD5] shadow-sm space-y-5">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#E6DFD5]">
                 <div>
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-[#7D756E] block font-semibold">
+                  <span className="text-[10px] font-sans uppercase tracking-wider text-[#7D756E] block font-semibold">
                     Booking Reference
                   </span>
-                  <span className="font-mono text-xl font-bold text-[#9A7228]">
+                  <span className="font-sans text-xl font-bold text-[#9A7228]">
                     #{reservation.bookingReference}
                   </span>
                 </div>
                 <div className="sm:text-right">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-[#7D756E] block font-semibold">
+                  <span className="text-[10px] font-sans uppercase tracking-wider text-[#7D756E] block font-semibold">
                     Total Tariff (Pay at Desk)
                   </span>
                   <span className="font-serif text-xl font-bold text-[#1A1715]">
@@ -393,7 +393,7 @@ function DeskConfirmContent() {
                         <span className="font-semibold text-[#1A1715]">{rm.quantity}&times; {rm.roomName}</span>
                         <span className="text-[11px] text-[#7D756E] block">{rm.ratePlanName}</span>
                       </div>
-                      <span className="font-mono font-bold text-[#1A1715]">
+                      <span className="font-sans font-bold text-[#1A1715]">
                         {formatCurrencyINR((rm.pricePerNight || 0) * (rm.quantity || 1))}/n
                       </span>
                     </div>
@@ -407,7 +407,7 @@ function DeskConfirmContent() {
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="w-5 h-5 text-[#9A7228]" />
-                  <h3 className="font-serif text-lg font-normal text-[#1A1715]">
+                  <h3 className="font-serif text-lg font-medium text-[#1A1715]">
                     Front Desk Verification Checklist
                   </h3>
                 </div>
@@ -524,7 +524,7 @@ function DeskConfirmContent() {
               </div>
 
               <div className="text-center space-y-1">
-                <h3 className="font-serif text-xl font-normal text-[#1A1715]">
+                <h3 className="font-serif text-xl font-medium text-[#1A1715]">
                   Confirm Reservation #{reservation.bookingReference}?
                 </h3>
                 <p className="text-xs text-[#5C554E] leading-relaxed">
@@ -580,7 +580,7 @@ function DeskConfirmContent() {
               </div>
 
               <div className="text-center space-y-1">
-                <h3 className="font-serif text-xl font-normal text-[#1A1715]">
+                <h3 className="font-serif text-xl font-medium text-[#1A1715]">
                   Cancel Reservation #{reservation.bookingReference}?
                 </h3>
                 <p className="text-xs text-[#5C554E] leading-relaxed">

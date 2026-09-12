@@ -31,7 +31,7 @@ export default function BusinessPreview() {
               Multi-Purpose Banquet Hall
             </span>
 
-            <h2 className="font-serif text-3xl sm:text-5xl font-normal leading-tight">
+            <h2 className="font-serif text-3xl sm:text-5xl font-medium leading-tight">
               Host Conferences, Seminars &amp; <br />
               <span className="text-[#BFA058] italic">Social Celebrations</span>
             </h2>
@@ -104,7 +104,7 @@ export default function BusinessPreview() {
                   <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center text-[#9E8255]">
                     <Icon className="w-4.5 h-4.5" />
                   </div>
-                  <h4 className="font-serif text-lg text-[#FAF8F5] font-normal">{s.label}</h4>
+                  <h4 className="font-serif text-lg text-[#FAF8F5] font-medium">{s.label}</h4>
                   <p className="text-xs text-[#FAF8F5]/60 font-light leading-relaxed">{s.desc}</p>
                 </motion.div>
               );

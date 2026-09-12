@@ -55,7 +55,7 @@ export default function DiningPage() {
           <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#B4872F] block">
             Culinary &amp; Lounge Experiences
           </span>
-          <h1 className="font-serif text-4xl sm:text-6xl font-normal text-[#0C0B0B]">
+          <h1 className="font-serif text-4xl sm:text-6xl font-medium text-[#0C0B0B]">
             Dining &amp; Pavillion Bar
           </h1>
           <p className="text-sm sm:text-base text-[#3D3734] max-w-2xl mx-auto font-light leading-relaxed">
@@ -101,7 +101,7 @@ export default function DiningPage() {
                   priority
                 />
                 <div className="absolute top-4 left-4">
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-[#0C0B0B] bg-[#FFFFFF]/90 backdrop-blur-md px-3 py-1 rounded-full border border-black/5 font-semibold shadow-sm">
+                  <span className="text-[10px] font-sans uppercase tracking-widest text-[#0C0B0B] bg-[#FFFFFF]/90 backdrop-blur-md px-3 py-1 rounded-full border border-black/5 font-semibold shadow-sm">
                     Dining Hall • Photo {activePhotoIdx + 1} of {DINING_INFO.images.length}
                   </span>
                 </div>
@@ -137,7 +137,7 @@ export default function DiningPage() {
                 <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#B4872F] block">
                   Fresh &amp; Authentic
                 </span>
-                <h2 className="font-serif text-3xl sm:text-4xl font-normal text-[#0C0B0B] leading-tight">
+                <h2 className="font-serif text-3xl sm:text-4xl font-medium text-[#0C0B0B] leading-tight">
                   The Ambarish Restaurant
                 </h2>
                 <p className="text-xs sm:text-sm text-[#3D3734] font-light leading-relaxed">
@@ -153,7 +153,7 @@ export default function DiningPage() {
                 <div className="grid grid-cols-2 gap-3 text-xs">
                   <div>
                     <span className="text-[#7A7067] block">Intercom Dial:</span>
-                    <span className="font-mono text-base font-bold text-[#0C0B0B]">Ext 9 / Ext 555</span>
+                    <span className="font-sans text-base font-bold text-[#0C0B0B]">Ext 9 / Ext 555</span>
                   </div>
                   <div>
                     <span className="text-[#7A7067] block">Prep Time:</span>
@@ -178,7 +178,7 @@ export default function DiningPage() {
           <div className="space-y-6">
             <div className="text-center max-w-xl mx-auto space-y-2">
               <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#B4872F]">Service Schedule</span>
-              <h3 className="font-serif text-3xl font-normal text-[#0C0B0B]">Service Hours</h3>
+              <h3 className="font-serif text-3xl font-medium text-[#0C0B0B]">Service Hours</h3>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -187,10 +187,10 @@ export default function DiningPage() {
                   key={idx}
                   className="p-6 rounded-2xl bg-[#FFFFFF] border border-[#0C0B0B]/10 space-y-3 shadow-sm hover:shadow-md transition-shadow"
                 >
-                  <span className="text-[10px] uppercase font-mono tracking-widest text-[#B4872F] font-bold block">
+                  <span className="text-[10px] uppercase font-sans tracking-widest text-[#B4872F] font-bold block">
                     {t.hours}
                   </span>
-                  <h4 className="font-serif text-xl font-normal text-[#0C0B0B]">{t.meal}</h4>
+                  <h4 className="font-serif text-xl font-medium text-[#0C0B0B]">{t.meal}</h4>
                   <p className="text-xs text-[#7A7067] font-light leading-relaxed">{t.description}</p>
                 </div>
               ))}
@@ -203,7 +203,7 @@ export default function DiningPage() {
               <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#B4872F] block">
                 Culinary Signatures
               </span>
-              <h3 className="font-serif text-3xl sm:text-4xl font-normal text-[#0C0B0B]">
+              <h3 className="font-serif text-3xl sm:text-4xl font-medium text-[#0C0B0B]">
                 Chef&apos;s Signature House Specialties
               </h3>
               <p className="text-xs sm:text-sm text-[#7A7067] font-light leading-relaxed">
@@ -226,7 +226,7 @@ export default function DiningPage() {
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />
                     <div className="absolute top-3 left-3">
-                      <span className="text-[10px] font-mono font-semibold uppercase tracking-wider bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-full text-[#0C0B0B] shadow-sm border border-black/5">
+                      <span className="text-[10px] font-sans font-semibold uppercase tracking-wider bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-full text-[#0C0B0B] shadow-sm border border-black/5">
                         {dish.tag}
                       </span>
                     </div>
@@ -248,10 +248,10 @@ export default function DiningPage() {
 
                   <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
                     <div>
-                      <span className="text-[10px] font-mono text-[#B4872F] uppercase tracking-wider font-semibold block">
+                      <span className="text-[10px] font-sans text-[#B4872F] uppercase tracking-wider font-semibold block">
                         {dish.category}
                       </span>
-                      <h4 className="font-serif text-lg font-normal text-[#0C0B0B] mt-0.5">
+                      <h4 className="font-serif text-lg font-medium text-[#0C0B0B] mt-0.5">
                         {dish.name}
                       </h4>
                       <p className="text-xs text-[#7A7067] font-light leading-relaxed mt-1 line-clamp-2">
@@ -260,7 +260,7 @@ export default function DiningPage() {
                     </div>
 
                     <div className="pt-3 border-t border-[#0C0B0B]/10 flex items-center justify-between">
-                      <span className="text-xs text-[#7A7067] font-mono">Price:</span>
+                      <span className="text-xs text-[#7A7067] font-sans">Price:</span>
                       <span className="font-serif text-xl font-bold text-[#B4872F]">
                         ₹{dish.price}
                       </span>
@@ -277,7 +277,7 @@ export default function DiningPage() {
               <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#B4872F]">
                 Full À La Carte Menu
               </span>
-              <h3 className="font-serif text-3xl sm:text-4xl font-normal text-[#0C0B0B]">
+              <h3 className="font-serif text-3xl sm:text-4xl font-medium text-[#0C0B0B]">
                 Explore Our 70+ Item Menu
               </h3>
               <p className="text-xs sm:text-sm text-[#7A7067] font-light leading-relaxed">
@@ -344,7 +344,7 @@ export default function DiningPage() {
                 >
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] uppercase font-mono text-[#B4872F] font-semibold">
+                      <span className="text-[10px] uppercase font-sans text-[#B4872F] font-semibold">
                         {item.category}
                       </span>
                       <span
@@ -362,7 +362,7 @@ export default function DiningPage() {
                     </div>
 
                     <div className="flex justify-between items-baseline">
-                      <h4 className="font-serif text-lg font-normal text-[#0C0B0B]">{item.name}</h4>
+                      <h4 className="font-serif text-lg font-medium text-[#0C0B0B]">{item.name}</h4>
                     </div>
                   </div>
 
@@ -389,12 +389,12 @@ export default function DiningPage() {
                 <div className="space-y-3">
                   <div className="inline-flex items-center space-x-2 bg-[#26211E] border border-[#B4872F]/30 px-3.5 py-1.5 rounded-full">
                     <Wine className="w-3.5 h-3.5 text-[#B4872F]" />
-                    <span className="text-[10px] uppercase font-mono tracking-widest text-[#B4872F] font-semibold">
+                    <span className="text-[10px] uppercase font-sans tracking-widest text-[#B4872F] font-semibold">
                       Hotel Lounge &amp; Bar • 2nd Floor
                     </span>
                   </div>
 
-                  <h2 className="font-serif text-4xl sm:text-5xl font-normal text-white leading-tight">
+                  <h2 className="font-serif text-4xl sm:text-5xl font-medium text-white leading-tight">
                     {PAVILLION_BAR_INFO.name}
                   </h2>
 
@@ -461,14 +461,14 @@ export default function DiningPage() {
 
                   <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
                     <div>
-                      <span className="text-[10px] font-mono uppercase tracking-widest text-[#B4872F] block">
+                      <span className="text-[10px] font-sans uppercase tracking-widest text-[#B4872F] block">
                         Pavillion Bar View
                       </span>
                       <p className="text-xs sm:text-sm text-white font-medium">
                         {PAVILLION_BAR_INFO.images[activeBarPhotoIdx].caption}
                       </p>
                     </div>
-                    <span className="text-[10px] font-mono text-[#A89F96] bg-black/60 px-2.5 py-1 rounded-full backdrop-blur-sm border border-white/10">
+                    <span className="text-[10px] font-sans text-[#A89F96] bg-black/60 px-2.5 py-1 rounded-full backdrop-blur-sm border border-white/10">
                       {activeBarPhotoIdx + 1} / {PAVILLION_BAR_INFO.images.length}
                     </span>
                   </div>
@@ -503,10 +503,10 @@ export default function DiningPage() {
             {/* Highlights Grid */}
             <div className="pt-10 border-t border-[#26211E] space-y-6">
               <div className="text-center max-w-xl mx-auto space-y-1.5">
-                <span className="text-[10px] uppercase font-mono tracking-widest text-[#B4872F] font-semibold">
+                <span className="text-[10px] uppercase font-sans tracking-widest text-[#B4872F] font-semibold">
                   What We Offer
                 </span>
-                <h3 className="font-serif text-2xl sm:text-3xl font-normal text-white">
+                <h3 className="font-serif text-2xl sm:text-3xl font-medium text-white">
                   Signature Lounge Experiences
                 </h3>
               </div>
@@ -517,10 +517,10 @@ export default function DiningPage() {
                     key={idx}
                     className="p-6 rounded-2xl bg-[#1E1B19] border border-[#332C28] space-y-2 hover:border-[#B4872F]/40 transition-colors"
                   >
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-[#B4872F] font-bold block">
+                    <span className="text-[10px] font-sans uppercase tracking-wider text-[#B4872F] font-bold block">
                       {item.category}
                     </span>
-                    <h4 className="font-serif text-lg text-white font-normal">{item.name}</h4>
+                    <h4 className="font-serif text-lg text-white font-medium">{item.name}</h4>
                     <p className="text-xs text-[#A89F96] font-light leading-relaxed">{item.description}</p>
                   </div>
                 ))}

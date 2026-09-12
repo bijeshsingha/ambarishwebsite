@@ -348,7 +348,7 @@ function BookingContent() {
               <span className="text-[10px] sm:text-[11px] font-semibold tracking-[0.18em] uppercase text-[#A27520] block">
                 Direct Rates &amp; Multi-Room Booking
               </span>
-              <h1 className="font-serif text-2xl sm:text-3xl font-normal text-[#1A1715]">
+              <h1 className="font-serif text-2xl sm:text-3xl font-medium text-[#1A1715]">
                 Select Rooms &amp; Rates
               </h1>
             </div>
@@ -496,7 +496,7 @@ function BookingContent() {
                   <button
                     key={promo.code}
                     onClick={() => handleApplyPromo(promo.code)}
-                    className={`px-2 py-0.5 rounded-full text-[9px] font-mono font-bold tracking-wider whitespace-nowrap transition-all ${
+                    className={`px-2 py-0.5 rounded-full text-[9px] font-sans font-bold tracking-wider whitespace-nowrap transition-all ${
                       appliedPromo?.code === promo.code
                         ? "bg-[#B62576] text-white shadow-sm ring-1 ring-[#B62576]"
                         : "bg-[#FAF7F2] hover:bg-[#EFE8DE] text-[#A27520] border border-[#E6DED3]"
@@ -576,7 +576,7 @@ function BookingContent() {
                       sizes="(max-width: 1024px) 100vw, 40vw"
                     />
                     <div className="absolute top-3 left-3 flex flex-col space-y-1">
-                      <span className="px-2.5 py-0.5 bg-[#1A1715]/85 backdrop-blur-md text-white text-[9px] font-mono uppercase tracking-wider rounded-full">
+                      <span className="px-2.5 py-0.5 bg-[#1A1715]/85 backdrop-blur-md text-white text-[9px] font-sans font-semibold uppercase tracking-wider rounded-full">
                         {room.categoryCode} • {room.sizeSqFt} Sq Ft
                       </span>
                     </div>
@@ -596,7 +596,7 @@ function BookingContent() {
                     <div className="space-y-3 sm:space-y-4">
                       {/* Title */}
                       <div className="space-y-0.5">
-                        <h3 className="font-serif text-xl sm:text-2xl lg:text-3xl text-[#1A1715] font-normal">
+                        <h3 className="font-serif text-xl sm:text-2xl lg:text-3xl text-[#1A1715] font-medium">
                           {room.name}
                         </h3>
                         <p className="text-xs text-[#787069] font-light leading-relaxed line-clamp-2 sm:line-clamp-none">
@@ -760,7 +760,7 @@ function BookingContent() {
                             >
                               <Minus className="w-3 h-3" />
                             </button>
-                            <span className="font-mono font-bold text-xs sm:text-sm px-2 text-[#1A1715]">
+                            <span className="font-sans font-bold text-xs sm:text-sm px-2 text-[#1A1715]">
                               {currentSelection.quantity}
                             </span>
                             <button
@@ -791,7 +791,7 @@ function BookingContent() {
             {/* Left side: Selected rooms summary */}
             <div className="space-y-1">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded-full bg-[#9E8255] text-[#0C0B0A] text-[10px] font-mono font-semibold uppercase tracking-wider">
+                <span className="px-2.5 py-0.5 rounded-full bg-[#9E8255] text-[#0C0B0A] text-[10px] font-sans font-semibold uppercase tracking-wider">
                   {cartSummary.totalRoomsCount} {cartSummary.totalRoomsCount === 1 ? "Room Selected" : "Rooms Selected"}
                 </span>
                 <span className="text-xs text-[#FAF8F5] font-medium">
@@ -818,7 +818,7 @@ function BookingContent() {
             <div className="flex items-center justify-between md:justify-end gap-4 pt-2 sm:pt-0 border-t sm:border-t-0 border-white/10">
               <div className="text-left md:text-right">
                 <div className="flex items-baseline space-x-1.5">
-                  <span className="text-[10px] uppercase font-mono tracking-wider text-[#BFA058] font-semibold">
+                  <span className="text-[10px] uppercase font-sans tracking-wider text-[#BFA058] font-semibold">
                     Total:
                   </span>
                   <span className="font-serif text-2xl sm:text-3xl font-medium text-[#FAF8F5]">
@@ -853,7 +853,7 @@ export default function BookingPage() {
         <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center p-8">
           <div className="text-center space-y-3">
             <div className="w-8 h-8 border-2 border-[#B62576] border-t-transparent rounded-full animate-spin mx-auto" />
-            <p className="text-xs text-[#787069] uppercase tracking-wider font-mono">
+            <p className="text-xs text-[#787069] uppercase tracking-wider font-sans font-medium">
               Loading Room Tariffs...
             </p>
           </div>

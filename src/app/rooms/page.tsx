@@ -26,7 +26,7 @@ export default function RoomsPage() {
           <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#B4872F] block">
             Accommodation
           </span>
-          <h1 className="font-serif text-4xl sm:text-6xl font-normal text-[#0C0B0B]">
+          <h1 className="font-serif text-4xl sm:text-6xl font-medium text-[#0C0B0B]">
             Rooms & Suites
           </h1>
           <p className="text-sm sm:text-base text-[#3D3734] max-w-xl mx-auto font-light leading-relaxed">

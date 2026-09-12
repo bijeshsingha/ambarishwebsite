@@ -39,7 +39,7 @@ export default function GalleryPage() {
           <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#A27520] block">
             Visual Archive
           </span>
-          <h1 className="font-serif text-4xl sm:text-6xl font-normal text-[#1A1715]">
+          <h1 className="font-serif text-4xl sm:text-6xl font-medium text-[#1A1715]">
             Authentic Photo Gallery
           </h1>
           <p className="text-sm sm:text-base text-[#4A443F] max-w-xl mx-auto font-light leading-relaxed">

@@ -448,7 +448,7 @@ function CheckoutContent() {
             <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-[#A27520] block">
               Direct Guaranteed Booking &bull; {totalRoomsCount} {totalRoomsCount === 1 ? "Room" : "Rooms"}
             </span>
-            <h1 className="font-serif text-2xl sm:text-3xl font-normal text-[#1A1715]">
+            <h1 className="font-serif text-2xl sm:text-3xl font-medium text-[#1A1715]">
               Confirm Your Stay Reservation
             </h1>
           </div>
@@ -474,7 +474,7 @@ function CheckoutContent() {
             {/* 1. Primary Guest Details */}
             <div className="bg-[#FFFFFF] p-6 sm:p-8 rounded-3xl border border-[#E6DED3] shadow-md space-y-5">
               <div className="flex items-center justify-between border-b border-[#E6DED3] pb-3">
-                <h3 className="font-serif text-xl font-normal text-[#1A1715]">
+                <h3 className="font-serif text-xl font-medium text-[#1A1715]">
                   1. Primary Guest Information
                 </h3>
                 <span className="text-[11px] text-[#787069] font-light">
@@ -661,7 +661,7 @@ function CheckoutContent() {
 
             {/* 2. Special Requests */}
             <div className="bg-[#FFFFFF] p-6 sm:p-8 rounded-3xl border border-[#E6DED3] shadow-md space-y-4">
-              <h3 className="font-serif text-xl font-normal text-[#1A1715]">
+              <h3 className="font-serif text-xl font-medium text-[#1A1715]">
                 2. Special Requests (Optional)
               </h3>
               <textarea
@@ -676,10 +676,10 @@ function CheckoutContent() {
             {/* 3. Payment Method */}
             <div className="bg-[#FFFFFF] p-6 sm:p-8 rounded-3xl border border-[#E6DED3] shadow-md space-y-5">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <h3 className="font-serif text-xl font-normal text-[#1A1715]">
+                <h3 className="font-serif text-xl font-medium text-[#1A1715]">
                   3. Payment &amp; Confirmation Option
                 </h3>
-                <span className="text-[10px] uppercase font-mono tracking-wider px-3 py-1 rounded-full bg-amber-50 text-amber-800 font-semibold border border-amber-200 inline-flex items-center gap-1.5 w-fit">
+                <span className="text-[10px] uppercase font-sans tracking-wider px-3 py-1 rounded-full bg-amber-50 text-amber-800 font-semibold border border-amber-200 inline-flex items-center gap-1.5 w-fit">
                   <Phone className="w-3 h-3 text-amber-700" />
                   <span>Call Confirmation Required</span>
                 </span>
@@ -724,7 +724,7 @@ function CheckoutContent() {
                       <CreditCard className="w-4 h-4 text-gray-400" />
                       <span className="text-xs font-bold text-gray-400">Pay Online (Instant)</span>
                     </div>
-                    <span className="text-[9px] uppercase font-mono tracking-wider px-2 py-0.5 rounded bg-gray-200 text-gray-600 font-semibold">
+                    <span className="text-[9px] uppercase font-sans tracking-wider px-2 py-0.5 rounded bg-gray-200 text-gray-600 font-semibold">
                       Disabled
                     </span>
                   </div>
@@ -778,7 +778,7 @@ function CheckoutContent() {
           <div className="lg:col-span-5 space-y-6">
             <div className="bg-[#FFFFFF] p-6 sm:p-8 rounded-3xl border border-[#E6DED3] shadow-md space-y-6 sticky top-24">
               <div className="flex items-center justify-between border-b border-[#E6DED3] pb-3">
-                <h3 className="font-serif text-xl font-normal text-[#1A1715]">
+                <h3 className="font-serif text-xl font-medium text-[#1A1715]">
                   Reservation Summary
                 </h3>
                 <Link
@@ -803,7 +803,7 @@ function CheckoutContent() {
                         className="p-3.5 rounded-2xl bg-[#FAF7F2] border border-[#EDE7DE] flex items-center justify-between space-x-3"
                       >
                         <div className="space-y-0.5">
-                          <span className="text-[9px] font-mono uppercase tracking-wider text-[#A27520] font-bold block">
+                          <span className="text-[9px] font-sans uppercase tracking-wider text-[#A27520] font-bold block">
                             {item.quantity}&times; {item.categoryCode} {item.bedType ? `• ${item.bedType}` : ""}
                           </span>
                           <h4 className="font-serif text-sm font-semibold text-[#1A1715] leading-snug">
@@ -998,7 +998,7 @@ export default function CheckoutPage() {
         <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center p-8">
           <div className="text-center space-y-3">
             <div className="w-8 h-8 border-2 border-[#B62576] border-t-transparent rounded-full animate-spin mx-auto" />
-            <p className="text-xs text-[#787069] uppercase tracking-wider font-mono">
+            <p className="text-xs text-[#787069] uppercase tracking-wider font-sans font-medium">
               Loading Checkout...
             </p>
           </div>

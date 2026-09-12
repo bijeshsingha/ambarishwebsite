@@ -172,7 +172,7 @@ export default function SuiteSpotlight() {
                 Signature Accommodation
               </span>
 
-              <h2 className="font-serif text-3xl sm:text-5xl font-normal text-[#FAF8F5] leading-tight">
+              <h2 className="font-serif text-3xl sm:text-5xl font-medium text-[#FAF8F5] leading-tight">
                 The Presidential <br />
                 <span className="text-[#BFA058] italic">Luxury Suite</span>
               </h2>
@@ -186,25 +186,25 @@ export default function SuiteSpotlight() {
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 rounded-2xl bg-[#141210] border border-white/5 space-y-1.5 hover:border-[#9E8255]/30 transition-colors">
                 <Layers className="w-5 h-5 text-[#9E8255]" />
-                <h4 className="font-serif text-lg text-[#FAF8F5] font-normal">Living &amp; Bedroom</h4>
+                <h4 className="font-serif text-lg text-[#FAF8F5] font-medium">Living &amp; Bedroom</h4>
                 <p className="text-xs text-[#FAF8F5]/60 font-light">Separated zones with private interconnecting door</p>
               </div>
 
               <div className="p-4 rounded-2xl bg-[#141210] border border-white/5 space-y-1.5 hover:border-[#9E8255]/30 transition-colors">
                 <Wind className="w-5 h-5 text-[#9E8255]" />
-                <h4 className="font-serif text-lg text-[#FAF8F5] font-normal">Dual AC Units</h4>
+                <h4 className="font-serif text-lg text-[#FAF8F5] font-medium">Dual AC Units</h4>
                 <p className="text-xs text-[#FAF8F5]/60 font-light">Dedicated split ACs in both salon and bedroom</p>
               </div>
 
               <div className="p-4 rounded-2xl bg-[#141210] border border-white/5 space-y-1.5 hover:border-[#9E8255]/30 transition-colors">
                 <Utensils className="w-5 h-5 text-[#9E8255]" />
-                <h4 className="font-serif text-lg text-[#FAF8F5] font-normal">Pantry Kitchenette</h4>
+                <h4 className="font-serif text-lg text-[#FAF8F5] font-medium">Pantry Kitchenette</h4>
                 <p className="text-xs text-[#FAF8F5]/60 font-light">Counter with sink, cooktop &amp; preparation area</p>
               </div>
 
               <div className="p-4 rounded-2xl bg-[#141210] border border-white/5 space-y-1.5 hover:border-[#9E8255]/30 transition-colors">
                 <Tv className="w-5 h-5 text-[#9E8255]" />
-                <h4 className="font-serif text-lg text-[#FAF8F5] font-normal">55&quot; Smart TV</h4>
+                <h4 className="font-serif text-lg text-[#FAF8F5] font-medium">55&quot; Smart TV</h4>
                 <p className="text-xs text-[#FAF8F5]/60 font-light">Wall-mounted OLED facing master King bed</p>
               </div>
             </div>

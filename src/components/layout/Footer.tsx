@@ -86,7 +86,7 @@ export default function Footer() {
               <p>{HOTEL_INFO.address.full}</p>
               <p>
                 <strong className="text-[#F5EBDD] font-medium">Phone: </strong>
-                <a href={`tel:${HOTEL_INFO.phoneRaw}`} className="text-[#B4872F] hover:underline font-mono font-semibold">
+                <a href={`tel:${HOTEL_INFO.phoneRaw}`} className="text-[#B4872F] hover:underline font-sans font-semibold tracking-wider">
                   {HOTEL_INFO.phone}
                 </a>
               </p>

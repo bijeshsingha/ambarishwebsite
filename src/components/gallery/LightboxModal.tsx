@@ -63,7 +63,7 @@ export default function LightboxModal({
     >
       {/* Top Header */}
       <div className="flex items-center justify-between text-white z-10">
-        <div className="text-xs font-mono tracking-widest text-[#B4872F] uppercase">
+        <div className="text-xs font-sans font-semibold tracking-widest text-[#B4872F] uppercase">
           {currentIndex + 1} / {images.length} • {currentImage.categoryLabel}
         </div>
 
@@ -115,7 +115,7 @@ export default function LightboxModal({
 
       {/* Bottom Caption */}
       <div className="text-center z-10 max-w-2xl mx-auto space-y-1">
-        <h3 className="font-serif text-lg sm:text-xl text-[#F5EBDD] font-normal">
+        <h3 className="font-serif text-lg sm:text-xl text-[#F5EBDD] font-medium">
           {currentImage.title}
         </h3>
         {currentImage.caption && (

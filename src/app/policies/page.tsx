@@ -20,7 +20,7 @@ export default function PoliciesPage() {
           <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#A27520] block">
             Policies & Guidance
           </span>
-          <h1 className="font-serif text-4xl sm:text-6xl font-normal text-[#1A1715]">
+          <h1 className="font-serif text-4xl sm:text-6xl font-medium text-[#1A1715]">
             Hotel Policies & FAQs
           </h1>
           <p className="text-sm sm:text-base text-[#4A443F] max-w-xl mx-auto font-light leading-relaxed">
@@ -38,7 +38,7 @@ export default function PoliciesPage() {
               key={idx}
               className="p-8 rounded-3xl bg-[#FFFFFF] border border-[#E6DED3] shadow-sm space-y-4"
             >
-              <h3 className="font-serif text-2xl font-normal text-[#1A1715] flex items-center">
+              <h3 className="font-serif text-2xl font-medium text-[#1A1715] flex items-center">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#A27520] mr-3 shrink-0" />
                 {section.title}
               </h3>
@@ -57,7 +57,7 @@ export default function PoliciesPage() {
         <div className="space-y-6 pt-6 hairline-t">
           <div className="text-center space-y-2">
             <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#A27520]">Got Questions?</span>
-            <h2 className="font-serif text-3xl font-normal text-[#1A1715]">Frequently Asked Questions</h2>
+            <h2 className="font-serif text-3xl font-medium text-[#1A1715]">Frequently Asked Questions</h2>
           </div>
 
           <div className="space-y-3">

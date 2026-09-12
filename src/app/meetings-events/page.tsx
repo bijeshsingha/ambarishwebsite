@@ -107,7 +107,7 @@ export default function MeetingsEventsPage() {
           <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#A27520] block">
             Banquet &amp; Event Venue
           </span>
-          <h1 className="font-serif text-4xl sm:text-6xl font-normal text-[#1A1715]">
+          <h1 className="font-serif text-4xl sm:text-6xl font-medium text-[#1A1715]">
             The Grand Residency Banquet Hall
           </h1>
           <p className="text-sm sm:text-base text-[#4A443F] max-w-2xl mx-auto font-light leading-relaxed">
@@ -132,12 +132,12 @@ export default function MeetingsEventsPage() {
                   priority
                 />
                 <div className="absolute top-4 left-4">
-                  <span className="px-3.5 py-1.5 bg-[#FFFFFF]/95 backdrop-blur-md text-xs font-mono font-semibold text-[#1A1715] rounded-full shadow-sm border border-black/5">
+                  <span className="px-3.5 py-1.5 bg-[#FFFFFF]/95 backdrop-blur-md text-xs font-sans font-semibold text-[#1A1715] rounded-full shadow-sm border border-black/5">
                     Single Multipurpose Hall • Up to 150 Pax
                   </span>
                 </div>
                 <div className="absolute bottom-4 left-4 right-4 bg-black/75 backdrop-blur-md p-3 rounded-xl text-white">
-                  <span className="text-[10px] font-mono text-[#B4872F] uppercase tracking-wider block">
+                  <span className="text-[10px] font-sans text-[#B4872F] uppercase tracking-wider block">
                     {hallAngles[activePhotoIdx].subtitle}
                   </span>
                   <h4 className="font-serif text-base text-white">
@@ -177,7 +177,7 @@ export default function MeetingsEventsPage() {
                 <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#A27520] block">
                   One Hall • Multiple Arrangements
                 </span>
-                <h2 className="font-serif text-3xl sm:text-4xl font-normal text-[#1A1715]">
+                <h2 className="font-serif text-3xl sm:text-4xl font-medium text-[#1A1715]">
                   {BANQUET_HALL.name}
                 </h2>
                 <p className="text-xs sm:text-sm text-[#787069] font-light leading-relaxed">
@@ -255,7 +255,7 @@ export default function MeetingsEventsPage() {
         <div className="p-8 sm:p-12 rounded-3xl bg-[#FFFFFF] border border-[#E6DED3] shadow-lg space-y-8" id="rfp-form">
           <div className="text-center max-w-xl mx-auto space-y-2">
             <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#A27520]">Proposal &amp; Tariff Request</span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-normal text-[#1A1715]">
+            <h2 className="font-serif text-3xl sm:text-4xl font-medium text-[#1A1715]">
               Request Event Availability &amp; Negotiated Quote
             </h2>
             <p className="text-xs text-[#787069] font-light">

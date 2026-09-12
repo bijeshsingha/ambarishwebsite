@@ -31,7 +31,7 @@ export default function LocationPreview() {
               <MapPin className="w-3.5 h-3.5 mr-2 text-[#9E8255]" />
               Strategic Transit Position
             </span>
-            <h2 className="font-serif text-3xl sm:text-5xl font-normal text-[#0C0B0A] leading-tight">
+            <h2 className="font-serif text-3xl sm:text-5xl font-medium text-[#0C0B0A] leading-tight">
               In the Heart of Paltan Bazaar
             </h2>
             <p className="text-[#6B635B] text-sm sm:text-base font-light max-w-xl leading-relaxed">
@@ -75,7 +75,7 @@ export default function LocationPreview() {
                       <Icon className="w-5 h-5" />
                     </div>
                     <div className="space-y-1.5">
-                      <h4 className="font-serif text-lg text-[#0C0B0A] font-normal leading-snug">{l.name}</h4>
+                      <h4 className="font-serif text-lg text-[#0C0B0A] font-medium leading-snug">{l.name}</h4>
                       <p className="text-xs text-[#7A7067] font-light leading-relaxed">{l.detail}</p>
                       <div className="flex items-center space-x-2 text-xs text-[#6B635B] font-sans pt-2 border-t border-[#0C0B0A]/5">
                         <span className="font-semibold text-[#9E8255]">{l.distance}</span>
@@ -98,7 +98,7 @@ export default function LocationPreview() {
                 <Footprints className="w-3.5 h-3.5" />
                 <span>Effortless Arrival</span>
               </span>
-              <h3 className="font-serif text-2xl sm:text-4xl text-white font-normal leading-snug">
+              <h3 className="font-serif text-2xl sm:text-4xl text-white font-medium leading-snug">
                 Step-Free 250m Walk From Guwahati Railway Station
               </h3>
               <p className="text-xs sm:text-sm text-[#D1C7BD] font-light leading-relaxed">
@@ -170,7 +170,7 @@ export default function LocationPreview() {
             <span className="text-[10px] font-sans uppercase tracking-widest text-[#9E8255]">
               Hotel Address &bull; Reception 24/7
             </span>
-            <h3 className="font-serif text-2xl sm:text-3xl font-normal">
+            <h3 className="font-serif text-2xl sm:text-3xl font-medium">
               {HOTEL_INFO.address.street}, {HOTEL_INFO.address.city}, {HOTEL_INFO.address.state} {HOTEL_INFO.address.pincode}
             </h3>
             <p className="text-xs text-[#FAF8F5]/60 font-light">

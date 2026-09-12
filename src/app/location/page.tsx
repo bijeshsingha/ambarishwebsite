@@ -36,7 +36,7 @@ export default function LocationPage() {
           <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#A27520] block">
             Location & Transit
           </span>
-          <h1 className="font-serif text-4xl sm:text-6xl font-normal text-[#1A1715]">
+          <h1 className="font-serif text-4xl sm:text-6xl font-medium text-[#1A1715]">
             Arrival & Connectivity Guide
           </h1>
           <p className="text-sm sm:text-base text-[#4A443F] max-w-xl mx-auto font-light leading-relaxed">
@@ -117,7 +117,7 @@ export default function LocationPage() {
 
         {/* Proximity Grid */}
         <div className="space-y-6">
-          <h2 className="font-serif text-3xl font-normal text-[#1A1715]">
+          <h2 className="font-serif text-3xl font-medium text-[#1A1715]">
             Transit Proximities & Landmarks
           </h2>
 
@@ -138,7 +138,7 @@ export default function LocationPage() {
                       <p className="text-[11px] text-[#787069] mt-0.5">{item.time}</p>
                     </div>
                   </div>
-                  <span className="font-mono text-xs font-semibold text-[#A27520]">{item.distance}</span>
+                  <span className="font-sans text-xs font-semibold text-[#A27520]">{item.distance}</span>
                 </div>
               );
             })}

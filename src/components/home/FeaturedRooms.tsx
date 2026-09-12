@@ -25,7 +25,7 @@ export default function FeaturedRooms() {
             <span className="text-[10px] font-sans uppercase tracking-[0.25em] text-[#B4872F] font-semibold">
               Accommodations
             </span>
-            <h2 className="font-serif text-3xl sm:text-5xl font-normal text-[#0C0B0B] leading-tight">
+            <h2 className="font-serif text-3xl sm:text-5xl font-medium text-[#0C0B0B] leading-tight">
               Curated Guest Rooms
             </h2>
             <p className="text-[#7A7067] text-sm sm:text-base font-light max-w-xl leading-relaxed">
