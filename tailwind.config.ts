@@ -26,8 +26,8 @@ const config: Config = {
         "surface-dark": "#0C0B0B",
       },
       fontFamily: {
-        serif: ["var(--font-cormorant)", "Georgia", "serif"],
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        serif: ["var(--font-cormorant)", "'Cormorant Garamond'", "'Playfair Display'", "Georgia", "serif"],
+        sans: ["var(--font-inter)", "'Inter'", "-apple-system", "BlinkMacSystemFont", "'Segoe UI'", "Roboto", "sans-serif"],
       },
       boxShadow: {
         "nav": "0 10px 30px rgba(12, 11, 11, 0.35)",

@@ -96,6 +96,20 @@ export default function Header() {
 
   return (
     <>
+      {/* Top Luxury Announcement Strip - Early Check-in Offer */}
+      <div className="bg-gradient-to-r from-[#171410] via-[#2A1E12] to-[#171410] border-b border-[#B4872F]/25 py-1.5 px-4 text-center text-[10px] sm:text-[11px] text-[#F5EBDD] flex items-center justify-center gap-1.5 sm:gap-2.5 flex-wrap z-50 relative">
+        <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-[#B4872F]/20 text-[#D4AF37] font-bold text-[9px] uppercase tracking-wider border border-[#B4872F]/30">
+          Special Offer
+        </span>
+        <span className="text-[#F5EBDD]/90 font-medium">
+          Free Early Check-in from <strong className="text-[#D4AF37] font-semibold">5:00 AM onwards</strong> with zero extra charge!
+        </span>
+        <span className="hidden sm:inline text-white/30">•</span>
+        <span className="hidden sm:inline text-[#F5EBDD]/75">
+          Standard Check-in &amp; Check-out: <strong>12:00 Noon</strong>
+        </span>
+      </div>
+
       {/* Prominent Luxury Navigation Bar */}
       <header
         className={`sticky top-0 z-50 w-full transition-all duration-300 ${
@@ -244,12 +258,12 @@ export default function Header() {
             {/* Quick Booking Form */}
             <form onSubmit={handleQuickBookSubmit} className="space-y-4 text-xs">
               {/* Hotel Check-in Policy Pill */}
-              <div className="flex items-center justify-between text-[11px] text-[#A27520] bg-[#FAF7F2] border border-[#EDE7DE] px-3.5 py-2 rounded-xl">
-                <span>Check-in: <strong>11:00 AM</strong></span>
+              <div className="flex flex-wrap items-center justify-between gap-1 text-[11px] text-[#A27520] bg-[#FAF7F2] border border-[#EDE7DE] px-3 py-2 rounded-xl">
+                <span>Check-in: <strong>12:00 PM</strong></span>
                 <span>•</span>
                 <span>Check-out: <strong>12:00 PM</strong></span>
                 <span>•</span>
-                <span className="text-emerald-700 font-semibold">Free Cancellation</span>
+                <span className="text-emerald-700 font-semibold">Free 5 AM Early Check-in</span>
               </div>
 
               {/* Dates */}

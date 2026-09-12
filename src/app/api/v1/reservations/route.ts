@@ -123,36 +123,8 @@ export async function GET(request: Request) {
   );
 }
 
+import { POST as finalizeReservation } from "./finalize/route";
+
 export async function POST(request: Request) {
-  try {
-    const body = await request.json();
-
-    // SEC 01 Acceptance criteria: Direct POST without checkoutId/token is strictly rejected
-    if (!body.checkoutId || !body.accessToken) {
-      return NextResponse.json(
-        {
-          error: "RESERVATION_CREATION_REJECTED",
-          message:
-            "Direct reservation creation without an active checkout session and inventory hold is disallowed. Please create a checkout via /api/v1/checkouts first.",
-        },
-        { status: 400 }
-      );
-    }
-
-    // Forward to finalize handler
-    const finalizeUrl = new URL("/api/v1/reservations/finalize", request.url);
-    const forwardResponse = await fetch(finalizeUrl.toString(), {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-
-    const data = await forwardResponse.json();
-    return NextResponse.json(data, { status: forwardResponse.status });
-  } catch (err: any) {
-    return NextResponse.json(
-      { error: "INTERNAL_ERROR", message: err?.message || "Failed to process request." },
-      { status: 500 }
-    );
-  }
+  return finalizeReservation(request);
 }

@@ -267,7 +267,7 @@ export async function sendReservationNotificationEmails(payload: ReservationEmai
                             Verify Live Availability with Guest
                           </div>
                           <p style="margin: 0 0 16px; font-size: 13px; color: #5C554E; line-height: 1.5;">
-                            Guest <strong>${safeGuestName}</strong> selected <strong>Pay at Hotel</strong> with zero advance payment. Please contact the guest to confirm physical room availability and finalize arrival details.
+                            Guest <strong>${safeGuestName}</strong> selected <strong>Pay at Hotel</strong>. Zero advance payment is subject to room availability and demand. You may request an advance payment on call to guarantee reservation confirmation.
                           </p>
 
                           <!-- Action Buttons -->
@@ -358,7 +358,7 @@ export async function sendReservationNotificationEmails(payload: ReservationEmai
                         Hotel Policy Times
                       </td>
                       <td style="padding: 10px 16px; border-bottom: 1px solid #F0ECE6; font-size: 12px; color: #5C554E;">
-                        Check-in: <strong>11:00 AM</strong> &bull; Check-out: <strong>12:00 PM</strong>
+                        Check-in: <strong>12:00 PM</strong> (Early check-in from 5:00 AM free of charge) &bull; Check-out: <strong>12:00 PM</strong>
                       </td>
                     </tr>
                     <tr>
@@ -519,7 +519,7 @@ export async function sendReservationNotificationEmails(payload: ReservationEmai
                             Our Front Desk Will Call You Shortly
                           </div>
                           <p style="margin: 0; font-size: 12.5px; color: #5C554E; line-height: 1.5;">
-                            Zero advance payment was charged. Our hotel reception will call you at <strong>${safeGuestPhone}</strong> to verify room availability and confirm your booking details.
+                            Zero upfront payment was charged online. Zero advance payment is subject to room availability and demand; our reception desk may request an advance payment during your verification call to guarantee confirmation.
                           </p>
                           <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #E8DFD3; font-size: 12px; color: #7D756E;">
                             Need immediate confirmation? Call our front desk: <a href="tel:${HOTEL_INFO.phone}" style="color: #9A7228; font-weight: 700; text-decoration: none;">${HOTEL_INFO.phone}</a>
@@ -547,7 +547,7 @@ export async function sendReservationNotificationEmails(payload: ReservationEmai
                   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #FFFFFF; border: 1px solid #EAE4DC; border-radius: 10px; overflow: hidden; margin-bottom: 20px;">
                     <tr>
                       <td style="padding: 10px 16px; border-bottom: 1px solid #F0ECE6; font-size: 12px; color: #7D756E; width: 40%;">Check-in Date:</td>
-                      <td style="padding: 10px 16px; border-bottom: 1px solid #F0ECE6; font-size: 13px; font-weight: 600; color: #1A1715;">${escapeHtml(payload.checkIn)} (From 11:00 AM)</td>
+                      <td style="padding: 10px 16px; border-bottom: 1px solid #F0ECE6; font-size: 13px; font-weight: 600; color: #1A1715;">${escapeHtml(payload.checkIn)} (12:00 PM • Early check-in from 5:00 AM)</td>
                     </tr>
                     <tr>
                       <td style="padding: 10px 16px; border-bottom: 1px solid #F0ECE6; font-size: 12px; color: #7D756E;">Check-out Date:</td>
@@ -744,7 +744,7 @@ export async function sendGuestConfirmedVoucherEmail(payload: ReservationEmailPa
                   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #FFFFFF; border: 1px solid #EAE4DC; border-radius: 10px; overflow: hidden; margin-bottom: 20px;">
                     <tr>
                       <td style="padding: 10px 16px; border-bottom: 1px solid #F0ECE6; font-size: 12px; color: #7D756E; width: 40%;">Check-in Date:</td>
-                      <td style="padding: 10px 16px; border-bottom: 1px solid #F0ECE6; font-size: 13px; font-weight: 600; color: #1A1715;">${escapeHtml(confirmedPayload.checkIn)} (From 11:00 AM)</td>
+                      <td style="padding: 10px 16px; border-bottom: 1px solid #F0ECE6; font-size: 13px; font-weight: 600; color: #1A1715;">${escapeHtml(confirmedPayload.checkIn)} (12:00 PM • Early check-in from 5:00 AM)</td>
                     </tr>
                     <tr>
                       <td style="padding: 10px 16px; border-bottom: 1px solid #F0ECE6; font-size: 12px; color: #7D756E;">Check-out Date:</td>

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Search, Tag, Users, Calendar, BedDouble, ChevronDown, Baby } from "lucide-react";
+import { Search, Tag, Users, Calendar, BedDouble, ChevronDown, Baby, Sparkles } from "lucide-react";
 import { getTodayDate, getTomorrowDate } from "@/lib/formatters";
 import { saveStaySession, getStaySession } from "@/lib/session";
 
@@ -86,7 +86,7 @@ export default function BookingBar({
           <div className="hidden lg:flex items-center divide-x divide-black/10">
             {/* 1. Check-In */}
             <div className="flex-1 min-w-[120px] px-3.5 py-1.5 flex flex-col justify-center">
-              <label className="flex items-center text-[10px] font-mono font-bold tracking-[0.16em] uppercase text-[#B4872F] mb-0.5">
+              <label className="flex items-center text-[10px] font-sans font-bold tracking-[0.16em] uppercase text-[#B4872F] mb-0.5">
                 <Calendar className="w-3 h-3 mr-1 text-[#B4872F] shrink-0" />
                 Check-In
               </label>
@@ -109,7 +109,7 @@ export default function BookingBar({
 
             {/* 2. Check-Out */}
             <div className="flex-1 min-w-[120px] px-3.5 py-1.5 flex flex-col justify-center">
-              <label className="flex items-center text-[10px] font-mono font-bold tracking-[0.16em] uppercase text-[#B4872F] mb-0.5">
+              <label className="flex items-center text-[10px] font-sans font-bold tracking-[0.16em] uppercase text-[#B4872F] mb-0.5">
                 <Calendar className="w-3 h-3 mr-1 text-[#B4872F] shrink-0" />
                 Check-Out
               </label>
@@ -125,7 +125,7 @@ export default function BookingBar({
 
             {/* 3. Rooms (1 to 4) */}
             <div className="flex-1 min-w-[95px] px-3 py-1.5 flex flex-col justify-center">
-              <label className="flex items-center text-[10px] font-mono font-bold tracking-[0.16em] uppercase text-[#B4872F] mb-0.5">
+              <label className="flex items-center text-[10px] font-sans font-bold tracking-[0.16em] uppercase text-[#B4872F] mb-0.5">
                 <BedDouble className="w-3 h-3 mr-1 text-[#B4872F] shrink-0" />
                 Rooms
               </label>
@@ -146,7 +146,7 @@ export default function BookingBar({
 
             {/* 4. Adults (1 to 8) */}
             <div className="flex-1 min-w-[100px] px-3 py-1.5 flex flex-col justify-center">
-              <label className="flex items-center text-[10px] font-mono font-bold tracking-[0.16em] uppercase text-[#B4872F] mb-0.5">
+              <label className="flex items-center text-[10px] font-sans font-bold tracking-[0.16em] uppercase text-[#B4872F] mb-0.5">
                 <Users className="w-3 h-3 mr-1 text-[#B4872F] shrink-0" />
                 Adults
               </label>
@@ -168,7 +168,7 @@ export default function BookingBar({
 
             {/* 5. Children */}
             <div className="flex-1 min-w-[100px] px-3 py-1.5 flex flex-col justify-center">
-              <label className="flex items-center text-[10px] font-mono font-bold tracking-[0.16em] uppercase text-[#B4872F] mb-0.5">
+              <label className="flex items-center text-[10px] font-sans font-bold tracking-[0.16em] uppercase text-[#B4872F] mb-0.5">
                 <Baby className="w-3 h-3 mr-1 text-[#B4872F] shrink-0" />
                 Children
               </label>
@@ -190,7 +190,7 @@ export default function BookingBar({
 
             {/* 6. Promo Code */}
             <div className="flex-1 min-w-[110px] px-3 py-1.5 flex flex-col justify-center">
-              <label className="flex items-center text-[10px] font-mono font-bold tracking-[0.16em] uppercase text-[#B4872F] mb-0.5">
+              <label className="flex items-center text-[10px] font-sans font-bold tracking-[0.16em] uppercase text-[#B4872F] mb-0.5">
                 <Tag className="w-3 h-3 mr-1 text-[#B4872F] shrink-0" />
                 Promo
               </label>
@@ -220,7 +220,7 @@ export default function BookingBar({
             {/* Row 1: Check-in & Check-out */}
             <div className="grid grid-cols-2 gap-2">
               <div className="bg-[#FAF7F2] p-2.5 rounded-xl border border-[#E6DED3]">
-                <label className="flex items-center text-[9px] font-mono font-bold tracking-wider uppercase text-[#B4872F] mb-0.5">
+                <label className="flex items-center text-[9px] font-sans font-bold tracking-wider uppercase text-[#B4872F] mb-0.5">
                   <Calendar className="w-3 h-3 mr-1 text-[#B4872F]" />
                   Check-In
                 </label>
@@ -242,7 +242,7 @@ export default function BookingBar({
               </div>
 
               <div className="bg-[#FAF7F2] p-2.5 rounded-xl border border-[#E6DED3]">
-                <label className="flex items-center text-[9px] font-mono font-bold tracking-wider uppercase text-[#B4872F] mb-0.5">
+                <label className="flex items-center text-[9px] font-sans font-bold tracking-wider uppercase text-[#B4872F] mb-0.5">
                   <Calendar className="w-3 h-3 mr-1 text-[#B4872F]" />
                   Check-Out
                 </label>
@@ -261,7 +261,7 @@ export default function BookingBar({
             <div className="grid grid-cols-2 gap-2">
               <div className="bg-[#FAF7F2] p-2.5 rounded-xl border border-[#E6DED3] flex items-center justify-between">
                 <div className="flex-1">
-                  <label className="flex items-center text-[9px] font-mono font-bold tracking-wider uppercase text-[#B4872F] mb-0.5">
+                  <label className="flex items-center text-[9px] font-sans font-bold tracking-wider uppercase text-[#B4872F] mb-0.5">
                     <Users className="w-3 h-3 mr-1 text-[#B4872F]" />
                     Rooms &amp; Adults
                   </label>
@@ -293,7 +293,7 @@ export default function BookingBar({
               </div>
 
               <div className="bg-[#FAF7F2] p-2.5 rounded-xl border border-[#E6DED3]">
-                <label className="flex items-center text-[9px] font-mono font-bold tracking-wider uppercase text-[#B4872F] mb-0.5">
+                <label className="flex items-center text-[9px] font-sans font-bold tracking-wider uppercase text-[#B4872F] mb-0.5">
                   <Tag className="w-3 h-3 mr-1 text-[#B4872F]" />
                   Promo Code
                 </label>
@@ -317,6 +317,21 @@ export default function BookingBar({
             </button>
           </div>
         </form>
+      </div>
+
+      {/* Direct Booking Early Check-in Offer Strip */}
+      <div className="mt-2.5 flex items-center justify-center gap-2 text-[11px] sm:text-xs text-[#F5EBDD] flex-wrap font-medium text-center">
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#B4872F]/25 text-[#E6C67E] border border-[#B4872F]/35 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider">
+          <Sparkles className="w-3 h-3 text-[#E6C67E]" />
+          Special Direct Offer
+        </span>
+        <span className="text-[#F5EBDD]/90">
+          Free Early Check-in from <strong className="text-[#E6C67E] font-semibold">5:00 AM onwards</strong> with no extra charge!
+        </span>
+        <span className="text-white/30 hidden sm:inline">•</span>
+        <span className="text-[#F5EBDD]/70 hidden sm:inline">
+          Check-in &amp; Check-out: <strong>12:00 Noon</strong>
+        </span>
       </div>
     </div>
   );

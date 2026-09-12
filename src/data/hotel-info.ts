@@ -18,6 +18,7 @@ export interface HotelInfo {
   };
   checkInTime: string;
   checkOutTime: string;
+  earlyCheckInOffer?: string;
   coordinates: {
     lat: number;
     lng: number;
@@ -49,8 +50,9 @@ export const HOTEL_INFO: HotelInfo = {
     full: "Md Shah Road, Paltan Bazaar, Guwahati, Assam 781008",
     landmark: "200 meters from Guwahati Railway Station",
   },
-  checkInTime: "11:00 AM",
+  checkInTime: "12:00 PM",
   checkOutTime: "12:00 PM",
+  earlyCheckInOffer: "Complimentary Early Check-in from 5:00 AM onwards with no extra charge (subject to room availability)",
   coordinates: {
     lat: 26.1824,
     lng: 91.7516,
@@ -63,6 +65,7 @@ export const HOTEL_INFO: HotelInfo = {
     "Secure On-Site Car Parking",
     "24-Hour Power Backup",
     "Daily Housekeeping & Room Service",
+    "Airport Pick Up & Dropping Service (Upon Request)",
     "Travel & Cab Assistance",
     "Elevator / Lift Access",
     "Doctor on Call",

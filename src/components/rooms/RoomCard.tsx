@@ -45,7 +45,7 @@ export default function RoomCard({ room, featured = false }: RoomCardProps) {
 
             {/* Category Tag */}
             <div className="absolute top-4 left-4 pointer-events-none">
-              <span className="text-[10px] font-mono tracking-widest uppercase text-[#0C0B0A] bg-[#FFFFFF]/95 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-black/5 shadow-sm font-semibold">
+              <span className="text-[10px] font-sans tracking-widest uppercase text-[#0C0B0A] bg-[#FFFFFF]/95 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-black/5 shadow-sm font-semibold">
                 Most Requested &bull; {room.categoryCode}
               </span>
             </div>
@@ -87,7 +87,7 @@ export default function RoomCard({ room, featured = false }: RoomCardProps) {
           <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
             <div className="space-y-4">
               <div className="space-y-1.5">
-                <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#9E8255] font-semibold">
+                <span className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#9E8255] font-semibold">
                   Featured Accommodation
                 </span>
                 <h3 className="font-serif text-3xl sm:text-4xl font-normal text-[#0C0B0A] group-hover:text-[#9E8255] transition-colors">
@@ -135,7 +135,7 @@ export default function RoomCard({ room, featured = false }: RoomCardProps) {
             {/* Pricing & CTA */}
             <div className="pt-2 flex items-center justify-between">
               <div>
-                <span className="text-[10px] font-mono uppercase tracking-wider text-[#7A7067] block">
+                <span className="text-[10px] font-sans uppercase tracking-wider text-[#7A7067] block">
                   Direct Rate from
                 </span>
                 <span className="font-serif text-2xl sm:text-3xl font-semibold text-[#9E8255]">
@@ -182,7 +182,7 @@ export default function RoomCard({ room, featured = false }: RoomCardProps) {
 
           {/* Category Badge */}
           <div className="absolute top-3.5 left-3.5 pointer-events-none">
-            <span className="text-[10px] font-mono tracking-widest uppercase text-[#0C0B0A] bg-[#FFFFFF]/95 backdrop-blur-md px-3 py-1 rounded-full border border-black/5 shadow-sm font-semibold">
+            <span className="text-[10px] font-sans tracking-widest uppercase text-[#0C0B0A] bg-[#FFFFFF]/95 backdrop-blur-md px-3 py-1 rounded-full border border-black/5 shadow-sm font-semibold">
               {room.categoryCode}
             </span>
           </div>
@@ -228,13 +228,13 @@ export default function RoomCard({ room, featured = false }: RoomCardProps) {
                 <h3 className="font-serif text-2xl sm:text-3xl font-normal text-[#0C0B0A] group-hover:text-[#9E8255] transition-colors">
                   <Link href={`/rooms/${room.slug}`}>{room.name}</Link>
                 </h3>
-                <p className="text-[11px] uppercase tracking-wider text-[#7A7067] font-mono mt-1">
+                <p className="text-[11px] uppercase tracking-wider text-[#7A7067] font-sans mt-1">
                   {room.capacity.maxGuests} Guests &bull; {room.sizeSqFt} sq.ft &bull; {room.bedType}
                 </p>
               </div>
 
               <div className="text-right shrink-0">
-                <span className="text-[10px] font-mono uppercase tracking-wider text-[#7A7067] block">
+                <span className="text-[10px] font-sans uppercase tracking-wider text-[#7A7067] block">
                   From
                 </span>
                 <span className="font-serif text-xl font-semibold text-[#9E8255]">

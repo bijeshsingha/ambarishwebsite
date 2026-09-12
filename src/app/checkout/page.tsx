@@ -220,6 +220,19 @@ function CheckoutContent() {
     setErrorMsg("");
     setIsProcessing(true);
 
+    const readSafeJson = async (res: Response): Promise<{ ok: boolean; data: any }> => {
+      try {
+        const text = await res.text();
+        if (!text || text.trim() === "") {
+          return { ok: res.ok, data: { message: `Empty response from server (Status: ${res.status})` } };
+        }
+        const data = JSON.parse(text);
+        return { ok: res.ok, data };
+      } catch {
+        return { ok: false, data: { message: `Unable to parse server response (${res.status}). Please check network or contact front desk.` } };
+      }
+    };
+
     try {
       // 1. Initialize server-authoritative checkout session and atomic inventory hold
       const checkoutItems = bookedRoomsList.map((rm) => ({
@@ -241,10 +254,10 @@ function CheckoutContent() {
         }),
       });
 
-      const checkoutData = await checkoutRes.json();
-      if (!checkoutRes.ok || !checkoutData.checkoutId) {
+      const { ok: checkoutOk, data: checkoutData } = await readSafeJson(checkoutRes);
+      if (!checkoutOk || !checkoutData?.checkoutId) {
         throw new Error(
-          checkoutData.message || checkoutData.error || "Failed to reserve inventory. Room may no longer be available."
+          checkoutData?.message || checkoutData?.error || "Failed to reserve inventory. Room may no longer be available."
         );
       }
 
@@ -269,9 +282,9 @@ function CheckoutContent() {
           body: JSON.stringify({ checkoutId, accessToken }),
         });
 
-        const orderData = await orderRes.json();
-        if (!orderRes.ok || !orderData.orderId) {
-          throw new Error(orderData.message || orderData.error || "Failed to initialize payment gateway.");
+        const { ok: orderOk, data: orderData } = await readSafeJson(orderRes);
+        if (!orderOk || !orderData?.orderId) {
+          throw new Error(orderData?.message || orderData?.error || "Failed to initialize payment gateway.");
         }
 
         // If in dev simulation mode (credentials not yet set)
@@ -305,12 +318,12 @@ function CheckoutContent() {
             }),
           });
 
-          const finData = await finRes.json();
-          if (finData.success && finData.reservation) {
+          const { ok: finOk, data: finData } = await readSafeJson(finRes);
+          if (finOk && finData?.success && finData?.reservation) {
             router.push(`/booking/confirmation/${finData.reservation.bookingReference}?token=${finData.reservation.lookupToken}`);
             return;
           } else {
-            throw new Error(finData.message || finData.error || "Reservation finalization failed.");
+            throw new Error(finData?.message || finData?.error || "Reservation finalization failed.");
           }
         }
 
@@ -357,9 +370,9 @@ function CheckoutContent() {
                 }),
               });
 
-              const verifyData = await verifyRes.json();
-              if (!verifyData.success || !verifyData.verified) {
-                throw new Error(verifyData.message || "Payment verification failed.");
+              const { ok: verifyOk, data: verifyData } = await readSafeJson(verifyRes);
+              if (!verifyOk || !verifyData?.success || !verifyData?.verified) {
+                throw new Error(verifyData?.message || "Payment verification failed.");
               }
 
               // 4. Finalize reservation atomically
@@ -374,13 +387,13 @@ function CheckoutContent() {
                 }),
               });
 
-              const finData = await finRes.json();
-              if (finData.success && finData.reservation) {
+              const { ok: finOk, data: finData } = await readSafeJson(finRes);
+              if (finOk && finData?.success && finData?.reservation) {
                 router.push(
                   `/booking/confirmation/${finData.reservation.bookingReference}?token=${finData.reservation.lookupToken}`
                 );
               } else {
-                throw new Error(finData.message || finData.error || "Finalization failed.");
+                throw new Error(finData?.message || finData?.error || "Finalization failed.");
               }
             } catch (vErr: any) {
               setErrorMsg(vErr.message || "Payment verification failed. Please contact our front desk.");
@@ -410,13 +423,13 @@ function CheckoutContent() {
         }),
       });
 
-      const finData = await finRes.json();
-      if (finData.success && finData.reservation) {
+      const { ok: finOk, data: finData } = await readSafeJson(finRes);
+      if (finOk && finData?.success && finData?.reservation) {
         router.push(
           `/booking/confirmation/${finData.reservation.bookingReference}?token=${finData.reservation.lookupToken}`
         );
       } else {
-        throw new Error(finData.message || finData.error || "Reservation finalization failed.");
+        throw new Error(finData?.message || finData?.error || "Reservation finalization failed.");
       }
     } catch (err: any) {
       setErrorMsg(err.message || "A network error occurred. Please try again.");
@@ -679,7 +692,7 @@ function CheckoutContent() {
                   <span>Confirmation Pending &bull; Live Verification via Call</span>
                 </p>
                 <p className="text-[11px] leading-relaxed text-amber-900/90">
-                  Online card/UPI payment is temporarily disabled. You can submit your reservation request with <strong>zero advance payment</strong>. Our hotel front desk will call you directly at <strong>{guestPhone || "your contact number"}</strong> to verify live room availability and confirm your booking and payment details over the phone.
+                  Online card/UPI payment is temporarily disabled. You can submit your reservation request with <strong>zero upfront payment</strong>. Please note that zero advance payment is <strong>subject to room availability and demand</strong>. Our front desk will call you directly at <strong>{guestPhone || "your contact number"}</strong> to verify live availability, and we may ask for an advance payment on call to guarantee confirmation.
                 </p>
               </div>
 
@@ -698,7 +711,7 @@ function CheckoutContent() {
                     </span>
                   </div>
                   <p className="text-[11px] text-[#787069] font-light leading-relaxed">
-                    Zero advance payment required. Our front desk will call you to confirm room availability and payment terms. Pay at front desk upon check-in.
+                    Zero advance payment is subject to availability and demand. Our front desk will call you to confirm room availability and we may ask for an advance payment on call to guarantee confirmation.
                   </p>
                 </div>
 
@@ -732,7 +745,7 @@ function CheckoutContent() {
                     className="w-4 h-4 mt-0.5 rounded text-[#A27520] focus:ring-[#A27520]"
                   />
                   <span className="text-[#787069] leading-relaxed">
-                    I agree to the hotel check-in policy (Check-in: 11:00 AM, Check-out: 12:00 PM) and free cancellation up to 24 hours prior to arrival. Valid Government Photo ID required for all adult guests.
+                    I agree to the hotel policy (Standard Check-in: 12:00 PM, Check-out: 12:00 PM • Free Early Check-in from 5:00 AM onwards upon request). Zero advance payment is subject to availability and demand; advance payment may be requested on call to guarantee confirmation. Valid Government Photo ID required for all adult guests.
                   </span>
                 </label>
               </div>
@@ -755,7 +768,7 @@ function CheckoutContent() {
                 </button>
                 <p className="text-center text-[11px] text-[#787069] flex items-center justify-center gap-1.5">
                   <ShieldCheck className="w-3.5 h-3.5 text-[#A27520]" />
-                  <span>Zero advance payment. Front desk will call to confirm live availability and payment.</span>
+                  <span>Zero upfront fee to submit. Advance payment may be asked on call to guarantee confirmation based on availability &amp; demand.</span>
                 </p>
               </div>
             </div>
@@ -966,7 +979,8 @@ function CheckoutContent() {
                 <ul className="space-y-1 pl-6 list-disc text-[#787069]">
                   <li>Instant confirmation voucher &amp; SMS</li>
                   <li>Free cancellation up to 24h before check-in</li>
-                  <li>Priority room allocation &amp; early check-in support</li>
+                  <li><strong className="text-emerald-700 font-medium">Free Early Check-in from 5:00 AM</strong> (no extra charge)</li>
+                  <li>Standard Check-in: 12:00 PM &bull; Check-out: 12:00 PM</li>
                 </ul>
               </div>
             </div>

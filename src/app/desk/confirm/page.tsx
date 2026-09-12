@@ -180,7 +180,7 @@ function DeskConfirmContent() {
   const cleanPhoneDigits = (reservation?.guestPhone || "").replace(/[^0-9]/g, "");
   const waPhone = cleanPhoneDigits.length === 10 ? `91${cleanPhoneDigits}` : cleanPhoneDigits;
   const waConfirmedMessage = encodeURIComponent(
-    `Namaste ${reservation?.guestName}, your reservation at Hotel Ambarish Grand Residency, Guwahati is CONFIRMED & GUARANTEED! Booking Reference: #${reservation?.bookingReference}. Check-in: ${reservation?.checkIn} (11:00 AM). View your official confirmed voucher here: ${typeof window !== "undefined" ? window.location.origin : ""}/booking/confirmation/${reservation?.bookingReference}`
+    `Namaste ${reservation?.guestName}, your reservation at Hotel Ambarish Grand Residency, Guwahati is CONFIRMED & GUARANTEED! Booking Reference: #${reservation?.bookingReference}. Check-in: ${reservation?.checkIn} (12:00 PM • Free early check-in from 5:00 AM available). View your official confirmed voucher here: ${typeof window !== "undefined" ? window.location.origin : ""}/booking/confirmation/${reservation?.bookingReference}`
   );
 
   if (loading) {
@@ -376,7 +376,7 @@ function DeskConfirmContent() {
                     {reservation.rooms} Room(s) &bull; {reservation.adults} Adults
                   </p>
                   <p className="text-[#7D756E]">
-                    Policy Check-in: 11:00 AM | Check-out: 12:00 PM
+                    Policy Check-in: 12:00 PM | Check-out: 12:00 PM | Free Early Check-in: 5:00 AM+
                   </p>
                 </div>
               </div>

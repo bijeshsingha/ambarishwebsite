@@ -524,6 +524,19 @@ function BookingContent() {
                 </div>
               )}
             </div>
+
+            {/* Special Early Check-in Offer Banner */}
+            <div className="pt-2.5 border-t border-[#E6DED3]/60 flex flex-wrap items-center justify-between gap-2 text-xs">
+              <div className="flex items-center gap-1.5 text-amber-900 font-medium">
+                <Sparkles className="w-3.5 h-3.5 text-[#A27520] shrink-0" />
+                <span>
+                  <strong className="text-[#A27520]">Special Direct Offer:</strong> Free Early Check-in from <strong>5:00 AM onwards</strong> with no extra charge!
+                </span>
+              </div>
+              <div className="text-[11px] text-[#787069]">
+                Standard Check-in &amp; Check-out: <strong>12:00 Noon</strong>
+              </div>
+            </div>
           </div>
         </div>
       </section>

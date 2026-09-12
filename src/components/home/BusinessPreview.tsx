@@ -80,7 +80,7 @@ export default function BusinessPreview() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0C0B0A]/80 via-transparent to-transparent" />
 
                 <div className="absolute bottom-6 left-6">
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-[#BFA058] bg-black/70 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10">
+                  <span className="text-[10px] font-sans uppercase tracking-widest text-[#BFA058] bg-black/70 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10">
                     Grand Residency Banquet Hall in Session
                   </span>
                 </div>

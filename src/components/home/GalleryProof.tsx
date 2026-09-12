@@ -90,7 +90,7 @@ export default function GalleryProof() {
                 {/* Title & Category Information */}
                 <div className="absolute bottom-0 left-0 right-0 p-5 flex items-end justify-between">
                   <div>
-                    <span className="text-[10px] font-mono uppercase tracking-widest text-[#BFA058] block mb-1">
+                    <span className="text-[10px] font-sans uppercase tracking-widest text-[#BFA058] block mb-1">
                       {img.category}
                     </span>
                     <h3 className="font-serif text-lg sm:text-xl text-white font-normal leading-snug">

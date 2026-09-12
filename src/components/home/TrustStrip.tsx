@@ -16,7 +16,7 @@ const brandPillars = [
     title: "24-Hour Dependability",
     subtitle: "Continuous Power & Care",
     description:
-      "Dedicated 24-hour generator power backup, 24/7 active reception desk, secure covered parking, and daily fresh housekeeping.",
+      "Free early check-in from 5:00 AM, 24-hour generator backup, 24/7 front desk hospitality, secure covered parking, and daily housekeeping.",
   },
   {
     icon: Utensils,

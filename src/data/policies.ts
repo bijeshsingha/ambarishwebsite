@@ -7,9 +7,9 @@ export const HOTEL_POLICIES: PolicySection[] = [
   {
     title: "Check-in & Check-out Policies",
     items: [
-      "Standard Check-in Time: 11:00 AM.",
+      "Standard Check-in Time: 12:00 PM (Noon).",
       "Standard Check-out Time: 12:00 PM (Noon).",
-      "Early Check-in between 06:00 AM and 11:00 AM is subject to room availability upon arrival (nominal early-charge may apply for before 8:00 AM).",
+      "Special Early Check-in Offer: Free Early Check-in from 05:00 AM onwards with NO extra charge (subject to room availability upon arrival). Perfect for travelers arriving on early morning trains into Guwahati Railway Station.",
       "Late Check-out up to 02:00 PM is subject to availability and prior front-desk approval.",
     ],
   },
@@ -24,7 +24,7 @@ export const HOTEL_POLICIES: PolicySection[] = [
   {
     title: "Cancellation & Refund Terms",
     items: [
-      "Free Cancellation: Cancellations made at least 24 hours prior to the standard check-in time (11:00 AM on arrival date) are eligible for a 100% refund of the deposit paid.",
+      "Free Cancellation: Cancellations made at least 24 hours prior to the standard check-in time (12:00 PM on arrival date) are eligible for a 100% refund of the deposit paid.",
       "Late Cancellation / No-Show: Cancellations made within 24 hours of check-in or failure to arrive on the booked date will attract a retention charge equivalent to 1 night's room tariff + taxes.",
       "Refund Processing: Eligible refunds for payments made via Razorpay / Card / UPI are processed back to the original source account within 5 to 7 business days.",
     ],
@@ -55,6 +55,11 @@ export interface FAQItem {
 
 export const FAQS: FAQItem[] = [
   {
+    question: "What are the check-in and check-out timings? Is early check-in available?",
+    answer: "Our standard check-in time is 12:00 PM (Noon) and check-out is 12:00 PM (Noon). We currently offer a Special Early Check-in Offer: guests can check in early from 05:00 AM onwards with NO extra charge (subject to room availability upon arrival). This is especially popular with travelers arriving on early morning trains into Guwahati.",
+    category: "booking",
+  },
+  {
     question: "How close is Hotel Ambarish to Guwahati Railway Station?",
     answer: "Hotel Ambarish Grand Residency is located just 250 meters (a 2-3 minute easy walk) from the Paltan Bazaar exit of Guwahati Railway Station, making it the most convenient stay in Guwahati for rail passengers.",
     category: "location",
@@ -76,7 +81,7 @@ export const FAQS: FAQItem[] = [
   },
   {
     question: "Do you assist with airport transfers and local sightseeing?",
-    answer: "Yes, our travel concierge desk assists with reliable AC taxi pickups and drops to Lokpriya Gopinath Bordoloi Airport (21 km away) as well as day tours to Maa Kamakhya Temple, Umananda Island, and Pobitora Wildlife Sanctuary.",
+    answer: "Yes, airport pick up and dropping service is available upon request. Our travel concierge desk assists with reliable AC taxi pickups and drops to Lokpriya Gopinath Bordoloi Airport (21 km away) as well as day tours to Maa Kamakhya Temple, Umananda Island, and Pobitora Wildlife Sanctuary. Please contact our front desk in advance to arrange your transfer.",
     category: "services",
   },
   {

@@ -89,7 +89,7 @@ export default function SuiteSpotlight() {
 
                   {/* Price Tariff Badge */}
                   <div className="absolute top-6 left-6 bg-[#171412]/90 backdrop-blur-md text-[#FAF8F5] rounded-2xl px-5 py-3 shadow-xl border border-[#9E8255]/40 z-10">
-                    <span className="text-[9px] uppercase tracking-widest font-mono block text-[#9E8255]">
+                    <span className="text-[9px] uppercase tracking-widest font-sans block text-[#9E8255]">
                       Direct Tariff from
                     </span>
                     <span className="font-serif text-2xl sm:text-3xl font-medium block">
@@ -100,7 +100,7 @@ export default function SuiteSpotlight() {
 
                   {/* Active Zone Label */}
                   <div className="absolute bottom-6 left-6 z-10 max-w-[70%]">
-                    <span className="text-[10px] font-mono uppercase tracking-widest text-[#BFA058] bg-black/75 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10 inline-block mb-1.5">
+                    <span className="text-[10px] font-sans uppercase tracking-widest text-[#BFA058] bg-black/75 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10 inline-block mb-1.5">
                       {currentPhoto.badge}
                     </span>
                     <p className="text-xs text-white/80 font-light drop-shadow line-clamp-1 hidden sm:block">

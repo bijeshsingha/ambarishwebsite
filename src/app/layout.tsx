@@ -107,7 +107,7 @@ export default function RootLayout({
       latitude: HOTEL_INFO.coordinates.lat,
       longitude: HOTEL_INFO.coordinates.lng,
     },
-    checkinTime: "11:00",
+    checkinTime: "12:00",
     checkoutTime: "12:00",
     amenityFeature: HOTEL_INFO.amenities.map((a) => ({
       "@type": "LocationFeatureSpecification",
@@ -120,6 +120,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${cormorant.variable} ${inter.variable}`}>
       <head>
+        {/* Google Fonts CDN fallback for mobile devices */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+
         {/* Google tag (gtag.js) */}
         <script
           async

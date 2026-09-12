@@ -378,14 +378,19 @@ function ConfirmationContent() {
               </p>
 
               {/* Official Hotel Policy Times */}
-              <div className="flex items-center justify-between text-[11px] text-[#787069] pt-1 border-t border-[#EDE7DE]/60 voucher-compact-text">
-                <span className="flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-[#A27520]" />
-                  Check-in: <strong className="text-[#1A1715]">11:00 AM</strong>
-                </span>
-                <span>
-                  Check-out: <strong className="text-[#1A1715]">12:00 PM</strong>
-                </span>
+              <div className="space-y-1 pt-1 border-t border-[#EDE7DE]/60 text-[11px] voucher-compact-text">
+                <div className="flex items-center justify-between text-[#787069]">
+                  <span className="flex items-center gap-1">
+                    <Clock className="w-3 h-3 text-[#A27520]" />
+                    Check-in: <strong className="text-[#1A1715]">12:00 PM</strong>
+                  </span>
+                  <span>
+                    Check-out: <strong className="text-[#1A1715]">12:00 PM</strong>
+                  </span>
+                </div>
+                <p className="text-[10px] text-[#A27520] font-medium">
+                  ⚡ Free Early Check-in available from 05:00 AM onwards (no extra charge, subject to availability).
+                </p>
               </div>
             </div>
           </div>
@@ -474,7 +479,7 @@ function ConfirmationContent() {
                       ⏳ Confirmation Pending (Pay at Hotel)
                     </span>
                     <span className="block text-[10px] text-[#787069] mt-0.5">
-                      Front desk will call to verify availability &bull; Pay at Hotel
+                      Front desk will call to verify availability &bull; Advance payment may be requested on call
                     </span>
                   </div>
                 )}

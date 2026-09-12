@@ -65,7 +65,7 @@ export default function HeroSection() {
       </div>
 
       {/* Top Editorial Slide Counter */}
-      <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-5 flex justify-between items-center text-xs font-mono tracking-widest uppercase">
+      <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-5 flex justify-between items-center text-xs font-sans tracking-widest uppercase font-medium">
         <span className="text-[#9E8255] font-medium hidden sm:inline-block">
           Est. Paltan Bazaar &bull; 250m to Railway Station
         </span>
