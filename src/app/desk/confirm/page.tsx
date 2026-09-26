@@ -198,19 +198,19 @@ function DeskConfirmContent() {
 
   if (error || !reservation) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center p-4 text-[#1A1715]">
-        <div className="max-w-md w-full bg-white rounded-3xl p-8 border border-[#E6DFD5] text-center shadow-sm space-y-4">
+      <div className="min-h-screen bg-[#FAF8F5] flex items-center justify-center p-4 text-[#1C1917]">
+        <div className="max-w-md w-full bg-white rounded-3xl p-8 border border-[#E7E2D9] text-center shadow-sm space-y-4">
           <div className="w-12 h-12 rounded-full bg-rose-50 text-rose-700 mx-auto flex items-center justify-center">
             <AlertCircle className="w-6 h-6" />
           </div>
-          <h2 className="font-serif text-xl font-medium text-[#1A1715]">Front Desk Verification</h2>
-          <p className="text-xs text-[#7D756E] leading-relaxed">
+          <h2 className="font-serif text-xl font-medium text-[#1C1917]">Front Desk Verification</h2>
+          <p className="text-xs text-[#78716C] leading-relaxed">
             {error || "Unable to authorize confirmation for this booking."}
           </p>
           <div className="pt-2">
             <Link
               href="/"
-              className="inline-block py-2.5 px-5 bg-[#1A1715] text-white rounded-full text-xs font-semibold uppercase tracking-wider hover:bg-[#9A7228] transition-colors"
+              className="inline-block py-2.5 px-5 bg-[#1C1917] text-white rounded-full text-xs font-semibold uppercase tracking-wider hover:bg-[#8F6B2A] transition-colors"
             >
               Return to Website
             </Link>
@@ -221,11 +221,11 @@ function DeskConfirmContent() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] text-[#1A1715] py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#FAF8F5] text-[#1C1917] py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto space-y-5">
         
         {/* Header with Official Logo */}
-        <div className="bg-white rounded-3xl p-6 border border-[#E6DFD5] text-center shadow-sm space-y-3">
+        <div className="bg-white rounded-3xl p-6 border border-[#E7E2D9] text-center shadow-sm space-y-3">
           <div className="relative h-12 w-48 mx-auto">
             <Image
               src="/images/logo.png"
@@ -237,10 +237,10 @@ function DeskConfirmContent() {
             />
           </div>
           <div>
-            <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-[#9A7228] block">
+            <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-[#8F6B2A] block">
               Front Desk Operations Portal
             </span>
-            <h1 className="font-serif text-xl sm:text-2xl font-medium text-[#1A1715] pt-0.5">
+            <h1 className="font-serif text-xl sm:text-2xl font-medium text-[#1C1917] pt-0.5">
               Reservation Confirmation Desk
             </h1>
           </div>

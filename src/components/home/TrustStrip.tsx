@@ -36,9 +36,9 @@ const brandPillars = [
 
 export default function TrustStrip() {
   return (
-    <section className="bg-[#0C0B0B] border-t border-b border-white/10 py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
+    <section className="bg-[#F4EFE6] border-t border-b border-[#E7E2D9] py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0 lg:divide-x lg:divide-white/10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0 lg:divide-x lg:divide-[#E7E2D9]">
           {brandPillars.map((pillar) => {
             const Icon = pillar.icon;
             return (
@@ -46,16 +46,16 @@ export default function TrustStrip() {
                 key={pillar.title}
                 className="lg:px-8 first:pl-0 last:pr-0 space-y-3"
               >
-                <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-[#B4872F] mb-4">
+                <div className="w-11 h-11 rounded-lg bg-[#FFFFFF] border border-[#E7E2D9] flex items-center justify-center text-[#8F6B2A] mb-4 shadow-sm">
                   <Icon className="w-5 h-5" />
                 </div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-[#B4872F]">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-[#8F6B2A]">
                   {pillar.subtitle}
                 </p>
-                <h3 className="font-serif text-xl text-[#F5EBDD] font-medium">
+                <h3 className="font-serif text-xl text-[#1C1917] font-medium">
                   {pillar.title}
                 </h3>
-                <p className="text-xs text-[#F5EBDD]/65 font-light leading-relaxed">
+                <p className="text-xs sm:text-[13px] text-[#44403C] font-normal leading-relaxed">
                   {pillar.description}
                 </p>
               </div>

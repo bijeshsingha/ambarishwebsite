@@ -19,17 +19,17 @@ export default function RoomsPage() {
   });
 
   return (
-    <div className="bg-[#F5EBDD] text-[#0C0B0B] min-h-screen pb-20">
+    <div className="bg-[#FAF8F5] text-[#1C1917] min-h-screen pb-20">
       {/* Header */}
-      <section className="py-20 sm:py-28 bg-[#ECE1D0] hairline-b text-center">
+      <section className="py-20 sm:py-28 bg-[#F4EFE6] border-b border-[#E7E2D9] text-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
-          <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#B4872F] block">
+          <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#8F6B2A] block">
             Accommodation
           </span>
-          <h1 className="font-serif text-4xl sm:text-6xl font-medium text-[#0C0B0B]">
-            Rooms & Suites
+          <h1 className="font-serif text-4xl sm:text-6xl font-medium text-[#1C1917]">
+            Rooms &amp; Suites
           </h1>
-          <p className="text-sm sm:text-base text-[#3D3734] max-w-xl mx-auto font-light leading-relaxed">
+          <p className="text-sm sm:text-base text-[#44403C] max-w-xl mx-auto font-light leading-relaxed">
             Thoughtfully designed sanctuaries featuring split AC, pristine linens, 24/7 hot water, and high-speed Wi-Fi in Paltan Bazaar.
           </p>
         </div>
@@ -43,9 +43,9 @@ export default function RoomsPage() {
       {/* Main Catalog */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         {/* Category Filters */}
-        <div className="flex flex-wrap items-center justify-between gap-4 pb-8 hairline-b mb-12">
-          <div className="flex items-center space-x-2 text-[11px] font-semibold uppercase tracking-wider text-[#7A7067]">
-            <Filter className="w-3.5 h-3.5 text-[#B4872F]" />
+        <div className="flex flex-wrap items-center justify-between gap-4 pb-8 border-b border-[#E7E2D9] mb-12">
+          <div className="flex items-center space-x-2 text-[11px] font-semibold uppercase tracking-wider text-[#78716C]">
+            <Filter className="w-3.5 h-3.5 text-[#8F6B2A]" />
             <span>Filter categories</span>
           </div>
 
@@ -61,8 +61,8 @@ export default function RoomsPage() {
                 onClick={() => setActiveFilter(f.id as any)}
                 className={`px-4 py-1.5 rounded-full text-xs transition-all ${
                   activeFilter === f.id
-                    ? "bg-[#0C0B0B] text-[#F5EBDD] font-semibold shadow-md"
-                    : "bg-[#FFFFFF] text-[#3D3734] hover:text-[#0C0B0B] border border-[#0C0B0B]/10"
+                    ? "bg-[#1C1917] text-[#FAF8F5] font-semibold shadow-md"
+                    : "bg-[#FFFFFF] text-[#44403C] hover:text-[#1C1917] border border-[#E7E2D9]"
                 }`}
               >
                 {f.label}

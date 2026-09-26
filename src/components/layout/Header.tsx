@@ -10,14 +10,12 @@ import {
   X,
   ArrowUpRight,
   Calendar,
-  Users,
-  Sparkles,
   ShieldCheck,
-  Zap,
   Tag,
+  Clock,
 } from "lucide-react";
 import { HOTEL_INFO } from "@/data/hotel-info";
-import { getTodayDate, getTomorrowDate, calculateNights, formatCurrencyINR } from "@/lib/formatters";
+import { getTodayDate, getTomorrowDate, formatCurrencyINR } from "@/lib/formatters";
 import { ROOMS } from "@/data/rooms";
 
 export default function Header() {
@@ -74,7 +72,7 @@ export default function Header() {
     { label: "Rooms & Suites", href: "/rooms" },
     { label: "Dining & Bar", href: "/dining" },
     { label: "Banquets", href: "/meetings-events" },
-    { label: "Offers & Promos", href: "/booking" },
+    { label: "Special Offers", href: "/booking" },
     { label: "Gallery", href: "/gallery" },
     { label: "Location", href: "/location" },
   ];
@@ -96,32 +94,33 @@ export default function Header() {
 
   return (
     <>
-      {/* Top Luxury Announcement Strip - Early Check-in Offer */}
-      <div className="bg-gradient-to-r from-[#171410] via-[#2A1E12] to-[#171410] border-b border-[#B4872F]/25 py-1.5 px-4 text-center text-[10px] sm:text-[11px] text-[#F5EBDD] flex items-center justify-center gap-1.5 sm:gap-2.5 flex-wrap z-50 relative">
-        <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-[#B4872F]/20 text-[#D4AF37] font-bold text-[9px] uppercase tracking-wider border border-[#B4872F]/30">
-          Special Offer
+      {/* Top Announcement Strip: Heritage Bronze & Warm Stone */}
+      <div className="bg-[#1C1917] border-b border-[#8F6B2A]/30 py-2 px-4 text-center text-[11px] sm:text-xs text-[#FAF8F5] flex items-center justify-center gap-2 sm:gap-3 flex-wrap z-50 relative">
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-[#8F6B2A]/30 text-[#FAF8F5] font-semibold text-[10px] uppercase tracking-wider border border-[#8F6B2A]/40">
+          <Clock className="w-3 h-3 text-[#B3863E]" />
+          Direct Benefit
         </span>
-        <span className="text-[#F5EBDD]/90 font-medium">
-          Free Early Check-in from <strong className="text-[#D4AF37] font-semibold">5:00 AM onwards</strong> with zero extra charge!
+        <span className="font-normal text-[#FAF8F5]/90">
+          Free Early Check-in from <strong className="text-[#B3863E] font-medium">5:00 AM onwards</strong> with zero extra charge!
         </span>
         <span className="hidden sm:inline text-white/30">•</span>
-        <span className="hidden sm:inline text-[#F5EBDD]/75">
+        <span className="hidden sm:inline text-[#FAF8F5]/75">
           Standard Check-in &amp; Check-out: <strong>12:00 Noon</strong>
         </span>
       </div>
 
-      {/* Prominent Luxury Navigation Bar */}
+      {/* Main Warm Heritage Navigation Bar */}
       <header
         className={`sticky top-0 z-50 w-full transition-all duration-300 ${
           isScrolled
-            ? "bg-[#0A0909]/95 backdrop-blur-2xl border-b border-[#9E8255]/20 shadow-sm py-2 sm:py-2.5"
-            : "bg-[#0A0909]/90 backdrop-blur-xl border-b border-white/10 py-2.5 sm:py-3"
+            ? "bg-[#FAF8F5]/95 backdrop-blur-md border-b border-[#E7E2D9] shadow-sm py-2.5 sm:py-3"
+            : "bg-[#FAF8F5]/90 backdrop-blur-sm border-b border-[#E7E2D9] py-3 sm:py-4"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 lg:gap-6">
-          {/* 1. Left: Brand Logo (Sleek & Balanced) */}
-          <Link href="/" className="flex items-center group shrink-0">
-            <div className="relative h-9 w-36 sm:h-10 sm:w-44 lg:h-11 lg:w-48 transition-transform duration-200 group-hover:scale-[1.02]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 lg:gap-8">
+          {/* 1. Left: Brand Logo */}
+          <Link href="/" className="flex items-center group shrink-0" aria-label="Hotel Ambarish Grand Residency Home">
+            <div className="relative h-10 w-40 sm:h-11 sm:w-48 lg:h-12 lg:w-52 transition-transform duration-200 group-hover:scale-[1.01]">
               <Image
                 src="/images/logo.png"
                 alt="Hotel Ambarish Grand Residency by Divine View"
@@ -132,8 +131,8 @@ export default function Header() {
             </div>
           </Link>
 
-          {/* 2. Center: Clean, Spaced Navigation Links */}
-          <nav className="hidden lg:flex items-center justify-center space-x-5 xl:space-x-7 flex-1">
+          {/* 2. Center: Editorial Navigation Links */}
+          <nav className="hidden lg:flex items-center justify-center space-x-6 xl:space-x-8 flex-1">
             {navLinks.map((link) => {
               const isActive =
                 pathname === link.href ||
@@ -142,113 +141,113 @@ export default function Header() {
                 <Link
                   key={link.label}
                   href={link.href}
-                  className={`text-[11px] xl:text-[12px] tracking-[0.12em] uppercase font-medium transition-all duration-150 relative py-1.5 whitespace-nowrap ${
+                  className={`text-[12px] xl:text-[13px] tracking-[0.14em] uppercase font-medium transition-colors duration-150 relative py-1.5 whitespace-nowrap ${
                     isActive
-                      ? "text-[#B4872F] font-bold"
-                      : "text-[#F5EBDD]/90 hover:text-[#B4872F]"
+                      ? "text-[#8F6B2A] font-semibold"
+                      : "text-[#292524] hover:text-[#8F6B2A]"
                   }`}
                 >
                   {link.label}
                   {isActive && (
-                    <span className="absolute -bottom-0.5 left-0 w-full h-[2px] bg-gradient-to-r from-[#B4872F] to-[#D4A74F] rounded-full shadow-sm shadow-[#B4872F]/70" />
+                    <span className="absolute -bottom-1 left-0 w-full h-[2px] bg-[#8F6B2A] rounded-full" />
                   )}
                 </Link>
               );
             })}
           </nav>
 
-          {/* 3. Right: Sleek Action CTAs */}
+          {/* 3. Right: Contact & Primary Action */}
           <div className="hidden sm:flex items-center space-x-3 shrink-0">
-            {/* Phone Hotline Pill */}
+            {/* Phone Hotline */}
             <a
               href={`tel:${HOTEL_INFO.phoneRaw}`}
-              className="px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#FAF8F5] hover:text-[#BFA058] hover:bg-white/5 border border-white/20 transition-all flex items-center whitespace-nowrap shadow-sm group"
+              className="px-3.5 py-2 rounded-lg text-xs font-semibold text-[#1C1917] hover:text-[#8F6B2A] hover:bg-[#FAF5EB] border border-[#E7E2D9] transition-all flex items-center whitespace-nowrap"
               aria-label="Call front desk"
             >
-              <Phone className="w-3.5 h-3.5 mr-1.5 text-[#9E8255] group-hover:rotate-12 transition-transform" />
+              <Phone className="w-3.5 h-3.5 mr-2 text-[#8F6B2A]" />
               <span>{HOTEL_INFO.phone}</span>
             </a>
 
             {/* Primary Book Direct Button */}
             <Link
               href="/booking"
-              className="group btn-luxury-gold inline-flex items-center justify-center px-5 py-2 text-xs font-bold uppercase tracking-[0.14em] rounded-full whitespace-nowrap"
+              className="btn-heritage-primary px-5 py-2 rounded-lg text-xs font-semibold tracking-wider whitespace-nowrap"
             >
               <span>Book Direct</span>
-              <ArrowUpRight className="w-3.5 h-3.5 ml-1 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              <ArrowUpRight className="w-3.5 h-3.5 ml-1" />
             </Link>
           </div>
 
-          {/* Mobile Menu Trigger */}
+          {/* Mobile Menu Trigger & Book CTA */}
           <div className="flex lg:hidden items-center space-x-2.5">
             {!isCheckoutOrConfirmation && (
               <button
                 onClick={() => setShowQuickBookModal(true)}
-                className="btn-luxury-gold px-4 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full sm:hidden"
+                className="btn-heritage-primary px-3.5 py-1.5 text-xs font-semibold tracking-wider rounded-lg sm:hidden"
               >
-                Book Now
+                Book
               </button>
             )}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-[#FAF8F5] hover:text-[#9E8255] transition-colors rounded-xl bg-white/5 border border-white/10"
+              className="p-2 text-[#1C1917] hover:text-[#8F6B2A] transition-colors rounded-lg bg-[#FAF5EB] border border-[#E7E2D9]"
               aria-label="Toggle navigation menu"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5 text-[#9E8255]" />}
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5 text-[#8F6B2A]" />}
             </button>
           </div>
         </div>
       </header>
 
-      {/* DYNAMIC SCROLL-DOWN FLOATING ISLAND POP-UP (Desktop & Tablet) */}
+      {/* FLOATING ACTION DOCK (Desktop & Tablet) */}
       <div
-        className={`hidden sm:block fixed bottom-6 right-6 lg:bottom-8 lg:right-8 z-40 transition-all duration-500 ease-out transform ${
+        className={`hidden sm:block fixed bottom-6 right-6 lg:bottom-8 lg:right-8 z-40 transition-all duration-300 ease-out transform ${
           showScrollDock
             ? "translate-y-0 opacity-100 scale-100 pointer-events-auto"
-            : "translate-y-10 opacity-0 scale-90 pointer-events-none"
+            : "translate-y-8 opacity-0 scale-95 pointer-events-none"
         }`}
       >
-        <div className="flex items-center gap-1.5 p-1 rounded-full bg-[#0A0909]/95 backdrop-blur-xl border border-[#9E8255]/40 shadow-lg shadow-black/20">
+        <div className="flex items-center gap-2 p-1.5 rounded-xl bg-[#FFFFFF] border border-[#E7E2D9] shadow-xl text-[#1C1917]">
           <button
             onClick={() => setShowQuickBookModal(true)}
-            className="btn-luxury-gold px-4 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider flex items-center space-x-2"
+            className="btn-heritage-primary px-4 py-2.5 rounded-lg text-xs font-semibold tracking-wider flex items-center space-x-2"
           >
-            <Calendar className="w-3.5 h-3.5 text-[#120E05]" />
+            <Calendar className="w-3.5 h-3.5" />
             <span>Check Rates &amp; Book</span>
             <ArrowUpRight className="w-3.5 h-3.5 ml-0.5" />
           </button>
 
           <a
             href={`tel:${HOTEL_INFO.phoneRaw}`}
-            className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-[#9E8255] text-[#FAF8F5] hover:text-[#0C0B0A] transition-all border border-white/10 shrink-0"
+            className="w-9 h-9 flex items-center justify-center rounded-lg bg-[#FAF5EB] hover:bg-[#F4EFE6] text-[#8F6B2A] border border-[#E7E2D9] transition-all"
             title="Call Front Desk 24/7"
             aria-label="Call Front Desk"
           >
-            <Phone className="w-3.5 h-3.5 text-[#9E8255] hover:text-[#0C0B0A]" />
+            <Phone className="w-3.5 h-3.5 text-[#8F6B2A]" />
           </a>
         </div>
       </div>
 
-      {/* INSTANT RESERVATION & DATES POP-UP MODAL (Mobile Bottom Sheet + Desktop Modal) */}
+      {/* QUICK RESERVATION MODAL */}
       {showQuickBookModal && !isCheckoutOrConfirmation && (
-        <div className="fixed inset-0 z-[110] bg-black/80 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 animate-in fade-in duration-200">
-          <div className="bg-[#FFFFFF] text-[#1A1715] rounded-t-[2rem] sm:rounded-3xl max-w-lg w-full max-h-[92vh] overflow-y-auto p-5 sm:p-8 space-y-5 shadow-2xl border border-[#E6DED3] relative animate-in slide-in-from-bottom-6 sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-[110] bg-[#1C1917]/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+          <div className="bg-[#FFFFFF] text-[#1C1917] rounded-t-2xl sm:rounded-2xl max-w-lg w-full max-h-[92vh] overflow-y-auto p-5 sm:p-7 space-y-5 shadow-2xl border border-[#E7E2D9] relative animate-fade-in">
             {/* Mobile Sheet Grab Handle */}
-            <div className="w-12 h-1 rounded-full bg-black/15 mx-auto -mt-1 mb-2 sm:hidden" />
+            <div className="w-10 h-1 rounded-full bg-[#1C1917]/15 mx-auto -mt-1 mb-2 sm:hidden" />
 
             {/* Modal Header */}
-            <div className="flex justify-between items-start border-b border-[#E6DED3] pb-3.5">
+            <div className="flex justify-between items-start border-b border-[#E7E2D9] pb-3.5">
               <div>
-                <span className="text-[10px] font-sans font-bold tracking-widest text-[#B4872F] uppercase block">
+                <span className="text-[11px] font-sans font-semibold tracking-widest text-[#8F6B2A] uppercase block">
                   Best Direct Rate Guarantee
                 </span>
-                <h3 className="font-serif text-2xl font-medium text-[#1A1715]">
+                <h3 className="font-serif text-2xl font-medium text-[#1C1917] mt-0.5">
                   Quick Reservation
                 </h3>
               </div>
               <button
                 onClick={() => setShowQuickBookModal(false)}
-                className="p-2 rounded-full hover:bg-black/5 text-[#787069] transition-colors"
+                className="p-1.5 rounded-lg hover:bg-[#FAF5EB] text-[#78716C] transition-colors"
                 aria-label="Close modal"
               >
                 <X className="w-5 h-5" />
@@ -257,19 +256,19 @@ export default function Header() {
 
             {/* Quick Booking Form */}
             <form onSubmit={handleQuickBookSubmit} className="space-y-4 text-xs">
-              {/* Hotel Check-in Policy Pill */}
-              <div className="flex flex-wrap items-center justify-between gap-1 text-[11px] text-[#A27520] bg-[#FAF7F2] border border-[#EDE7DE] px-3 py-2 rounded-xl">
+              {/* Hotel Check-in Policy Banner */}
+              <div className="flex flex-wrap items-center justify-between gap-1 text-[11px] text-[#8F6B2A] bg-[#FAF5EB] border border-[#DFD5C0] px-3.5 py-2.5 rounded-lg">
                 <span>Check-in: <strong>12:00 PM</strong></span>
                 <span>•</span>
                 <span>Check-out: <strong>12:00 PM</strong></span>
                 <span>•</span>
-                <span className="text-emerald-700 font-semibold">Free 5 AM Early Check-in</span>
+                <span className="text-emerald-800 font-semibold">Free 5 AM Early Check-in</span>
               </div>
 
               {/* Dates */}
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-[10px] uppercase font-semibold text-[#787069]">Check-In</label>
+                  <label className="text-[10px] uppercase font-semibold text-[#78716C]">Check-In</label>
                   <input
                     type="date"
                     min={getTodayDate()}
@@ -283,33 +282,33 @@ export default function Header() {
                       }
                     }}
                     required
-                    className="w-full p-3 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576]"
+                    className="w-full p-2.5 rounded-lg bg-[#FAF8F5] border border-[#E7E2D9] text-xs font-semibold text-[#1C1917] focus:outline-none focus:border-[#8F6B2A]"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[10px] uppercase font-semibold text-[#787069]">Check-Out</label>
+                  <label className="text-[10px] uppercase font-semibold text-[#78716C]">Check-Out</label>
                   <input
                     type="date"
                     min={checkIn || getTodayDate()}
                     value={checkOut}
                     onChange={(e) => setCheckOut(e.target.value)}
                     required
-                    className="w-full p-3 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576]"
+                    className="w-full p-2.5 rounded-lg bg-[#FAF8F5] border border-[#E7E2D9] text-xs font-semibold text-[#1C1917] focus:outline-none focus:border-[#8F6B2A]"
                   />
                 </div>
               </div>
 
               {/* Room Choice */}
               <div className="space-y-1">
-                <label className="text-[10px] uppercase font-semibold text-[#787069]">Select Room Category</label>
+                <label className="text-[10px] uppercase font-semibold text-[#78716C]">Select Room Category</label>
                 <select
                   value={selectedRoomSlug}
                   onChange={(e) => setSelectedRoomSlug(e.target.value)}
-                  className="w-full p-3 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576] cursor-pointer"
+                  className="w-full p-2.5 rounded-lg bg-[#FAF8F5] border border-[#E7E2D9] text-xs font-semibold text-[#1C1917] focus:outline-none focus:border-[#8F6B2A] cursor-pointer"
                 >
                   {ROOMS.map((r) => (
                     <option key={r.id} value={r.slug}>
-                      {r.name} • {r.bedType} (From {formatCurrencyINR(r.basePrice)}/nt)
+                      {r.name} • {r.bedType} (From {formatCurrencyINR(r.basePrice)}/night)
                     </option>
                   ))}
                 </select>
@@ -318,11 +317,11 @@ export default function Header() {
               {/* Rooms & Guests */}
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-[10px] uppercase font-semibold text-[#787069]">Rooms Count</label>
+                  <label className="text-[10px] uppercase font-semibold text-[#78716C]">Rooms Count</label>
                   <select
                     value={roomsCount}
                     onChange={(e) => setRoomsCount(e.target.value)}
-                    className="w-full p-3 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576] cursor-pointer"
+                    className="w-full p-2.5 rounded-lg bg-[#FAF8F5] border border-[#E7E2D9] text-xs font-semibold text-[#1C1917] focus:outline-none focus:border-[#8F6B2A] cursor-pointer"
                   >
                     <option value="1">1 Room</option>
                     <option value="2">2 Rooms</option>
@@ -331,11 +330,11 @@ export default function Header() {
                   </select>
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[10px] uppercase font-semibold text-[#787069]">Adults</label>
+                  <label className="text-[10px] uppercase font-semibold text-[#78716C]">Adults</label>
                   <select
                     value={adults}
                     onChange={(e) => setAdults(e.target.value)}
-                    className="w-full p-3 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-semibold text-[#1A1715] focus:outline-none focus:border-[#B62576] cursor-pointer"
+                    className="w-full p-2.5 rounded-lg bg-[#FAF8F5] border border-[#E7E2D9] text-xs font-semibold text-[#1C1917] focus:outline-none focus:border-[#8F6B2A] cursor-pointer"
                   >
                     <option value="1">1 Adult</option>
                     <option value="2">2 Adults</option>
@@ -346,18 +345,18 @@ export default function Header() {
               </div>
 
               {/* Promo Code Option */}
-              <div className="pt-1 border-t border-[#E6DED3] space-y-1">
-                <label className="text-[10px] uppercase font-semibold text-[#A27520]">
-                  Have a Promo Code? (Optional)
+              <div className="pt-1 border-t border-[#E7E2D9] space-y-1">
+                <label className="text-[10px] uppercase font-semibold text-[#8F6B2A]">
+                  Promo Code (Optional)
                 </label>
                 <div className="relative">
-                  <Tag className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#A27520]" />
+                  <Tag className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#8F6B2A]" />
                   <input
                     type="text"
-                    placeholder="e.g. DIRECT10, AMBARISH15"
+                    placeholder="e.g. DIRECT10"
                     value={customPromo}
                     onChange={(e) => setCustomPromo(e.target.value.toUpperCase())}
-                    className="w-full pl-8 pr-3 py-2.5 rounded-xl bg-[#FAF7F2] border border-[#E6DED3] text-xs font-bold uppercase text-[#1A1715] placeholder:font-normal placeholder:text-[#787069]/60 focus:outline-none focus:border-[#B62576]"
+                    className="w-full pl-8 pr-3 py-2.5 rounded-lg bg-[#FAF8F5] border border-[#E7E2D9] text-xs font-bold uppercase text-[#1C1917] placeholder:font-normal placeholder:text-[#78716C]/60 focus:outline-none focus:border-[#8F6B2A]"
                   />
                 </div>
               </div>
@@ -365,31 +364,31 @@ export default function Header() {
               {/* Instant Action Button */}
               <button
                 type="submit"
-                className="w-full py-4 rounded-full btn-luxury-gold text-xs font-bold uppercase tracking-[0.14em] flex items-center justify-center space-x-2"
+                className="w-full py-3.5 rounded-lg btn-heritage-primary text-xs font-semibold tracking-wider flex items-center justify-center space-x-2"
               >
-                <span>Proceed to Quick Checkout</span>
+                <span>Proceed to Reservation</span>
                 <ArrowUpRight className="w-4 h-4" />
               </button>
 
-              <div className="flex items-center justify-center space-x-4 text-[10px] text-[#787069] pt-1">
+              <div className="flex items-center justify-center space-x-4 text-[11px] text-[#78716C] pt-1">
                 <span className="flex items-center">
-                  <ShieldCheck className="w-3 h-3 text-[#B4872F] mr-1" />
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#8F6B2A] mr-1" />
                   Free Cancellation
                 </span>
                 <span>•</span>
-                <span>Pay Online or at Hotel</span>
+                <span>Pay at Hotel Available</span>
               </div>
             </form>
           </div>
         </div>
       )}
 
-      {/* Full-Screen Mobile Navigation Drawer */}
+      {/* Mobile Navigation Drawer */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-[100] bg-[#0C0B0B] flex flex-col justify-between p-6 lg:hidden animate-in fade-in duration-200 text-[#F5EBDD]">
+        <div className="fixed inset-0 z-[100] bg-[#FAF8F5] flex flex-col justify-between p-6 lg:hidden animate-fade-in text-[#1C1917]">
           <div>
-            <div className="flex justify-between items-center pb-6 border-b border-white/10">
-              <div className="relative h-12 w-52">
+            <div className="flex justify-between items-center pb-5 border-b border-[#E7E2D9]">
+              <div className="relative h-11 w-44">
                 <Image
                   src="/images/logo.png"
                   alt="Hotel Ambarish Grand Residency by Divine View"
@@ -399,14 +398,14 @@ export default function Header() {
               </div>
               <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="p-2 text-[#F5EBDD] hover:text-[#B4872F] transition-colors rounded-full bg-white/5"
+                className="p-2 text-[#1C1917] hover:text-[#8F6B2A] transition-colors rounded-lg bg-[#FAF5EB] border border-[#E7E2D9]"
                 aria-label="Close menu"
               >
-                <X className="w-6 h-6" />
+                <X className="w-5 h-5" />
               </button>
             </div>
 
-            <nav className="mt-8 flex flex-col space-y-5">
+            <nav className="mt-8 flex flex-col space-y-4">
               {navLinks.map((link) => {
                 const isActive = pathname === link.href;
                 return (
@@ -414,15 +413,15 @@ export default function Header() {
                     key={link.label}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`text-xl font-serif tracking-wide py-1 transition-colors flex items-center justify-between ${
+                    className={`text-lg font-serif tracking-wide py-2 transition-colors flex items-center justify-between border-b border-[#E7E2D9]/50 ${
                       isActive
-                        ? "text-[#B4872F] font-bold"
-                        : "text-[#FFFFFF] hover:text-[#B4872F]"
+                        ? "text-[#8F6B2A] font-semibold"
+                        : "text-[#1C1917] hover:text-[#8F6B2A]"
                     }`}
                   >
                     <span>{link.label}</span>
                     {isActive && (
-                      <span className="w-2 h-2 rounded-full bg-[#B4872F]" />
+                      <span className="w-2 h-2 rounded-full bg-[#8F6B2A]" />
                     )}
                   </Link>
                 );
@@ -430,12 +429,12 @@ export default function Header() {
             </nav>
           </div>
 
-          <div className="space-y-3 pt-6 border-t border-white/10">
+          <div className="space-y-3 pt-6 border-t border-[#E7E2D9]">
             <a
               href={`tel:${HOTEL_INFO.phoneRaw}`}
-              className="w-full flex items-center justify-center py-3.5 text-xs font-semibold uppercase tracking-wider text-[#F5EBDD] bg-[#171414] rounded-full border border-white/10"
+              className="w-full flex items-center justify-center py-3 text-xs font-semibold uppercase tracking-wider text-[#1C1917] bg-[#FAF5EB] rounded-lg border border-[#E7E2D9]"
             >
-              <Phone className="w-3.5 h-3.5 mr-2 text-[#B4872F]" />
+              <Phone className="w-3.5 h-3.5 mr-2 text-[#8F6B2A]" />
               Call Desk: {HOTEL_INFO.phone}
             </a>
 
@@ -444,9 +443,9 @@ export default function Header() {
                 setMobileMenuOpen(false);
                 setShowQuickBookModal(true);
               }}
-              className="w-full flex items-center justify-center py-4 text-xs font-bold uppercase tracking-[0.14em] btn-luxury-gold rounded-full"
+              className="w-full flex items-center justify-center py-3.5 text-xs font-semibold tracking-wider btn-heritage-primary rounded-lg"
             >
-              <span>Instant Quick Rates</span>
+              <span>Check Rates &amp; Book Direct</span>
               <ArrowUpRight className="w-4 h-4 ml-1.5" />
             </button>
           </div>

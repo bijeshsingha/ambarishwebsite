@@ -71,10 +71,10 @@ function ConfirmationContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center text-[#1A1715]">
+      <div className="min-h-screen bg-[#FAF8F5] flex items-center justify-center text-[#1C1917]">
         <div className="text-center space-y-3">
-          <div className="w-8 h-8 border-2 border-[#A27520] border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-sm font-light text-[#787069]">Loading confirmed voucher...</p>
+          <div className="w-8 h-8 border-2 border-[#8F6B2A] border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-sm font-light text-[#78716C]">Loading confirmed voucher...</p>
         </div>
       </div>
     );
@@ -82,21 +82,21 @@ function ConfirmationContent() {
 
   if (notFound || !reservation) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] py-20 px-4 sm:px-6 text-[#1A1715] flex items-center justify-center">
-        <div className="max-w-md w-full bg-white rounded-3xl p-8 border border-[#E6DED3] text-center shadow-sm space-y-5">
+      <div className="min-h-screen bg-[#FAF8F5] py-20 px-4 sm:px-6 text-[#1C1917] flex items-center justify-center">
+        <div className="max-w-md w-full bg-white rounded-3xl p-8 border border-[#E7E2D9] text-center shadow-sm space-y-5">
           <div className="w-14 h-14 rounded-full bg-amber-50 text-amber-700 mx-auto flex items-center justify-center">
             <AlertCircle className="w-7 h-7" />
           </div>
 
           <div className="space-y-1">
-            <h1 className="font-serif text-2xl font-medium text-[#1A1715]">Reservation Lookup</h1>
-            <p className="text-xs text-[#787069]">
+            <h1 className="font-serif text-2xl font-medium text-[#1C1917]">Reservation Lookup</h1>
+            <p className="text-xs text-[#78716C]">
               We could not find active records for reference{" "}
-              <strong className="font-sans font-bold text-[#A27520]">{reference}</strong>.
+              <strong className="font-sans font-bold text-[#8F6B2A]">{reference}</strong>.
             </p>
           </div>
 
-          <div className="p-4 rounded-xl bg-[#FAF7F2] border border-[#EDE7DE] text-left text-xs space-y-2 text-[#4A443F]">
+          <div className="p-4 rounded-xl bg-[#FAF8F5] border border-[#E7E2D9] text-left text-xs space-y-2 text-[#44403C]">
             <p>If you recently placed this booking:</p>
             <ul className="list-disc pl-4 space-y-1">
               <li>Check your email inbox for the booking confirmation.</li>
@@ -107,14 +107,14 @@ function ConfirmationContent() {
           <div className="flex flex-col gap-2 pt-2">
             <a
               href={`tel:${HOTEL_INFO.phone}`}
-              className="w-full py-2.5 px-4 bg-[#1A1715] text-white rounded-full text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 hover:bg-[#A27520] transition-colors"
+              className="btn-heritage-primary w-full py-2.5 px-4 text-xs font-semibold tracking-wider flex items-center justify-center gap-2"
             >
               <PhoneCall className="w-3.5 h-3.5" />
               <span>Call Front Desk ({HOTEL_INFO.phone})</span>
             </a>
             <Link
               href="/"
-              className="w-full py-2.5 px-4 bg-[#FAF7F2] text-[#1A1715] border border-[#EDE7DE] rounded-full text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 hover:bg-[#EDE7DE] transition-colors"
+              className="w-full py-2.5 px-4 bg-[#FAF8F5] text-[#1C1917] border border-[#E7E2D9] rounded-full text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 hover:bg-[#F4EFE6] transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Return to Home</span>
@@ -126,7 +126,7 @@ function ConfirmationContent() {
   }
 
   return (
-    <div className="bg-[#FAF7F2] text-[#1A1715] min-h-screen py-8 sm:py-14 px-3 sm:px-6 lg:px-8 print:bg-white print:p-0 print:m-0">
+    <div className="bg-[#FAF8F5] text-[#1C1917] min-h-screen py-8 sm:py-14 px-3 sm:px-6 lg:px-8 print:bg-white print:p-0 print:m-0">
       {/* Strict 1-Page Print Stylesheet (Mobile & Desktop) */}
       <style
         dangerouslySetInnerHTML={{
@@ -203,7 +203,7 @@ function ConfirmationContent() {
 
       <div className="max-w-3xl mx-auto space-y-5 print:max-w-none print:m-0 print:space-y-0">
         {/* Success / Pending Alert */}
-        <div className="print-hide p-5 sm:p-6 rounded-3xl bg-[#FFFFFF] border border-[#E6DED3] text-center space-y-3 shadow-sm">
+        <div className="print-hide p-5 sm:p-6 rounded-3xl bg-[#FFFFFF] border border-[#E7E2D9] text-center space-y-3 shadow-sm">
           {reservation.status === "CONFIRMED" ? (
             <>
               <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-700 mx-auto flex items-center justify-center border border-emerald-200">
@@ -213,12 +213,12 @@ function ConfirmationContent() {
                 <span className="text-[10px] font-sans uppercase tracking-widest px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 font-bold border border-emerald-300">
                   ✓ Official Reservation Confirmed &bull; Guaranteed
                 </span>
-                <h1 className="font-serif text-2xl sm:text-3xl font-medium text-[#1A1715] pt-1">
+                <h1 className="font-serif text-2xl sm:text-3xl font-medium text-[#1C1917] pt-1">
                   Booking Confirmed &amp; Guaranteed
                 </h1>
               </div>
-              <p className="text-xs text-[#524B46] max-w-lg mx-auto font-light leading-relaxed">
-                Your reservation reference <strong className="text-[#1A1715] font-sans font-bold">#{reservation.bookingReference}</strong> is officially guaranteed by Hotel Ambarish Grand Residency. Please present this voucher or reference code at the front desk upon check-in.
+              <p className="text-xs text-[#57534E] max-w-lg mx-auto font-light leading-relaxed">
+                Your reservation reference <strong className="text-[#1C1917] font-sans font-bold">#{reservation.bookingReference}</strong> is officially guaranteed by Hotel Ambarish Grand Residency. Please present this voucher or reference code at the front desk upon check-in.
               </p>
             </>
           ) : reservation.status === "CANCELLED" ? (
@@ -230,11 +230,11 @@ function ConfirmationContent() {
                 <span className="text-[10px] font-sans uppercase tracking-widest px-3 py-1 rounded-full bg-rose-100 text-rose-900 font-bold border border-rose-300">
                   ✗ Reservation Cancelled
                 </span>
-                <h1 className="font-serif text-2xl sm:text-3xl font-medium text-[#1A1715] pt-1">
+                <h1 className="font-serif text-2xl sm:text-3xl font-medium text-[#1C1917] pt-1">
                   Reservation Cancelled / Unavailable
                 </h1>
               </div>
-              <p className="text-xs text-[#524B46] max-w-lg mx-auto font-light leading-relaxed">
+              <p className="text-xs text-[#57534E] max-w-lg mx-auto font-light leading-relaxed">
                 This booking request could not be accommodated and has been marked as cancelled. Zero charges have been billed.
               </p>
             </>
@@ -247,29 +247,29 @@ function ConfirmationContent() {
                 <span className="text-[10px] font-sans uppercase tracking-widest px-3 py-1 rounded-full bg-amber-100/80 text-amber-900 font-bold border border-amber-300">
                   Confirmation Pending &bull; Call Verification
                 </span>
-                <h1 className="font-serif text-2xl sm:text-3xl font-medium text-[#1A1715] pt-1">
+                <h1 className="font-serif text-2xl sm:text-3xl font-medium text-[#1C1917] pt-1">
                   Booking Request Received
                 </h1>
               </div>
-              <p className="text-xs text-[#524B46] max-w-lg mx-auto font-light leading-relaxed">
+              <p className="text-xs text-[#57534E] max-w-lg mx-auto font-light leading-relaxed">
                 Thank you for choosing Hotel Ambarish Grand Residency. Your booking request reference is{" "}
-                <strong className="text-[#1A1715] font-sans font-bold">{reservation.bookingReference}</strong>. Our front desk team will call you shortly at{" "}
-                <strong className="text-[#1A1715]">{reservation.guestPhone}</strong> to verify live room availability and confirm your reservation &amp; payment details over the phone.
+                <strong className="text-[#1C1917] font-sans font-bold">{reservation.bookingReference}</strong>. Our front desk team will call you shortly at{" "}
+                <strong className="text-[#1C1917]">{reservation.guestPhone}</strong> to verify live room availability and confirm your reservation &amp; payment details over the phone.
               </p>
 
               {/* Direct Call to Hotel Box */}
-              <div className="p-3.5 rounded-2xl bg-[#FAF7F2] border border-[#EDE7DE] flex flex-col sm:flex-row items-center justify-between gap-3 max-w-lg mx-auto text-xs text-left">
+              <div className="p-3.5 rounded-2xl bg-[#FAF8F5] border border-[#E7E2D9] flex flex-col sm:flex-row items-center justify-between gap-3 max-w-lg mx-auto text-xs text-left">
                 <div className="space-y-0.5 text-center sm:text-left">
-                  <span className="text-[10px] font-sans uppercase tracking-wider text-[#A27520] font-bold block">
+                  <span className="text-[10px] font-sans uppercase tracking-wider text-[#8F6B2A] font-bold block">
                     Prefer Instant Confirmation?
                   </span>
-                  <span className="text-[#4A443F]">Call our 24/7 Hotel Front Desk directly:</span>
+                  <span className="text-[#57534E]">Call our 24/7 Hotel Front Desk directly:</span>
                 </div>
                 <a
                   href={`tel:${HOTEL_INFO.phoneRaw || HOTEL_INFO.phone}`}
-                  className="px-4 py-2 rounded-full bg-[#1A1715] text-white text-xs font-semibold hover:bg-[#A27520] transition-colors flex items-center gap-2 shadow-sm shrink-0"
+                  className="px-4 py-2 rounded-full bg-[#1C1917] text-white text-xs font-semibold hover:bg-[#8F6B2A] transition-colors flex items-center gap-2 shadow-sm shrink-0"
                 >
-                  <PhoneCall className="w-3.5 h-3.5 text-[#BFA058]" />
+                  <PhoneCall className="w-3.5 h-3.5 text-[#C29D4C]" />
                   <span>Call {HOTEL_INFO.phone}</span>
                 </a>
               </div>
@@ -281,7 +281,7 @@ function ConfirmationContent() {
         <div className="print-hide flex justify-between items-center gap-3">
           <Link
             href="/"
-            className="text-xs uppercase tracking-wider text-[#4A443F] hover:text-[#1A1715] flex items-center gap-1.5"
+            className="text-xs uppercase tracking-wider text-[#57534E] hover:text-[#1C1917] flex items-center gap-1.5"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Return to Home</span>
@@ -290,7 +290,7 @@ function ConfirmationContent() {
 
           <button
             onClick={handlePrint}
-            className="px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white bg-[#1A1715] hover:bg-[#A27520] rounded-full shadow-md flex items-center space-x-2 transition-all active:scale-[0.98]"
+            className="px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white bg-[#1C1917] hover:bg-[#8F6B2A] rounded-full shadow-md flex items-center space-x-2 transition-all active:scale-[0.98]"
           >
             <Printer className="w-4 h-4" />
             <span>Print Voucher / PDF</span>
@@ -302,7 +302,7 @@ function ConfirmationContent() {
         {/* ========================================================================= */}
         <div
           id="printable-voucher"
-          className="p-5 sm:p-8 rounded-3xl bg-[#FFFFFF] border border-[#E6DED3] shadow-md space-y-4 print:p-4 print:space-y-3 print:border print:border-[#E6DED3] print:shadow-none print:rounded-xl"
+          className="p-5 sm:p-8 rounded-3xl bg-[#FFFFFF] border border-[#E7E2D9] shadow-md space-y-4 print:p-4 print:space-y-3 print:border print:border-[#E7E2D9] print:shadow-none print:rounded-xl"
         >
           {/* Header */}
           <div className="flex justify-between items-center hairline-b pb-3.5 print:pb-2.5">
@@ -318,10 +318,10 @@ function ConfirmationContent() {
             </div>
 
             <div className="text-right">
-              <span className="text-[10px] uppercase font-sans tracking-widest text-[#A27520] block font-semibold">
+              <span className="text-[10px] uppercase font-sans tracking-widest text-[#8F6B2A] block font-semibold">
                 Booking Reference
               </span>
-              <strong className="font-sans text-base sm:text-lg font-bold text-[#1A1715]">
+              <strong className="font-sans text-base sm:text-lg font-bold text-[#1C1917]">
                 {reservation.bookingReference || reference}
               </strong>
             </div>
@@ -330,26 +330,26 @@ function ConfirmationContent() {
           {/* Guest & Stay Details (2-Column Flex in Print to prevent vertical stacking) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs voucher-flex-row print:gap-2.5">
             {/* Guest Details */}
-            <div className="p-3.5 sm:p-4 rounded-2xl bg-[#FAF7F2] border border-[#EDE7DE] space-y-1.5 print:p-2.5 print:rounded-xl">
-              <span className="font-semibold text-[10px] uppercase text-[#A27520] block tracking-wider">
+            <div className="p-3.5 sm:p-4 rounded-2xl bg-[#FAF8F5] border border-[#E7E2D9] space-y-1.5 print:p-2.5 print:rounded-xl">
+              <span className="font-semibold text-[10px] uppercase text-[#8F6B2A] block tracking-wider">
                 Guest &amp; Corporate Details
               </span>
-              <p className="font-medium text-sm text-[#1A1715] capitalize">{reservation.guestName}</p>
-              <p className="text-[#4A443F] voucher-compact-text">Phone: {reservation.guestPhone}</p>
-              <p className="text-[#4A443F] voucher-compact-text truncate">Email: {reservation.guestEmail}</p>
+              <p className="font-medium text-sm text-[#1C1917] capitalize">{reservation.guestName}</p>
+              <p className="text-[#57534E] voucher-compact-text">Phone: {reservation.guestPhone}</p>
+              <p className="text-[#57534E] voucher-compact-text truncate">Email: {reservation.guestEmail}</p>
               {(reservation.companyName || reservation.b2b?.companyName) && (
-                <div className="pt-1.5 border-t border-[#EDE7DE] text-[11px] voucher-compact-text">
-                  <p className="font-semibold text-[#1A1715]">🏢 {reservation.companyName || reservation.b2b?.companyName}</p>
+                <div className="pt-1.5 border-t border-[#E7E2D9] text-[11px] voucher-compact-text">
+                  <p className="font-semibold text-[#1C1917]">🏢 {reservation.companyName || reservation.b2b?.companyName}</p>
                   {reservation.guestGstin && (
-                    <p className="font-sans font-semibold text-[#A27520]">GSTIN: {reservation.guestGstin}</p>
+                    <p className="font-sans font-semibold text-[#8F6B2A]">GSTIN: {reservation.guestGstin}</p>
                   )}
                 </div>
               )}
             </div>
 
             {/* Stay & Room Details */}
-            <div className="p-3.5 sm:p-4 rounded-2xl bg-[#FAF7F2] border border-[#EDE7DE] space-y-1.5 print:p-2.5 print:rounded-xl">
-              <span className="font-semibold text-[10px] uppercase text-[#A27520] block tracking-wider">
+            <div className="p-3.5 sm:p-4 rounded-2xl bg-[#FAF8F5] border border-[#E7E2D9] space-y-1.5 print:p-2.5 print:rounded-xl">
+              <span className="font-semibold text-[10px] uppercase text-[#8F6B2A] block tracking-wider">
                 Stay &amp; Reserved Rooms
               </span>
               {reservation.bookedRooms && reservation.bookedRooms.length > 0 ? (
@@ -357,10 +357,10 @@ function ConfirmationContent() {
                   {reservation.bookedRooms.map((rm, idx) => (
                     <div key={idx} className="flex justify-between items-center text-xs voucher-compact-text">
                       <div>
-                        <span className="font-medium text-[#1A1715]">{rm.quantity}&times; {rm.roomName}</span>
-                        <span className="text-[10px] text-[#787069] block">{rm.ratePlanName}</span>
+                        <span className="font-medium text-[#1C1917]">{rm.quantity}&times; {rm.roomName}</span>
+                        <span className="text-[10px] text-[#78716C] block">{rm.ratePlanName}</span>
                       </div>
-                      <span className="font-sans text-[#A27520] font-semibold">
+                      <span className="font-sans text-[#8F6B2A] font-semibold">
                         {formatCurrencyINR((rm.pricePerNight || 0) * (rm.quantity || 1))}/n
                       </span>
                     </div>
@@ -368,44 +368,44 @@ function ConfirmationContent() {
                 </div>
               ) : (
                 <div className="voucher-compact-text">
-                  <p className="font-medium text-sm text-[#1A1715]">{reservation.roomName || "Double Deluxe Room"}</p>
-                  <p className="text-[#A27520] font-semibold">{reservation.ratePlanName || "Standard Rate"}</p>
+                  <p className="font-medium text-sm text-[#1C1917]">{reservation.roomName || "Double Deluxe Room"}</p>
+                  <p className="text-[#8F6B2A] font-semibold">{reservation.ratePlanName || "Standard Rate"}</p>
                 </div>
               )}
 
-              <p className="text-[#4A443F] text-xs pt-1 border-t border-[#EDE7DE] voucher-compact-text">
+              <p className="text-[#57534E] text-xs pt-1 border-t border-[#E7E2D9] voucher-compact-text">
                 {reservation.checkIn} &rarr; {reservation.checkOut} ({reservation.nights || 1} {(reservation.nights || 1) === 1 ? "Night" : "Nights"})
               </p>
 
               {/* Official Hotel Policy Times */}
-              <div className="space-y-1 pt-1 border-t border-[#EDE7DE]/60 text-[11px] voucher-compact-text">
-                <div className="flex items-center justify-between text-[#787069]">
+              <div className="space-y-1 pt-1 border-t border-[#E7E2D9]/60 text-[11px] voucher-compact-text">
+                <div className="flex items-center justify-between text-[#78716C]">
                   <span className="flex items-center gap-1">
-                    <Clock className="w-3 h-3 text-[#A27520]" />
-                    Check-in: <strong className="text-[#1A1715]">12:00 PM</strong>
+                    <Clock className="w-3 h-3 text-[#8F6B2A]" />
+                    Check-in: <strong className="text-[#1C1917]">12:00 PM</strong>
                   </span>
                   <span>
-                    Check-out: <strong className="text-[#1A1715]">12:00 PM</strong>
+                    Check-out: <strong className="text-[#1C1917]">12:00 PM</strong>
                   </span>
                 </div>
-                <p className="text-[10px] text-[#A27520] font-medium">
-                  ⚡ Free Early Check-in available from 05:00 AM onwards (no extra charge, subject to availability).
+                <p className="text-[10px] text-[#8F6B2A] font-medium">
+                  Free Early Check-in available from 05:00 AM onwards (no extra charge, subject to availability).
                 </p>
               </div>
             </div>
           </div>
 
           {/* Pricing Summary */}
-          <div className="p-3.5 sm:p-4 rounded-2xl bg-[#FAF7F2] border border-[#EDE7DE] space-y-2 text-xs print:p-2.5 print:rounded-xl">
-            <div className="text-[10px] font-sans uppercase tracking-widest text-[#A27520] font-bold pb-1 border-b border-[#EDE7DE] flex justify-between items-center">
+          <div className="p-3.5 sm:p-4 rounded-2xl bg-[#FAF8F5] border border-[#E7E2D9] space-y-2 text-xs print:p-2.5 print:rounded-xl">
+            <div className="text-[10px] font-sans uppercase tracking-widest text-[#8F6B2A] font-bold pb-1 border-b border-[#E7E2D9] flex justify-between items-center">
               <span>Detailed Tariff &amp; Price Breakup</span>
               <span>{reservation.rooms || 1} Room(s) &bull; {reservation.nights || 1} {(reservation.nights || 1) === 1 ? "Night" : "Nights"}</span>
             </div>
 
             {/* Base Room Tariff */}
-            <div className="flex justify-between text-[#4A443F] voucher-compact-text">
+            <div className="flex justify-between text-[#57534E] voucher-compact-text">
               <span>Base Room Tariff:</span>
-              <span className="font-medium text-[#1A1715]">{formatCurrencyINR(reservation.baseAmount || 0)}</span>
+              <span className="font-medium text-[#1C1917]">{formatCurrencyINR(reservation.baseAmount || 0)}</span>
             </div>
 
             {/* Promo / Discount Line */}
@@ -418,29 +418,29 @@ function ConfirmationContent() {
 
             {/* Net Taxable Subtotal */}
             {(reservation.discountAmount || 0) > 0 && (
-              <div className="flex justify-between text-[#787069] text-[11px] voucher-compact-text">
+              <div className="flex justify-between text-[#78716C] text-[11px] voucher-compact-text">
                 <span>Net Taxable Room Tariff:</span>
                 <span>{formatCurrencyINR((reservation.baseAmount || 0) - (reservation.discountAmount || 0))}</span>
               </div>
             )}
 
             {/* Taxes */}
-            <div className="flex justify-between text-[#4A443F] voucher-compact-text">
+            <div className="flex justify-between text-[#57534E] voucher-compact-text">
               <span>Taxes (GST 12% SAC 996311):</span>
-              <span className="font-medium text-[#1A1715]">{formatCurrencyINR(reservation.taxAmount || 0)}</span>
+              <span className="font-medium text-[#1C1917]">{formatCurrencyINR(reservation.taxAmount || 0)}</span>
             </div>
 
             {/* Grand Total */}
-            <div className="pt-1.5 hairline-t flex justify-between items-baseline font-bold text-sm text-[#1A1715]">
+            <div className="pt-1.5 hairline-t flex justify-between items-baseline font-bold text-sm text-[#1C1917]">
               <span>Total Amount Payable</span>
-              <span className="font-serif text-base sm:text-lg text-[#A27520]">
+              <span className="font-serif text-base sm:text-lg text-[#8F6B2A]">
                 {formatCurrencyINR(reservation.totalAmount || 0)}
               </span>
             </div>
 
             {/* Payment & Booking Status Badge */}
-            <div className="pt-1.5 border-t border-[#EDE7DE] flex justify-between items-center text-[11px] voucher-compact-text">
-              <span className="text-[#787069]">Payment &amp; Booking Status:</span>
+            <div className="pt-1.5 border-t border-[#E7E2D9] flex justify-between items-center text-[11px] voucher-compact-text">
+              <span className="text-[#78716C]">Payment &amp; Booking Status:</span>
               <div className="text-right">
                 {reservation.status === "CONFIRMED" ? (
                   <div>
@@ -468,7 +468,7 @@ function ConfirmationContent() {
                       ✓ Paid Online (Razorpay)
                     </span>
                     {reservation.paymentId && (
-                      <span className="block font-sans text-[10px] text-[#787069] mt-0.5">
+                      <span className="block font-sans text-[10px] text-[#78716C] mt-0.5">
                         Ref: {reservation.paymentId}
                       </span>
                     )}
@@ -478,7 +478,7 @@ function ConfirmationContent() {
                     <span className="px-2.5 py-0.5 rounded-md bg-amber-50 text-amber-800 font-bold border border-amber-300">
                       ⏳ Confirmation Pending (Pay at Hotel)
                     </span>
-                    <span className="block text-[10px] text-[#787069] mt-0.5">
+                    <span className="block text-[10px] text-[#78716C] mt-0.5">
                       Front desk will call to verify availability &bull; Advance payment may be requested on call
                     </span>
                   </div>
@@ -488,9 +488,9 @@ function ConfirmationContent() {
           </div>
 
           {/* QR Code & Front Desk Footer */}
-          <div className="pt-2.5 hairline-t flex justify-between items-center text-xs text-[#787069] print:pt-2">
+          <div className="pt-2.5 hairline-t flex justify-between items-center text-xs text-[#78716C] print:pt-2">
             <div className="flex items-center space-x-2">
-              <div className="p-1 bg-[#FAF7F2] rounded-lg border border-[#EDE7DE] text-[#1A1715]">
+              <div className="p-1 bg-[#FAF8F5] rounded-lg border border-[#E7E2D9] text-[#1C1917]">
                 <QrCode className="w-7 h-7 print:w-5 print:h-5" />
               </div>
               <span className="text-[11px] voucher-compact-text">
@@ -499,7 +499,7 @@ function ConfirmationContent() {
             </div>
 
             <div className="text-right voucher-compact-text">
-              <span className="block font-medium text-[#1A1715]">Hotel Helpdesk</span>
+              <span className="block font-medium text-[#1C1917]">Hotel Helpdesk</span>
               <span className="font-sans font-semibold text-xs">{HOTEL_INFO.phone}</span>
             </div>
           </div>
@@ -513,10 +513,10 @@ export default function ConfirmationPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center">
+        <div className="min-h-screen bg-[#FAF8F5] flex items-center justify-center">
           <div className="text-center space-y-3">
-            <div className="w-10 h-10 border-2 border-[#B4872F] border-t-transparent rounded-full animate-spin mx-auto" />
-            <p className="text-sm font-medium text-[#787069]">Loading your secure reservation voucher...</p>
+            <div className="w-10 h-10 border-2 border-[#8F6B2A] border-t-transparent rounded-full animate-spin mx-auto" />
+            <p className="text-sm font-medium text-[#78716C]">Loading your secure reservation voucher...</p>
           </div>
         </div>
       }

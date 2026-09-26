@@ -23,7 +23,6 @@ import {
   Users,
   ChevronRight,
   ArrowUpRight,
-  Sparkles,
 } from "lucide-react";
 import { HOTEL_INFO } from "@/data/hotel-info";
 import { ROOMS } from "@/data/rooms";
@@ -48,7 +47,7 @@ const corporateBenefits = [
   {
     icon: MapPin,
     title: "Prime Transit & Commercial Hub",
-    desc: "Located on MD Shah Road, Paltan Bazaar — just 200m (3-minute walk) from Guwahati Railway Station and minutes from commercial hubs.",
+    desc: "Located on MD Shah Road, Paltan Bazaar - just 200m (3-minute walk) from Guwahati Railway Station and minutes from commercial hubs.",
   },
   {
     icon: Wifi,

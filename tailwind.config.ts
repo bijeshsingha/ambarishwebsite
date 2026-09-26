@@ -9,21 +9,29 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Spec 2.1 Color Tokens
-        "ink": "#0C0B0B",
-        "charcoal": "#171414",
-        "warm-cream": "#F5EBDD",
-        "warm-cream-alt": "#ECE1D0",
-        "hotel-gold": "#B4872F",
-        "hotel-gold-light": "#CFA44C",
-        "hotel-gold-dark": "#8F671E",
-        "brand-magenta": "#B62576",
-        "brand-magenta-dark": "#9A1D62",
+        // Warm Heritage Hospitality Color Tokens
+        "ink": "#1C1917",
+        "charcoal": "#292524",
+        "warm-cream": "#FAF8F5",
+        "warm-cream-alt": "#F4EFE6",
+        "hotel-gold": "#8F6B2A",
+        "hotel-gold-light": "#B3863E",
+        "hotel-gold-dark": "#73541E",
+        "brand-magenta": "#8F6B2A",
+        "brand-magenta-dark": "#73541E",
 
         // Semantic surface mapping
-        "canvas": "#F5EBDD",
+        "canvas": "#FAF8F5",
+        "canvas-alt": "#F4EFE6",
         "surface": "#FFFFFF",
-        "surface-dark": "#0C0B0B",
+        "surface-tint": "#FAF5EB",
+        "surface-dark": "#1C1917",
+        "stone-border": "#E7E2D9",
+        "stone-border-light": "#F0ECE4",
+        "bronze": "#8F6B2A",
+        "bronze-dark": "#73541E",
+        "bronze-light": "#B3863E",
+        "ivory": "#FAF8F5",
       },
       fontFamily: {
         serif: ["var(--font-cormorant)", "'Cormorant Garamond'", "'Playfair Display'", "Georgia", "serif"],

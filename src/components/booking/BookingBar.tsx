@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Search, Tag, Users, Calendar, BedDouble, ChevronDown, Baby, Sparkles } from "lucide-react";
+import { Search, Tag, Users, Calendar, BedDouble, ChevronDown, Baby, Clock } from "lucide-react";
 import { getTodayDate, getTomorrowDate } from "@/lib/formatters";
 import { saveStaySession, getStaySession } from "@/lib/session";
 
@@ -80,14 +80,14 @@ export default function BookingBar({
 
   return (
     <div className={`w-full max-w-6xl mx-auto ${className}`}>
-      <div className="bg-[#FFFFFF] border border-[#0C0B0B]/10 rounded-2xl lg:rounded-full p-3 sm:p-3.5 lg:p-2.5 shadow-xl shadow-black/10">
+      <div className="bg-[#FFFFFF] border border-[#E7E2D9] rounded-2xl lg:rounded-xl p-3 sm:p-4 lg:p-2.5 shadow-xl text-[#1C1917]">
         <form onSubmit={handleSearch}>
           {/* Desktop View (>= lg): Single Fluid Strip */}
-          <div className="hidden lg:flex items-center divide-x divide-black/10">
+          <div className="hidden lg:flex items-center divide-x divide-[#E7E2D9]">
             {/* 1. Check-In */}
-            <div className="flex-1 min-w-[120px] px-3.5 py-1.5 flex flex-col justify-center">
-              <label className="flex items-center text-[10px] font-sans font-bold tracking-[0.16em] uppercase text-[#B4872F] mb-0.5">
-                <Calendar className="w-3 h-3 mr-1 text-[#B4872F] shrink-0" />
+            <div className="flex-1 min-w-[125px] px-3.5 py-1.5 flex flex-col justify-center">
+              <label className="flex items-center text-[10px] font-sans font-semibold tracking-[0.16em] uppercase text-[#8F6B2A] mb-0.5">
+                <Calendar className="w-3 h-3 mr-1 text-[#8F6B2A] shrink-0" />
                 Check-In
               </label>
               <input
@@ -103,14 +103,14 @@ export default function BookingBar({
                   }
                 }}
                 required
-                className="w-full bg-transparent text-xs xl:text-sm text-[#0C0B0B] font-semibold focus:outline-none cursor-pointer"
+                className="w-full bg-transparent text-xs xl:text-sm text-[#1C1917] font-semibold focus:outline-none cursor-pointer"
               />
             </div>
 
             {/* 2. Check-Out */}
-            <div className="flex-1 min-w-[120px] px-3.5 py-1.5 flex flex-col justify-center">
-              <label className="flex items-center text-[10px] font-sans font-bold tracking-[0.16em] uppercase text-[#B4872F] mb-0.5">
-                <Calendar className="w-3 h-3 mr-1 text-[#B4872F] shrink-0" />
+            <div className="flex-1 min-w-[125px] px-3.5 py-1.5 flex flex-col justify-center">
+              <label className="flex items-center text-[10px] font-sans font-semibold tracking-[0.16em] uppercase text-[#8F6B2A] mb-0.5">
+                <Calendar className="w-3 h-3 mr-1 text-[#8F6B2A] shrink-0" />
                 Check-Out
               </label>
               <input
@@ -119,109 +119,112 @@ export default function BookingBar({
                 value={checkOut}
                 onChange={(e) => setCheckOut(e.target.value)}
                 required
-                className="w-full bg-transparent text-xs xl:text-sm text-[#0C0B0B] font-semibold focus:outline-none cursor-pointer"
+                className="w-full bg-transparent text-xs xl:text-sm text-[#1C1917] font-semibold focus:outline-none cursor-pointer"
               />
             </div>
 
-            {/* 3. Rooms (1 to 4) */}
+            {/* 3. Rooms */}
             <div className="flex-1 min-w-[95px] px-3 py-1.5 flex flex-col justify-center">
-              <label className="flex items-center text-[10px] font-sans font-bold tracking-[0.16em] uppercase text-[#B4872F] mb-0.5">
-                <BedDouble className="w-3 h-3 mr-1 text-[#B4872F] shrink-0" />
+              <label className="flex items-center text-[10px] font-sans font-semibold tracking-[0.16em] uppercase text-[#8F6B2A] mb-0.5">
+                <BedDouble className="w-3 h-3 mr-1 text-[#8F6B2A] shrink-0" />
                 Rooms
               </label>
               <div className="relative flex items-center">
                 <select
                   value={roomsCount}
                   onChange={(e) => handleRoomsChange(e.target.value)}
-                  className="w-full bg-transparent text-xs xl:text-sm text-[#0C0B0B] font-semibold focus:outline-none cursor-pointer pr-4 appearance-none"
+                  className="w-full bg-transparent text-xs xl:text-sm text-[#1C1917] font-semibold focus:outline-none cursor-pointer pr-4 appearance-none"
                 >
                   <option value="1">1 Room</option>
                   <option value="2">2 Rooms</option>
                   <option value="3">3 Rooms</option>
                   <option value="4">4 Rooms</option>
                 </select>
-                <ChevronDown className="w-3.5 h-3.5 text-[#0C0B0B]/50 absolute right-0 pointer-events-none" />
+                <ChevronDown className="w-3 h-3 text-[#78716C] pointer-events-none absolute right-0" />
               </div>
             </div>
 
-            {/* 4. Adults (1 to 8) */}
-            <div className="flex-1 min-w-[100px] px-3 py-1.5 flex flex-col justify-center">
-              <label className="flex items-center text-[10px] font-sans font-bold tracking-[0.16em] uppercase text-[#B4872F] mb-0.5">
-                <Users className="w-3 h-3 mr-1 text-[#B4872F] shrink-0" />
+            {/* 4. Adults */}
+            <div className="flex-1 min-w-[95px] px-3 py-1.5 flex flex-col justify-center">
+              <label className="flex items-center text-[10px] font-sans font-semibold tracking-[0.16em] uppercase text-[#8F6B2A] mb-0.5">
+                <Users className="w-3 h-3 mr-1 text-[#8F6B2A] shrink-0" />
                 Adults
               </label>
               <div className="relative flex items-center">
                 <select
                   value={adults}
                   onChange={(e) => setAdults(e.target.value)}
-                  className="w-full bg-transparent text-xs xl:text-sm text-[#0C0B0B] font-semibold focus:outline-none cursor-pointer pr-4 appearance-none"
+                  className="w-full bg-transparent text-xs xl:text-sm text-[#1C1917] font-semibold focus:outline-none cursor-pointer pr-4 appearance-none"
                 >
-                  {[1, 2, 3, 4, 5, 6, 7, 8, 10].map((num) => (
-                    <option key={num} value={String(num)}>
-                      {num} {num === 1 ? "Adult" : "Adults"}
+                  {Array.from(
+                    { length: Math.max(1, parseInt(roomsCount, 10) * 3 - Math.max(1, parseInt(roomsCount, 10) * 1) + 1) },
+                    (_, i) => Math.max(1, parseInt(roomsCount, 10) * 1) + i
+                  ).map((count) => (
+                    <option key={count} value={String(count)}>
+                      {count} {count === 1 ? "Adult" : "Adults"}
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="w-3.5 h-3.5 text-[#0C0B0B]/50 absolute right-0 pointer-events-none" />
+                <ChevronDown className="w-3 h-3 text-[#78716C] pointer-events-none absolute right-0" />
               </div>
             </div>
 
             {/* 5. Children */}
-            <div className="flex-1 min-w-[100px] px-3 py-1.5 flex flex-col justify-center">
-              <label className="flex items-center text-[10px] font-sans font-bold tracking-[0.16em] uppercase text-[#B4872F] mb-0.5">
-                <Baby className="w-3 h-3 mr-1 text-[#B4872F] shrink-0" />
-                Children
+            <div className="flex-1 min-w-[95px] px-3 py-1.5 flex flex-col justify-center">
+              <label className="flex items-center text-[10px] font-sans font-semibold tracking-[0.16em] uppercase text-[#8F6B2A] mb-0.5">
+                <Baby className="w-3 h-3 mr-1 text-[#8F6B2A] shrink-0" />
+                Kids (0-12)
               </label>
               <div className="relative flex items-center">
                 <select
                   value={children}
                   onChange={(e) => setChildren(e.target.value)}
-                  className="w-full bg-transparent text-xs xl:text-sm text-[#0C0B0B] font-semibold focus:outline-none cursor-pointer pr-4 appearance-none"
+                  className="w-full bg-transparent text-xs xl:text-sm text-[#1C1917] font-semibold focus:outline-none cursor-pointer pr-4 appearance-none"
                 >
-                  <option value="0">0 Children</option>
-                  <option value="1">1 Child</option>
-                  <option value="2">2 Children</option>
-                  <option value="3">3 Children</option>
-                  <option value="4">4 Children</option>
+                  {[0, 1, 2, 3, 4].map((count) => (
+                    <option key={count} value={String(count)}>
+                      {count} {count === 1 ? "Child" : "Children"}
+                    </option>
+                  ))}
                 </select>
-                <ChevronDown className="w-3.5 h-3.5 text-[#0C0B0B]/50 absolute right-0 pointer-events-none" />
+                <ChevronDown className="w-3 h-3 text-[#78716C] pointer-events-none absolute right-0" />
               </div>
             </div>
 
             {/* 6. Promo Code */}
-            <div className="flex-1 min-w-[110px] px-3 py-1.5 flex flex-col justify-center">
-              <label className="flex items-center text-[10px] font-sans font-bold tracking-[0.16em] uppercase text-[#B4872F] mb-0.5">
-                <Tag className="w-3 h-3 mr-1 text-[#B4872F] shrink-0" />
-                Promo
+            <div className="flex-1 min-w-[120px] px-3.5 py-1.5 flex flex-col justify-center">
+              <label className="flex items-center text-[10px] font-sans font-semibold tracking-[0.16em] uppercase text-[#8F6B2A] mb-0.5">
+                <Tag className="w-3 h-3 mr-1 text-[#8F6B2A] shrink-0" />
+                Promo Code
               </label>
               <input
                 type="text"
                 placeholder="Optional"
                 value={promoCode}
                 onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
-                className="w-full bg-transparent text-xs xl:text-sm text-[#0C0B0B] font-bold uppercase placeholder:font-normal placeholder:text-black/35 focus:outline-none"
+                className="w-full bg-transparent text-xs xl:text-sm text-[#1C1917] font-bold uppercase placeholder:font-normal placeholder:text-[#78716C]/60 focus:outline-none"
               />
             </div>
 
-            {/* 7. Action Button */}
-            <div className="shrink-0 p-1">
+            {/* 7. CTA Search Button */}
+            <div className="pl-3 py-1 flex items-center shrink-0">
               <button
                 type="submit"
-                className="py-3 px-6 rounded-full bg-gradient-to-r from-[#B62576] to-[#92185C] hover:from-[#C72E84] hover:to-[#A71C67] text-white text-xs font-bold uppercase tracking-[0.14em] flex items-center justify-center space-x-2 transition-all duration-200 shadow-lg shadow-[#B62576]/30 hover:scale-[1.02] active:scale-[0.98]"
+                className="btn-heritage-primary py-3 px-5 xl:px-6 rounded-lg text-xs font-semibold tracking-wider flex items-center space-x-2"
               >
                 <Search className="w-3.5 h-3.5 shrink-0" />
-                <span>Check Rates</span>
+                <span className="whitespace-nowrap">Check Rates</span>
               </button>
             </div>
           </div>
 
-          {/* Mobile & Tablet View (< lg): Fluid 2-Row Responsive Card */}
-          <div className="lg:hidden space-y-2.5">
-            {/* Row 1: Check-in & Check-out */}
-            <div className="grid grid-cols-2 gap-2">
-              <div className="bg-[#FAF7F2] p-2.5 rounded-xl border border-[#E6DED3]">
-                <label className="flex items-center text-[9px] font-sans font-bold tracking-wider uppercase text-[#B4872F] mb-0.5">
-                  <Calendar className="w-3 h-3 mr-1 text-[#B4872F]" />
+          {/* Mobile & Tablet View (< lg): Responsive Form Grid */}
+          <div className="flex lg:hidden flex-col space-y-3">
+            {/* Row 1: Check-In & Check-Out */}
+            <div className="grid grid-cols-2 gap-2.5">
+              <div className="bg-[#FAF8F5] p-2.5 rounded-lg border border-[#E7E2D9] flex flex-col">
+                <label className="text-[10px] uppercase font-semibold text-[#8F6B2A] mb-0.5 flex items-center">
+                  <Calendar className="w-3 h-3 mr-1 text-[#8F6B2A]" />
                   Check-In
                 </label>
                 <input
@@ -231,19 +234,18 @@ export default function BookingBar({
                   onChange={(e) => {
                     setCheckIn(e.target.value);
                     if (new Date(e.target.value) >= new Date(checkOut)) {
-                      const next = new Date(e.target.value);
-                      next.setDate(next.getDate() + 1);
-                      setCheckOut(next.toISOString().split("T")[0]);
+                      const nextDay = new Date(e.target.value);
+                      nextDay.setDate(nextDay.getDate() + 1);
+                      setCheckOut(nextDay.toISOString().split("T")[0]);
                     }
                   }}
-                  required
-                  className="w-full bg-transparent text-xs text-[#0C0B0B] font-semibold focus:outline-none cursor-pointer"
+                  className="bg-transparent text-xs text-[#1C1917] font-semibold focus:outline-none"
                 />
               </div>
 
-              <div className="bg-[#FAF7F2] p-2.5 rounded-xl border border-[#E6DED3]">
-                <label className="flex items-center text-[9px] font-sans font-bold tracking-wider uppercase text-[#B4872F] mb-0.5">
-                  <Calendar className="w-3 h-3 mr-1 text-[#B4872F]" />
+              <div className="bg-[#FAF8F5] p-2.5 rounded-lg border border-[#E7E2D9] flex flex-col">
+                <label className="text-[10px] uppercase font-semibold text-[#8F6B2A] mb-0.5 flex items-center">
+                  <Calendar className="w-3 h-3 mr-1 text-[#8F6B2A]" />
                   Check-Out
                 </label>
                 <input
@@ -251,58 +253,50 @@ export default function BookingBar({
                   min={checkIn || getTodayDate()}
                   value={checkOut}
                   onChange={(e) => setCheckOut(e.target.value)}
-                  required
-                  className="w-full bg-transparent text-xs text-[#0C0B0B] font-semibold focus:outline-none cursor-pointer"
+                  className="bg-transparent text-xs text-[#1C1917] font-semibold focus:outline-none"
                 />
               </div>
             </div>
 
-            {/* Row 2: Occupancy & Promo (2 Clean Columns) */}
-            <div className="grid grid-cols-2 gap-2">
-              <div className="bg-[#FAF7F2] p-2.5 rounded-xl border border-[#E6DED3] flex items-center justify-between">
-                <div className="flex-1">
-                  <label className="flex items-center text-[9px] font-sans font-bold tracking-wider uppercase text-[#B4872F] mb-0.5">
-                    <Users className="w-3 h-3 mr-1 text-[#B4872F]" />
-                    Rooms &amp; Adults
-                  </label>
-                  <div className="flex items-center gap-1.5">
-                    <select
-                      value={roomsCount}
-                      onChange={(e) => handleRoomsChange(e.target.value)}
-                      className="bg-transparent text-xs text-[#0C0B0B] font-semibold focus:outline-none cursor-pointer"
-                    >
-                      <option value="1">1 Room</option>
-                      <option value="2">2 Rooms</option>
-                      <option value="3">3 Rooms</option>
-                      <option value="4">4 Rooms</option>
-                    </select>
-                    <span className="text-[#B4872F] font-bold">•</span>
-                    <select
-                      value={adults}
-                      onChange={(e) => setAdults(e.target.value)}
-                      className="bg-transparent text-xs text-[#0C0B0B] font-semibold focus:outline-none cursor-pointer"
-                    >
-                      {[1, 2, 3, 4, 5, 6, 8].map((num) => (
-                        <option key={num} value={String(num)}>
-                          {num} {num === 1 ? "Adult" : "Adults"}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
+            {/* Row 2: Occupancy & Promo */}
+            <div className="grid grid-cols-3 gap-2">
+              <div className="bg-[#FAF8F5] p-2 rounded-lg border border-[#E7E2D9] flex flex-col">
+                <label className="text-[9px] uppercase font-semibold text-[#8F6B2A] mb-0.5">Rooms</label>
+                <select
+                  value={roomsCount}
+                  onChange={(e) => handleRoomsChange(e.target.value)}
+                  className="bg-transparent text-xs text-[#1C1917] font-semibold focus:outline-none cursor-pointer"
+                >
+                  <option value="1">1 Room</option>
+                  <option value="2">2 Rooms</option>
+                  <option value="3">3 Rooms</option>
+                  <option value="4">4 Rooms</option>
+                </select>
               </div>
 
-              <div className="bg-[#FAF7F2] p-2.5 rounded-xl border border-[#E6DED3]">
-                <label className="flex items-center text-[9px] font-sans font-bold tracking-wider uppercase text-[#B4872F] mb-0.5">
-                  <Tag className="w-3 h-3 mr-1 text-[#B4872F]" />
-                  Promo Code
-                </label>
+              <div className="bg-[#FAF8F5] p-2 rounded-lg border border-[#E7E2D9] flex flex-col">
+                <label className="text-[9px] uppercase font-semibold text-[#8F6B2A] mb-0.5">Adults</label>
+                <select
+                  value={adults}
+                  onChange={(e) => setAdults(e.target.value)}
+                  className="bg-transparent text-xs text-[#1C1917] font-semibold focus:outline-none cursor-pointer"
+                >
+                  {[1, 2, 3, 4, 6, 8].map((c) => (
+                    <option key={c} value={String(c)}>
+                      {c} {c === 1 ? "Adult" : "Adults"}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="bg-[#FAF8F5] p-2 rounded-lg border border-[#E7E2D9] flex flex-col">
+                <label className="text-[9px] uppercase font-semibold text-[#8F6B2A] mb-0.5">Promo</label>
                 <input
                   type="text"
-                  placeholder="e.g. DIRECT10"
+                  placeholder="Optional"
                   value={promoCode}
                   onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
-                  className="w-full bg-transparent text-xs text-[#0C0B0B] font-bold uppercase placeholder:font-normal placeholder:text-black/35 focus:outline-none"
+                  className="w-full bg-transparent text-xs text-[#1C1917] font-bold uppercase placeholder:font-normal placeholder:text-[#78716C]/60 focus:outline-none"
                 />
               </div>
             </div>
@@ -310,7 +304,7 @@ export default function BookingBar({
             {/* Row 3: Action Button */}
             <button
               type="submit"
-              className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#B62576] to-[#92185C] hover:from-[#C72E84] hover:to-[#A71C67] text-white text-xs font-bold uppercase tracking-[0.14em] flex items-center justify-center space-x-2 shadow-lg shadow-[#B62576]/30 active:scale-[0.98] transition-all"
+              className="w-full py-3 px-4 rounded-lg btn-heritage-primary text-xs font-semibold tracking-wider flex items-center justify-center space-x-2"
             >
               <Search className="w-4 h-4 shrink-0" />
               <span>Check Rates &amp; Availability</span>
@@ -319,19 +313,21 @@ export default function BookingBar({
         </form>
       </div>
 
-      {/* Direct Booking Early Check-in Offer Strip */}
-      <div className="mt-2.5 flex items-center justify-center gap-2 text-[11px] sm:text-xs text-[#F5EBDD] flex-wrap font-medium text-center">
-        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#B4872F]/25 text-[#E6C67E] border border-[#B4872F]/35 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider">
-          <Sparkles className="w-3 h-3 text-[#E6C67E]" />
-          Special Direct Offer
-        </span>
-        <span className="text-[#F5EBDD]/90">
-          Free Early Check-in from <strong className="text-[#E6C67E] font-semibold">5:00 AM onwards</strong> with no extra charge!
-        </span>
-        <span className="text-white/30 hidden sm:inline">•</span>
-        <span className="text-[#F5EBDD]/70 hidden sm:inline">
-          Check-in &amp; Check-out: <strong>12:00 Noon</strong>
-        </span>
+      {/* Direct Booking Early Check-in Offer Strip (No AI sparkles) */}
+      <div className="mt-3 flex items-center justify-center">
+        <div className="inline-flex items-center justify-center gap-2.5 px-4 py-2 rounded-full bg-[#FAF8F5]/95 backdrop-blur-md border border-[#E7E2D9] shadow-sm text-xs text-[#1C1917] flex-wrap font-medium text-center">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FAF5EB] text-[#8F6B2A] border border-[#DFD5C0] text-[10px] font-semibold uppercase tracking-wider">
+            <Clock className="w-3 h-3 text-[#8F6B2A]" />
+            Special Direct Offer
+          </span>
+          <span className="text-[#1C1917]">
+            Free Early Check-in from <strong className="text-[#8F6B2A] font-semibold">5:00 AM onwards</strong> with zero extra charge!
+          </span>
+          <span className="text-[#A8A29E] hidden sm:inline">•</span>
+          <span className="text-[#57534E] hidden sm:inline">
+            Standard Check-in &amp; Check-out: <strong>12:00 Noon</strong>
+          </span>
+        </div>
       </div>
     </div>
   );

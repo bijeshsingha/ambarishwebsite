@@ -32,17 +32,17 @@ export default function GalleryPage() {
   };
 
   return (
-    <div className="bg-[#FAF7F2] text-[#1A1715] min-h-screen pb-20">
+    <div className="bg-[#FAF8F5] text-[#1C1917] min-h-screen pb-20">
       {/* Header */}
-      <section className="py-20 sm:py-28 bg-[#F5EFEB] hairline-b text-center">
+      <section className="py-20 sm:py-28 bg-[#F4EFE6] border-b border-[#E7E2D9] text-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
-          <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#A27520] block">
+          <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#8F6B2A] block">
             Visual Archive
           </span>
-          <h1 className="font-serif text-4xl sm:text-6xl font-medium text-[#1A1715]">
+          <h1 className="font-serif text-4xl sm:text-6xl font-medium text-[#1C1917]">
             Authentic Photo Gallery
           </h1>
-          <p className="text-sm sm:text-base text-[#4A443F] max-w-xl mx-auto font-light leading-relaxed">
+          <p className="text-sm sm:text-base text-[#44403C] max-w-xl mx-auto font-light leading-relaxed">
             Real photography of guest rooms, suites, restaurant, reception, and event venues at Hotel Ambarish Grand Residency.
           </p>
         </div>
@@ -58,8 +58,8 @@ export default function GalleryPage() {
               onClick={() => setActiveCategory(c.id)}
               className={`px-4 py-2 rounded-full text-xs transition-all ${
                 activeCategory === c.id
-                  ? "bg-[#1A1715] text-white font-semibold shadow-md"
-                  : "bg-[#FFFFFF] text-[#4A443F] hover:text-[#1A1715] border border-[#E6DED3]"
+                  ? "bg-[#1C1917] text-[#FAF8F5] font-semibold shadow-md"
+                  : "bg-[#FFFFFF] text-[#44403C] hover:text-[#1C1917] border border-[#E7E2D9]"
               }`}
             >
               {c.label}
@@ -73,7 +73,7 @@ export default function GalleryPage() {
             <div
               key={img.id}
               onClick={() => openLightbox(idx)}
-              className="group relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer bg-[#FFFFFF] border border-[#E6DED3] shadow-sm hover:shadow-xl transition-all duration-300"
+              className="group relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer bg-[#FFFFFF] border border-[#E7E2D9] shadow-sm hover:shadow-xl transition-all duration-300"
             >
               <Image
                 src={img.src}
