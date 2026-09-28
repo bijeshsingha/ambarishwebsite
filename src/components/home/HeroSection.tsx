@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import { MapPin } from "lucide-react";
 import BookingBar from "@/components/booking/BookingBar";
 
 export default function HeroSection() {
@@ -58,26 +59,34 @@ export default function HeroSection() {
           </motion.div>
         </AnimatePresence>
 
-        {/* Warm Scrim */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#171513]/90 via-[#171513]/40 to-[#171513]/30" />
+        {/* High-Contrast Multi-Layer Scrim for Flawless Readability Over Bright Photos */}
+        {/* Base dark tint to prevent ceiling/wall glare */}
+        <div className="absolute inset-0 bg-[#0E0C0A]/50" />
+
+        {/* Directional gradient: Deep header backdrop, subtle center, solid anchor for booking bar */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0E0C0A]/85 via-[#0E0C0A]/40 to-[#0E0C0A]/90" />
+
+        {/* Soft radial vignette concentrated behind center text */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(14,12,10,0.65)_0%,_rgba(14,12,10,0.3)_60%,_transparent_100%)] pointer-events-none" />
       </div>
 
-      {/* Top Editorial Slide Counter */}
-      <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-5 flex justify-between items-center text-xs tracking-widest uppercase font-medium">
-        <span className="text-[#B3863E] font-medium hidden sm:inline-block">
-          Paltan Bazaar • 250m to Guwahati Railway Station
-        </span>
-        <div className="flex items-center space-x-3 bg-[#1C1917]/70 backdrop-blur-md px-3.5 py-1.5 rounded-lg border border-white/15 text-[11px] text-[#FAF8F5]/85">
-          <span className="text-[#B3863E] font-semibold">{String(imgIndex + 1).padStart(2, "0")}</span>
-          <span className="text-white/30">/</span>
-          <span>{String(heroSlides.length).padStart(2, "0")}</span>
+      {/* Top Editorial Slide Counter & Location */}
+      <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-5 flex justify-between items-center text-xs tracking-wider uppercase">
+        <div className="hidden sm:inline-flex items-center space-x-2 bg-[#1C1917]/85 backdrop-blur-md px-3.5 py-1.5 rounded-lg border border-[#C59A45]/30 text-[11px] text-[#E5C378] font-medium tracking-wider shadow-sm">
+          <MapPin className="w-3.5 h-3.5 text-[#C59A45] shrink-0" />
+          <span>Paltan Bazaar • 250m to Guwahati Railway Station</span>
+        </div>
+        <div className="flex items-center space-x-3 bg-[#1C1917]/85 backdrop-blur-md px-3.5 py-1.5 rounded-lg border border-white/20 text-[11px] text-[#FAF8F5] shadow-sm ml-auto sm:ml-0">
+          <span className="text-[#E5C378] font-semibold">{String(imgIndex + 1).padStart(2, "0")}</span>
+          <span className="text-white/40">/</span>
+          <span className="text-[#FAF8F5]/80">{String(heroSlides.length).padStart(2, "0")}</span>
           <div className="flex space-x-1 pl-1.5">
             {heroSlides.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setImgIndex(i)}
-                className={`h-1 rounded-full transition-all duration-300 ${
-                  i === imgIndex ? "bg-[#B3863E] w-4" : "bg-white/30 hover:bg-white/60 w-1.5"
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  i === imgIndex ? "bg-[#E5C378] w-5" : "bg-white/40 hover:bg-white/70 w-1.5"
                 }`}
                 aria-label={`Slide ${i + 1}`}
               />
@@ -87,30 +96,34 @@ export default function HeroSection() {
       </div>
 
       {/* Center Zone: Headline */}
-      <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-2 flex flex-col justify-center text-center items-center">
+      <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-3 sm:py-5 flex flex-col justify-center text-center items-center">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-3xl space-y-2.5 sm:space-y-3"
+          className="max-w-3xl space-y-3 sm:space-y-3.5"
         >
-          <motion.p
+          {/* Location Badge */}
+          <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-[11px] sm:text-xs uppercase tracking-[0.24em] text-[#B3863E] font-semibold"
+            className="inline-flex items-center space-x-2 bg-[#1C1917]/80 backdrop-blur-md px-4 py-1.5 rounded-full border border-[#C59A45]/35 shadow-sm"
           >
-            Paltan Bazaar • Guwahati, Assam
-          </motion.p>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#E5C378]" />
+            <span className="text-[11px] sm:text-xs uppercase tracking-[0.22em] text-[#E5C378] font-semibold">
+              Paltan Bazaar • Guwahati, Assam
+            </span>
+          </motion.div>
 
           <motion.h1
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="font-serif text-3xl sm:text-5xl lg:text-6xl font-medium text-[#FAF8F5] leading-[1.1] tracking-tight"
+            className="font-serif text-3xl sm:text-5xl lg:text-6xl font-medium text-[#FAF8F5] leading-[1.12] tracking-tight drop-shadow-[0_2px_18px_rgba(0,0,0,0.75)]"
           >
             Hotel Ambarish Grand Residency
-            <span className="block text-xl sm:text-2xl lg:text-3xl text-[#B3863E] font-serif italic mt-1.5 font-normal tracking-wide">
+            <span className="block text-xl sm:text-2xl lg:text-3xl text-[#E5C378] font-serif italic mt-2 font-normal tracking-wide drop-shadow-[0_2px_14px_rgba(0,0,0,0.75)]">
               by Divine View
             </span>
           </motion.h1>
@@ -119,7 +132,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-[#FAF8F5]/85 text-xs sm:text-sm md:text-base font-light max-w-xl mx-auto leading-relaxed pt-1"
+            className="text-[#FAF8F5] text-xs sm:text-sm md:text-base font-normal max-w-2xl mx-auto leading-relaxed pt-1.5 drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)]"
           >
             A comfortable Guwahati stay, made simple. 250m from Guwahati Railway Station with clean AC rooms, in-house multi-cuisine dining, and 24/7 front desk hospitality.
           </motion.p>
