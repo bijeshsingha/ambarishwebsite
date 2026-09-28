@@ -286,13 +286,15 @@ function BookingContent() {
 
     let discountAmount = 0;
     if (appliedPromo && combinedSubtotal > 0) {
-      if (appliedPromo.type === "PERCENTAGE") {
-        discountAmount = (combinedSubtotal * appliedPromo.value) / 100;
+      const pType = appliedPromo.discountType || appliedPromo.type;
+      const pVal = appliedPromo.discountValue ?? appliedPromo.value ?? 0;
+      if (pType === "PERCENTAGE") {
+        discountAmount = (combinedSubtotal * pVal) / 100;
         if (appliedPromo.maxDiscount) {
           discountAmount = Math.min(discountAmount, appliedPromo.maxDiscount);
         }
-      } else if (appliedPromo.type === "FLAT") {
-        discountAmount = Math.min(combinedSubtotal, appliedPromo.value);
+      } else if (pType === "FLAT") {
+        discountAmount = Math.min(combinedSubtotal, pVal);
       }
     }
 

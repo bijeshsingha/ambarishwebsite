@@ -16,6 +16,7 @@ export interface RoomCategory {
   tagline: string;
   shortDescription: string;
   fullDescription: string;
+  description?: string;
   coverImage: string;
   images: string[];
   bedType: string;

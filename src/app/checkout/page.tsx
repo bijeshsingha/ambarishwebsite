@@ -163,13 +163,15 @@ function CheckoutContent() {
 
   let discountAmount = 0;
   if (appliedPromo && combinedGross > 0) {
-    if (appliedPromo.type === "PERCENTAGE") {
-      discountAmount = (combinedGross * appliedPromo.value) / 100;
+    const pType = appliedPromo.discountType || appliedPromo.type;
+    const pVal = appliedPromo.discountValue ?? appliedPromo.value ?? 0;
+    if (pType === "PERCENTAGE") {
+      discountAmount = (combinedGross * pVal) / 100;
       if (appliedPromo.maxDiscount) {
         discountAmount = Math.min(discountAmount, appliedPromo.maxDiscount);
       }
-    } else if (appliedPromo.type === "FLAT") {
-      discountAmount = Math.min(combinedGross, appliedPromo.value);
+    } else if (pType === "FLAT") {
+      discountAmount = Math.min(combinedGross, pVal);
     }
   }
 

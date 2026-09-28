@@ -96,7 +96,7 @@ export default function RoomCard({ room, featured = false }: RoomCardProps) {
             </div>
 
             <p className="text-xs sm:text-sm text-[#44403C] font-normal leading-relaxed">
-              {room.description}
+              {room.shortDescription || room.description}
             </p>
 
             {/* Room Specs Bar */}
