@@ -262,6 +262,23 @@ img {
 /* =============================================
    3D Heritage Typography & Shimmer Effects
    ============================================= */
+.text-chiseled-gold {
+  background: linear-gradient(
+    180deg,
+    #FFFFFF 0%,
+    #FFFDF7 25%,
+    #F6E5BD 55%,
+    #E5C378 80%,
+    #B3863E 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.95))
+          drop-shadow(0 6px 20px rgba(0, 0, 0, 0.75))
+          drop-shadow(0 0 35px rgba(212, 175, 55, 0.22));
+}
+
 .text-3d-gold {
   text-shadow:
     0 1px 0 #F5E6C4,
