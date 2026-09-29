@@ -96,6 +96,7 @@ export async function POST(request: Request) {
     // Validate rooms & calculate authoritative pricing on server (SEC 02)
     let totalBasePaise = 0;
     let totalRoomsCount = 0;
+    let totalCpRooms = 0;
     const validatedItems: Array<{
       roomTypeId: string;
       ratePlanCode: string;
@@ -118,7 +119,12 @@ export async function POST(request: Request) {
       const ratePlan =
         roomCat.ratePlans.find((rp) => rp.code === itm.ratePlanCode) || roomCat.ratePlans[0];
 
-      const unitPricePaise = Math.round(ratePlan.pricePerNight * 100);
+      if (ratePlan.code === "CP") {
+        totalCpRooms += quantity;
+      }
+
+      // Base room tariff
+      const unitPricePaise = Math.round(roomCat.basePrice * 100);
       const itemSubtotalPaise = unitPricePaise * quantity * stayNights;
       totalBasePaise += itemSubtotalPaise;
 
@@ -127,9 +133,28 @@ export async function POST(request: Request) {
         ratePlanCode: ratePlan.code,
         quantity,
         unitPricePaise,
-        taxRateBps: 1200, // standard baseline SAC 996311
+        taxRateBps: 500, // standard baseline SAC 996311 (5% GST)
       });
     }
+
+    // Dynamic breakfast calculation (₹150 per person per night for guests in CP rooms)
+    const numAdults = Math.max(1, parseInt(occupancy?.adults || 2, 10));
+    let breakfastGuestsCount = 0;
+    if (totalCpRooms > 0 && totalRoomsCount > 0) {
+      if (totalCpRooms === totalRoomsCount) {
+        breakfastGuestsCount = numAdults;
+      } else {
+        breakfastGuestsCount = Math.min(numAdults, totalCpRooms * 2);
+      }
+    }
+    const breakfastPaise = breakfastGuestsCount * 150 * 100 * stayNights;
+
+    // Extra bed charge for adults exceeding standard capacity of 2 per room
+    const baseIncludedAdults = totalRoomsCount * 2;
+    const extraPaxCount = Math.max(0, numAdults - baseIncludedAdults);
+    const extraPaxPaise = extraPaxCount * 500 * 100 * stayNights;
+
+    totalBasePaise += (breakfastPaise + extraPaxPaise);
 
     // Authoritative Promo Discount Calculation
     let discountPaise = 0;
@@ -154,9 +179,9 @@ export async function POST(request: Request) {
     const netBasePaise = Math.max(0, totalBasePaise - discountPaise);
 
     // SAC 996311 GST Engine:
-    // Room Tariff <= ₹7,500 per room/night: 12% (or 5% if basic), > ₹7,500: 18%
+    // Room Tariff <= ₹7,500 per room/night: 5% GST, > ₹7,500: 18%
     const effectiveDailyRateRupees = netBasePaise / 100 / Math.max(1, totalRoomsCount * stayNights);
-    const taxRateBps = effectiveDailyRateRupees > 7500 ? 1800 : 1200; // 18% vs 12%
+    const taxRateBps = effectiveDailyRateRupees > 7500 ? 1800 : 500; // 18% vs 5%
     const taxPaise = Math.round((netBasePaise * taxRateBps) / 10000);
     const totalPaise = netBasePaise + taxPaise;
 

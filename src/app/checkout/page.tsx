@@ -150,16 +150,55 @@ function CheckoutContent() {
     }
   }, [urlPromo]);
 
-  // Calculate pricing breakdown
+  // Room capacity validation
+  const totalMaxCapacity = useMemo(() => {
+    return bookedRoomsList.reduce((acc, curr) => {
+      const room = ROOMS.find((r) => r.slug === curr.roomSlug) || ROOMS[0];
+      return acc + (room.capacity.maxGuests * curr.quantity);
+    }, 0);
+  }, [bookedRoomsList]);
+
+  const minRoomsNeeded = useMemo(() => {
+    const shortfall = Math.max(0, adults - totalMaxCapacity);
+    const additional = Math.ceil(shortfall / 3);
+    return totalRoomsCount > 0 ? totalRoomsCount + additional : Math.ceil(adults / 3);
+  }, [adults, totalMaxCapacity, totalRoomsCount]);
+
+  const isCapacityExceeded = totalRoomsCount > 0 && adults > totalMaxCapacity;
+
+  // Base Room Tariff (Accommodation)
   const grossRoomsBase = useMemo(() => {
-    return bookedRoomsList.reduce((acc, curr) => acc + curr.pricePerNight * curr.quantity * nights, 0);
+    return bookedRoomsList.reduce((acc, curr) => {
+      const room = ROOMS.find((r) => r.slug === curr.roomSlug) || ROOMS[0];
+      return acc + room.basePrice * curr.quantity * nights;
+    }, 0);
   }, [bookedRoomsList, nights]);
 
+  // Dynamic Breakfast calculation: ₹150 per person per night for guests in CP rooms
+  const cpRoomsCount = useMemo(() => {
+    return bookedRoomsList
+      .filter((i) => i.ratePlanCode === "CP")
+      .reduce((acc, i) => acc + i.quantity, 0);
+  }, [bookedRoomsList]);
+
+  const breakfastGuestsCount = useMemo(() => {
+    if (cpRoomsCount === 0 || totalRoomsCount === 0) return 0;
+    if (cpRoomsCount === totalRoomsCount) {
+      return adults;
+    }
+    return Math.min(adults, cpRoomsCount * 2);
+  }, [cpRoomsCount, totalRoomsCount, adults]);
+
+  const totalBreakfastCost = useMemo(() => {
+    return breakfastGuestsCount * 150 * nights;
+  }, [breakfastGuestsCount, nights]);
+
+  // Extra Guest Bed (Mattress) for adults exceeding 2 per room
   const baseIncludedAdults = totalRoomsCount * 2;
   const extraPaxCount = Math.max(0, adults - baseIncludedAdults);
   const extraPaxCharge = extraPaxCount * 500 * nights;
 
-  const combinedGross = grossRoomsBase + extraPaxCharge;
+  const combinedGross = grossRoomsBase + totalBreakfastCost + extraPaxCharge;
 
   let discountAmount = 0;
   if (appliedPromo && combinedGross > 0) {
@@ -176,7 +215,7 @@ function CheckoutContent() {
   }
 
   const netBaseAmount = Math.max(0, combinedGross - discountAmount);
-  const gstRate = 0.12;
+  const gstRate = HOTEL_INFO.gstRate || 0.05;
   const taxAmount = Math.round(netBaseAmount * gstRate);
   const totalAmount = netBaseAmount + taxAmount;
 
@@ -233,6 +272,10 @@ function CheckoutContent() {
       setErrorMsg("Please accept the booking and cancellation policy to proceed.");
       return;
     }
+    if (isCapacityExceeded) {
+      setErrorMsg(`Selected ${totalRoomsCount} room(s) cannot accommodate ${adults} adults. Please adjust your room selection.`);
+      return;
+    }
     if (!guestName.trim() || !guestEmail.trim() || !guestPhone.trim()) {
       setErrorMsg("Please enter guest name, valid email, and contact phone number.");
       return;
@@ -269,6 +312,7 @@ function CheckoutContent() {
           checkOut,
           occupancy: { adults, children, rooms: totalRoomsCount },
           items: checkoutItems,
+          breakfastGuests: breakfastGuestsCount,
           promoCode: appliedPromo?.code,
           isB2b: isB2bBooking,
           corporateDetails: isB2bBooking
@@ -488,6 +532,29 @@ function CheckoutContent() {
         <form onSubmit={handleBookingSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column: Guest Details & Payment (7 Cols) */}
           <div className="lg:col-span-7 space-y-6">
+            {/* Capacity Warning Alert */}
+            {isCapacityExceeded && (
+              <div className="p-4 sm:p-5 rounded-2xl bg-amber-50 border-2 border-amber-300 text-amber-950 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-fade-in">
+                <div className="flex items-start gap-3">
+                  <span className="text-xl shrink-0 mt-0.5">⚠️</span>
+                  <div>
+                    <h3 className="font-serif text-base font-semibold text-amber-900">
+                      Occupancy Exceeds Room Capacity
+                    </h3>
+                    <p className="text-xs text-amber-800 leading-relaxed mt-0.5">
+                      You have selected <strong>{totalRoomsCount} Room(s)</strong> for <strong>{adults} Adults</strong>. The maximum allowable capacity is <strong>{totalMaxCapacity} Guests</strong> (max 3 pax per room, 4 for Suite). Please select at least <strong>{minRoomsNeeded} room(s)</strong> to accommodate all guests comfortably.
+                    </p>
+                  </div>
+                </div>
+                <Link
+                  href={`/booking?checkIn=${checkIn}&checkOut=${checkOut}&adults=${adults}&children=${children}`}
+                  className="px-4 py-2 rounded-lg bg-[#8F6B2A] hover:bg-[#73541E] text-white font-semibold text-xs transition-colors shrink-0 text-center"
+                >
+                  Adjust Rooms &rarr;
+                </Link>
+              </div>
+            )}
+
             {errorMsg && (
               <div className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 flex items-center space-x-2 text-xs">
                 <AlertCircle className="w-4 h-4 shrink-0" />
@@ -755,10 +822,16 @@ function CheckoutContent() {
               <div className="space-y-2 pt-1">
                 <button
                   type="submit"
-                  disabled={isProcessing}
-                  className="btn-heritage-primary w-full py-4 text-xs font-semibold tracking-wider rounded-lg shadow-md flex items-center justify-center space-x-2 disabled:opacity-60"
+                  disabled={isProcessing || isCapacityExceeded}
+                  className={`w-full py-4 text-xs font-semibold tracking-wider rounded-lg shadow-md flex items-center justify-center space-x-2 transition-all ${
+                    isCapacityExceeded
+                      ? "bg-amber-600 text-white cursor-not-allowed opacity-90 shadow-none"
+                      : "btn-heritage-primary disabled:opacity-60"
+                  }`}
                 >
-                  {isProcessing ? (
+                  {isCapacityExceeded ? (
+                    <span>⚠️ Occupancy Exceeds Capacity — Please Adjust Rooms Above</span>
+                  ) : isProcessing ? (
                     <span>
                       {paymentMethod === "ONLINE"
                         ? "Connecting to Razorpay..."
@@ -938,6 +1011,15 @@ function CheckoutContent() {
                   </div>
                 )}
 
+                {totalBreakfastCost > 0 && (
+                  <div className="flex justify-between text-emerald-800 font-semibold">
+                    <span>
+                      🍳 Morning Breakfast ({breakfastGuestsCount} Guests × ₹150 × {nights}N):
+                    </span>
+                    <span>+{formatCurrencyINR(totalBreakfastCost)}</span>
+                  </div>
+                )}
+
                 <div className="flex justify-between text-emerald-800 text-[11px] font-medium">
                   <span>👶 Children (Existing Bedding):</span>
                   <span className="font-bold">FREE (₹0)</span>
@@ -963,7 +1045,7 @@ function CheckoutContent() {
                 </div>
 
                 <div className="flex justify-between text-[#78716C]">
-                  <span>GST (12%):</span>
+                  <span>GST ({Math.round(gstRate * 100)}%):</span>
                   <span>+{formatCurrencyINR(taxAmount)}</span>
                 </div>
 

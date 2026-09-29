@@ -245,10 +245,16 @@ function BookingContent() {
     });
   };
 
-  // Calculate live multi-room cart totals with Extra Pax
+  // Calculate live multi-room cart totals with Dynamic Breakfast & Capacity Verification
   const cartSummary = useMemo(() => {
-    let subtotal = 0;
+    const parsedAdults = parseInt(adults, 10) || 2;
+
+    let baseRoomsCost = 0;
     let totalRoomsCount = 0;
+    let totalMaxCapacity = 0;
+    let totalStandardCapacity = 0;
+    let totalCpRoomsCount = 0;
+
     const items: {
       room: RoomCategory;
       quantity: number;
@@ -261,27 +267,47 @@ function BookingContent() {
     ROOMS.forEach((r) => {
       const sel = roomSelections[r.slug];
       if (sel && sel.quantity > 0) {
-        const plan = r.ratePlans.find((p) => p.code === sel.planCode) || r.ratePlans[0];
-        const cost = plan.pricePerNight * sel.quantity * nights;
-        subtotal += cost;
         totalRoomsCount += sel.quantity;
+        totalMaxCapacity += sel.quantity * r.capacity.maxGuests;
+        totalStandardCapacity += sel.quantity * r.capacity.adults;
+        if (sel.planCode === "CP") {
+          totalCpRoomsCount += sel.quantity;
+        }
+
+        const cost = r.basePrice * sel.quantity * nights;
+        baseRoomsCost += cost;
+
         items.push({
           room: r,
           quantity: sel.quantity,
           bedType: sel.bedType,
           planCode: sel.planCode,
-          planPrice: plan.pricePerNight,
+          planPrice: r.basePrice,
           roomSubtotal: cost,
         });
       }
     });
 
-    const parsedAdults = parseInt(adults, 10) || 2;
+    // Dynamic Breakfast calculation:
+    // ₹150 per person per night for guests covered under CP plan
+    let breakfastGuestsCount = 0;
+    if (totalCpRoomsCount > 0 && totalRoomsCount > 0) {
+      if (totalCpRoomsCount === totalRoomsCount) {
+        breakfastGuestsCount = parsedAdults;
+      } else {
+        breakfastGuestsCount = Math.min(parsedAdults, totalCpRoomsCount * 2);
+      }
+    }
+    const breakfastCostPerNight = breakfastGuestsCount * 150;
+    const totalBreakfastCost = breakfastCostPerNight * nights;
+
+    // Extra bed calculation (for adults exceeding standard capacity of 2 per room)
     const baseIncludedAdults = totalRoomsCount * 2;
     const extraPaxCount = Math.max(0, parsedAdults - baseIncludedAdults);
     const extraPaxCostPerNight = extraPaxCount * 500;
     const totalExtraPaxCost = extraPaxCostPerNight * nights;
 
+    const subtotal = baseRoomsCost + totalBreakfastCost;
     const combinedSubtotal = subtotal + totalExtraPaxCost;
 
     let discountAmount = 0;
@@ -299,13 +325,32 @@ function BookingContent() {
     }
 
     const netTaxable = Math.max(0, combinedSubtotal - discountAmount);
-    const gstRate = 0.12;
+    const gstRate = HOTEL_INFO.gstRate || 0.05;
     const gstAmount = Math.round(netTaxable * gstRate);
     const grandTotal = netTaxable + gstAmount;
+
+    // Capacity & Room requirement validation:
+    // Standard rooms fit up to 3 pax, Suite fits up to 4 pax.
+    // 2 rooms accommodate up to 6 guests (e.g. 5 adults need only 2 rooms).
+    const isCapacityExceeded = totalRoomsCount > 0 && parsedAdults > totalMaxCapacity;
+    const shortfall = Math.max(0, parsedAdults - totalMaxCapacity);
+    const additionalRoomsNeeded = Math.ceil(shortfall / 3);
+    const minRoomsNeeded = totalRoomsCount > 0
+      ? totalRoomsCount + additionalRoomsNeeded
+      : Math.ceil(parsedAdults / 3);
+    const isNeedingMoreRooms = totalRoomsCount < minRoomsNeeded;
 
     return {
       items,
       totalRoomsCount,
+      totalMaxCapacity,
+      totalStandardCapacity,
+      minRoomsNeeded,
+      isCapacityExceeded,
+      isNeedingMoreRooms,
+      baseRoomsCost,
+      breakfastGuestsCount,
+      totalBreakfastCost,
       subtotal,
       extraPaxCount,
       totalExtraPaxCost,
@@ -317,7 +362,7 @@ function BookingContent() {
 
   // Proceed to checkout with complete parameters
   const handleProceedToCheckout = () => {
-    if (cartSummary.totalRoomsCount === 0) return;
+    if (cartSummary.totalRoomsCount === 0 || cartSummary.isCapacityExceeded) return;
 
     const multiRoomsPayload = cartSummary.items.map((i) => ({
       slug: i.room.slug,
@@ -567,6 +612,34 @@ function BookingContent() {
 
       {/* Room Listing Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 sm:space-y-8">
+        {/* Dynamic Capacity Notification & Room Selection Prompt */}
+        {cartSummary.isCapacityExceeded ? (
+          <div className="p-4 sm:p-5 rounded-2xl bg-amber-50 border-2 border-amber-300 text-amber-950 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-fade-in">
+            <div className="flex items-start gap-3">
+              <span className="text-xl shrink-0 mt-0.5">⚠️</span>
+              <div>
+                <h4 className="font-serif text-base font-semibold text-amber-900">
+                  More Rooms Needed for {parseInt(adults, 10) || 2} Adults
+                </h4>
+                <p className="text-xs text-amber-800 leading-relaxed mt-0.5">
+                  Your selected {cartSummary.totalRoomsCount} room(s) can accommodate at most {cartSummary.totalMaxCapacity} adults (max 3 guests per room, 4 for Suite). Under hotel policy, please select at least <strong>{cartSummary.minRoomsNeeded} room(s)</strong> to accommodate all {adults} adult guests.
+                </p>
+              </div>
+            </div>
+            <div className="sm:self-center shrink-0">
+              <span className="inline-flex items-center px-3.5 py-1.5 rounded-lg bg-amber-200/90 text-amber-950 font-bold text-xs border border-amber-300">
+                Please add {cartSummary.minRoomsNeeded - cartSummary.totalRoomsCount} more room(s) below
+              </span>
+            </div>
+          </div>
+        ) : cartSummary.totalRoomsCount === 0 && (parseInt(adults, 10) || 2) > 3 ? (
+          <div className="p-3.5 sm:p-4 rounded-xl bg-[#FAF5EB] border border-[#D5C29F] text-[#443825] flex items-center gap-3">
+            <span className="text-base shrink-0">💡</span>
+            <p className="text-xs">
+              For your party of <strong>{adults} Adults</strong>, please select at least <strong>{cartSummary.minRoomsNeeded} room(s)</strong> using the quantity controls below (max 3 guests per room, 4 for Suite).
+            </p>
+          </div>
+        ) : null}
         {ROOMS.map((room) => {
           const currentSelection =
             roomSelections[room.slug] || { planCode: "EP", bedType: "KING", quantity: 0 };
@@ -695,52 +768,60 @@ function BookingContent() {
                       </div>
                     </div>
 
-                    {/* Meal Plan Options */}
-                    <div className="space-y-2">
-                      <span className="text-[10px] uppercase font-semibold tracking-wider text-[#8F6B2A] block">
-                        Select Rate / Meal Plan:
-                      </span>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                        {room.ratePlans.map((plan) => {
-                          const isPlanActive = plan.code === currentSelection.planCode;
-                          return (
-                            <button
-                              key={plan.id}
-                              type="button"
-                              onClick={() => handlePlanChange(room.slug, plan.code)}
-                              className={`p-3 rounded-lg text-left border-2 transition-all flex flex-col justify-between space-y-1.5 ${
-                                isPlanActive
-                                  ? "border-[#8F6B2A] bg-[#FAF5EB] shadow-sm"
-                                  : "border-[#E7E2D9] bg-[#FAF8F5] hover:border-[#8F6B2A]/50"
-                              }`}
-                            >
-                              <div>
-                                <div className="flex items-center justify-between">
-                                  <span className="text-xs font-semibold text-[#1C1917]">
-                                    {plan.name}
-                                  </span>
-                                  {isPlanActive && (
-                                    <span className="w-4 h-4 rounded-full bg-[#8F6B2A] text-white flex items-center justify-center text-[10px] font-bold">
-                                      ✓
+                      {/* Meal Plan Options */}
+                      <div className="space-y-2">
+                        <span className="text-[10px] uppercase font-semibold tracking-wider text-[#8F6B2A] block">
+                          Select Rate / Meal Plan:
+                        </span>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                          {room.ratePlans.map((plan) => {
+                            const isPlanActive = plan.code === currentSelection.planCode;
+                            const currentAdultsCount = parseInt(adults, 10) || 2;
+                            const roomGuests = Math.max(1, Math.min(room.capacity.maxGuests, Math.round(currentAdultsCount / Math.max(1, currentSelection.quantity || cartSummary.totalRoomsCount || 1)) || 2));
+                            const dynamicTariff = plan.code === "CP" ? room.basePrice + (roomGuests * 150) : room.basePrice;
+
+                            return (
+                              <button
+                                key={plan.id}
+                                type="button"
+                                onClick={() => handlePlanChange(room.slug, plan.code)}
+                                className={`p-3 rounded-lg text-left border-2 transition-all flex flex-col justify-between space-y-1.5 ${
+                                  isPlanActive
+                                    ? "border-[#8F6B2A] bg-[#FAF5EB] shadow-sm"
+                                    : "border-[#E7E2D9] bg-[#FAF8F5] hover:border-[#8F6B2A]/50"
+                                }`}
+                              >
+                                <div>
+                                  <div className="flex items-center justify-between">
+                                    <span className="text-xs font-semibold text-[#1C1917]">
+                                      {plan.name}
                                     </span>
-                                  )}
+                                    {isPlanActive && (
+                                      <span className="w-4 h-4 rounded-full bg-[#8F6B2A] text-white flex items-center justify-center text-[10px] font-bold">
+                                        ✓
+                                      </span>
+                                    )}
+                                  </div>
+                                  <p className="text-[10px] text-[#78716C] mt-0.5 font-normal">
+                                    {plan.code === "CP"
+                                      ? `Freshly cooked breakfast for ${roomGuests} ${roomGuests === 1 ? "guest" : "guests"} included (@ ₹150/pax per day).`
+                                      : "Room only tariff. Restaurant meals can be ordered à la carte."}
+                                  </p>
                                 </div>
-                                <p className="text-[10px] text-[#78716C] mt-0.5 font-normal">
-                                  {plan.description}
-                                </p>
-                              </div>
-                              <div className="pt-1 flex items-baseline justify-between border-t border-[#E7E2D9]">
-                                <span className="text-[9px] text-[#78716C]">Tariff per night:</span>
-                                <span className="font-serif text-sm sm:text-base font-semibold text-[#8F6B2A]">
-                                  {formatCurrencyINR(plan.pricePerNight)}
-                                </span>
-                              </div>
-                            </button>
-                          );
-                        })}
+                                <div className="pt-1 flex items-baseline justify-between border-t border-[#E7E2D9]">
+                                  <span className="text-[9px] text-[#78716C]">
+                                    {plan.code === "CP" ? `Tariff (${roomGuests} pax breakfast):` : "Tariff (Room only):"}
+                                  </span>
+                                  <span className="font-serif text-sm sm:text-base font-semibold text-[#8F6B2A]">
+                                    {formatCurrencyINR(dynamicTariff)}
+                                  </span>
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
                       </div>
                     </div>
-                  </div>
 
                   {/* Room Quantity Controller */}
                   <div className="pt-3 border-t border-[#E7E2D9] flex items-center justify-between gap-3">
@@ -821,9 +902,14 @@ function BookingContent() {
                   • {nights} {nights === 1 ? "Night" : "Nights"} ({checkIn} to {checkOut}) • {adults} {parseInt(adults, 10) === 1 ? "Adult" : "Adults"}
                   {parsedChildren > 0 ? `, ${parsedChildren} ${parsedChildren === 1 ? "Child" : "Children"}` : ""}
                 </span>
+                {cartSummary.totalBreakfastCost > 0 && (
+                  <span className="px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-600/40 text-[10px] font-semibold">
+                    🍳 Breakfast ({cartSummary.breakfastGuestsCount} Guests @ ₹150/day)
+                  </span>
+                )}
                 {cartSummary.extraPaxCount > 0 && (
                   <span className="px-2 py-0.5 rounded bg-[#8F6B2A]/20 text-[#B3863E] border border-[#8F6B2A]/40 text-[10px] font-semibold">
-                    +{cartSummary.extraPaxCount} Extra Pax (+₹500/nt)
+                    🛏️ +{cartSummary.extraPaxCount} Extra Bed (+₹500/nt)
                   </span>
                 )}
               </div>
@@ -855,11 +941,20 @@ function BookingContent() {
 
               <button
                 type="button"
+                disabled={cartSummary.isCapacityExceeded}
                 onClick={handleProceedToCheckout}
-                className="btn-heritage-primary px-7 py-3 rounded-lg text-xs font-semibold tracking-wider flex items-center space-x-2 shrink-0"
+                className={`px-7 py-3 rounded-lg text-xs font-semibold tracking-wider flex items-center space-x-2 shrink-0 transition-all ${
+                  cartSummary.isCapacityExceeded
+                    ? "bg-amber-600 text-white cursor-not-allowed opacity-90 shadow-none"
+                    : "btn-heritage-primary"
+                }`}
               >
-                <span>Proceed to Guest Details</span>
-                <ArrowUpRight className="w-4 h-4 ml-1" />
+                <span>
+                  {cartSummary.isCapacityExceeded
+                    ? `Select ${cartSummary.minRoomsNeeded - cartSummary.totalRoomsCount} More Room(s)`
+                    : "Proceed to Guest Details"}
+                </span>
+                {!cartSummary.isCapacityExceeded && <ArrowUpRight className="w-4 h-4 ml-1" />}
               </button>
             </div>
           </div>

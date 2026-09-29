@@ -100,6 +100,31 @@ export default function LocationPage() {
                     {HOTEL_INFO.email}
                   </a>
                 </div>
+
+                <div className="pt-2 border-t border-[#E7E2D9]">
+                  <span className="text-[#78716C] block text-[10px] uppercase font-semibold tracking-wider">
+                    Follow Our Updates
+                  </span>
+                  <div className="flex items-center gap-3 mt-1.5 text-xs">
+                    <a
+                      href={HOTEL_INFO.socials.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#8F6B2A] hover:text-[#684E1E] font-medium underline inline-flex items-center gap-1"
+                    >
+                      Instagram
+                    </a>
+                    <span className="text-[#D6CEBE]">•</span>
+                    <a
+                      href={HOTEL_INFO.socials.facebook}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#8F6B2A] hover:text-[#684E1E] font-medium underline inline-flex items-center gap-1"
+                    >
+                      Facebook
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
 

@@ -141,7 +141,7 @@ export function ensureCheckoutSession(checkoutId: string, accessToken: string): 
           itm.ratePlanCode || "EP",
           itm.quantity,
           itm.unitPricePaise,
-          itm.taxRateBps || 1200
+          itm.taxRateBps || 500
         );
       }
 

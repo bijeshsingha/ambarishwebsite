@@ -42,10 +42,30 @@ export default function RoomDetailPage() {
   const [checkOut, setCheckOut] = useState(getTomorrowDate());
   const [selectedPlan, setSelectedPlan] = useState("EP");
   const [adults, setAdults] = useState(room?.capacity.adults || 2);
+  const [roomsCount, setRoomsCount] = useState(1);
 
   if (!room) {
     notFound();
   }
+
+  const handleAdultsChange = (val: number) => {
+    setAdults(val);
+    const minRooms = Math.ceil(val / room.capacity.maxGuests);
+    if (roomsCount < minRooms) {
+      setRoomsCount(minRooms);
+    }
+  };
+
+  const handleRoomsChange = (val: number) => {
+    setRoomsCount(val);
+    if (adults > val * room.capacity.maxGuests) {
+      setAdults(val * room.capacity.maxGuests);
+    }
+  };
+
+  const guestsPerRoom = Math.max(1, Math.min(room.capacity.maxGuests, Math.round(adults / roomsCount) || 2));
+  const dynamicPrice = selectedPlan === "CP" ? room.basePrice + (guestsPerRoom * 150) : room.basePrice;
+  const isCapacityExceeded = adults > roomsCount * room.capacity.maxGuests;
 
   const galleryItems = room.images.map((imgSrc, i) => ({
     id: `room-img-${i}`,
@@ -159,7 +179,7 @@ export default function RoomDetailPage() {
               <div className="flex justify-between items-baseline hairline-b pb-3">
                 <span className="text-xs text-[#7A7067] uppercase tracking-wider">Tariff</span>
                 <span className="font-serif text-2xl text-[#B4872F]">
-                  {formatCurrencyINR(activeRatePlan.pricePerNight)}
+                  {formatCurrencyINR(dynamicPrice)}
                   <span className="text-[11px] font-sans font-light text-[#7A7067] ml-1">/ night + GST</span>
                 </span>
               </div>
@@ -170,23 +190,29 @@ export default function RoomDetailPage() {
                   Select meal plan:
                 </label>
                 <div className="grid grid-cols-2 gap-2">
-                  {room.ratePlans.map((plan) => (
-                    <button
-                      key={plan.id}
-                      type="button"
-                      onClick={() => setSelectedPlan(plan.code)}
-                      className={`p-3 rounded-xl text-left border transition-all ${
-                        selectedPlan === plan.code
-                          ? "bg-[#F5EBDD] border-[#B62576] text-[#0C0B0B] ring-1 ring-[#B62576]"
-                          : "bg-[#FFFFFF] border-[#0C0B0B]/10 text-[#3D3734] hover:border-[#0C0B0B]/20"
-                      }`}
-                    >
-                      <span className="block text-xs font-semibold">{plan.code} Plan</span>
-                      <span className="block text-[11px] text-[#B4872F]">
-                        {formatCurrencyINR(plan.pricePerNight)}/nt
-                      </span>
-                    </button>
-                  ))}
+                  {room.ratePlans.map((plan) => {
+                    const planTariff = plan.code === "CP" ? room.basePrice + (guestsPerRoom * 150) : room.basePrice;
+                    return (
+                      <button
+                        key={plan.id}
+                        type="button"
+                        onClick={() => setSelectedPlan(plan.code)}
+                        className={`p-3 rounded-xl text-left border transition-all ${
+                          selectedPlan === plan.code
+                            ? "bg-[#F5EBDD] border-[#8F6B2A] text-[#0C0B0B] ring-1 ring-[#8F6B2A]"
+                            : "bg-[#FFFFFF] border-[#0C0B0B]/10 text-[#3D3734] hover:border-[#0C0B0B]/20"
+                        }`}
+                      >
+                        <span className="block text-xs font-semibold">{plan.code} Plan</span>
+                        <span className="block text-[11px] text-[#B4872F]">
+                          {formatCurrencyINR(planTariff)}/nt
+                        </span>
+                        <span className="text-[9px] text-[#7A7067] block mt-0.5">
+                          {plan.code === "CP" ? `Incl. ${guestsPerRoom} pax breakfast` : "Room only"}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -214,9 +240,59 @@ export default function RoomDetailPage() {
                 </div>
               </div>
 
+              {/* Rooms & Adults Selectors */}
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div>
+                  <label className="text-[10px] uppercase text-[#7A7067] block mb-1">Rooms</label>
+                  <select
+                    value={roomsCount}
+                    onChange={(e) => handleRoomsChange(parseInt(e.target.value, 10))}
+                    className="w-full bg-[#FAF6F0] border border-[#0C0B0B]/10 rounded-xl p-2.5 text-xs text-[#0C0B0B] font-semibold cursor-pointer"
+                  >
+                    {[1, 2, 3, 4].map((count) => (
+                      <option key={count} value={count}>
+                        {count} {count === 1 ? "Room" : "Rooms"}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="text-[10px] uppercase text-[#7A7067] block mb-1">Adults</label>
+                  <select
+                    value={adults}
+                    onChange={(e) => handleAdultsChange(parseInt(e.target.value, 10))}
+                    className="w-full bg-[#FAF6F0] border border-[#0C0B0B]/10 rounded-xl p-2.5 text-xs text-[#0C0B0B] font-semibold cursor-pointer"
+                  >
+                    {[1, 2, 3, 4, 5, 6, 8].map((count) => (
+                      <option key={count} value={count}>
+                        {count} {count === 1 ? "Adult" : "Adults"}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Capacity Prompt Notice */}
+              {adults > roomsCount * 2 && (
+                <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-[11px] text-amber-900 space-y-1">
+                  <p>
+                    <strong>{adults} Adults</strong> in {roomsCount} {roomsCount === 1 ? "room" : "rooms"}: Standard rooms fit 2 adults comfortably. {adults - roomsCount * 2} extra mattress(es) @ ₹500/night will be added (max {room.capacity.maxGuests} pax per room).
+                  </p>
+                  {roomsCount < Math.ceil(adults / room.capacity.maxGuests) && (
+                    <button
+                      type="button"
+                      onClick={() => setRoomsCount(Math.ceil(adults / room.capacity.maxGuests))}
+                      className="text-[11px] font-semibold text-[#8F6B2A] underline"
+                    >
+                      Adjust to {Math.ceil(adults / room.capacity.maxGuests)} Rooms &rarr;
+                    </button>
+                  )}
+                </div>
+              )}
+
               <Link
-                href={`/checkout?room=${room.slug}&plan=${selectedPlan}&checkIn=${checkIn}&checkOut=${checkOut}&adults=${adults}`}
-                className="w-full py-3.5 px-4 rounded-full bg-[#B62576] hover:bg-[#9A1D62] text-white text-xs font-bold uppercase tracking-[0.14em] flex items-center justify-center space-x-1.5 transition-all shadow-lg hover:scale-[1.02] active:scale-[0.98]"
+                href={`/checkout?room=${room.slug}&plan=${selectedPlan}&checkIn=${checkIn}&checkOut=${checkOut}&rooms=${roomsCount}&adults=${adults}`}
+                className="w-full py-3.5 px-4 rounded-full btn-heritage-primary text-xs font-bold uppercase tracking-[0.14em] flex items-center justify-center space-x-1.5 transition-all shadow-lg hover:scale-[1.02] active:scale-[0.98]"
               >
                 <span>Proceed to checkout</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />

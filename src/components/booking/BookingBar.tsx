@@ -39,14 +39,24 @@ export default function BookingBar({
     }
   }, [initialPromo]);
 
+  const handleAdultsChange = (newAdults: string) => {
+    setAdults(newAdults);
+    const a = parseInt(newAdults, 10) || 2;
+    const currentRooms = parseInt(roomsCount, 10) || 1;
+    // Standard room capacity is max 3 pax per room, Suite is 4 pax. 2 rooms fit 5-6 guests.
+    const minRoomsNeeded = Math.ceil(a / 3);
+    if (currentRooms < minRoomsNeeded) {
+      setRoomsCount(String(Math.min(4, minRoomsNeeded)));
+    }
+  };
+
   const handleRoomsChange = (newRooms: string) => {
     setRoomsCount(newRooms);
     const r = Math.max(1, parseInt(newRooms, 10) || 1);
     const currentAdults = parseInt(adults, 10) || 2;
-    const minAdults = r * 1;
-    const maxAdults = r * 3;
-    if (currentAdults < minAdults || currentAdults > maxAdults) {
-      setAdults(String(r * 2));
+    const maxAdultsForRooms = r * 3;
+    if (currentAdults > maxAdultsForRooms) {
+      setAdults(String(r * 3));
     }
   };
 
@@ -153,13 +163,10 @@ export default function BookingBar({
               <div className="relative flex items-center">
                 <select
                   value={adults}
-                  onChange={(e) => setAdults(e.target.value)}
+                  onChange={(e) => handleAdultsChange(e.target.value)}
                   className="w-full bg-transparent text-xs xl:text-sm text-[#1C1917] font-semibold focus:outline-none cursor-pointer pr-4 appearance-none"
                 >
-                  {Array.from(
-                    { length: Math.max(1, parseInt(roomsCount, 10) * 3 - Math.max(1, parseInt(roomsCount, 10) * 1) + 1) },
-                    (_, i) => Math.max(1, parseInt(roomsCount, 10) * 1) + i
-                  ).map((count) => (
+                  {[1, 2, 3, 4, 5, 6, 7, 8].map((count) => (
                     <option key={count} value={String(count)}>
                       {count} {count === 1 ? "Adult" : "Adults"}
                     </option>
@@ -278,7 +285,7 @@ export default function BookingBar({
                 <label className="text-[9px] uppercase font-semibold text-[#8F6B2A] mb-0.5">Adults</label>
                 <select
                   value={adults}
-                  onChange={(e) => setAdults(e.target.value)}
+                  onChange={(e) => handleAdultsChange(e.target.value)}
                   className="bg-transparent text-xs text-[#1C1917] font-semibold focus:outline-none cursor-pointer"
                 >
                   {[1, 2, 3, 4, 6, 8].map((c) => (

@@ -21,9 +21,9 @@ import { ROOMS } from "@/data/rooms";
 export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
-  const isCheckoutOrConfirmation =
-    pathname?.startsWith("/checkout") ||
-    pathname?.startsWith("/booking/confirmation");
+  const isBookingOrCheckout =
+    pathname?.startsWith("/booking") ||
+    pathname?.startsWith("/checkout");
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [showScrollDock, setShowScrollDock] = useState(false);
@@ -76,6 +76,25 @@ export default function Header() {
     { label: "Gallery", href: "/gallery" },
     { label: "Location", href: "/location" },
   ];
+
+  const handleModalAdultsChange = (val: string) => {
+    setAdults(val);
+    const a = parseInt(val, 10) || 2;
+    const r = parseInt(roomsCount, 10) || 1;
+    const minRooms = Math.ceil(a / 3);
+    if (r < minRooms) {
+      setRoomsCount(String(Math.min(4, minRooms)));
+    }
+  };
+
+  const handleModalRoomsChange = (val: string) => {
+    setRoomsCount(val);
+    const r = parseInt(val, 10) || 1;
+    const a = parseInt(adults, 10) || 2;
+    if (a > r * 3) {
+      setAdults(String(r * 3));
+    }
+  };
 
   const handleQuickBookSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -180,7 +199,7 @@ export default function Header() {
 
           {/* Mobile Menu Trigger & Book CTA */}
           <div className="flex lg:hidden items-center space-x-2.5">
-            {!isCheckoutOrConfirmation && (
+            {!isBookingOrCheckout && (
               <button
                 onClick={() => setShowQuickBookModal(true)}
                 className="btn-heritage-primary px-3.5 py-1.5 text-xs font-semibold tracking-wider rounded-lg sm:hidden"
@@ -199,37 +218,39 @@ export default function Header() {
         </div>
       </header>
 
-      {/* FLOATING ACTION DOCK (Desktop & Tablet) */}
-      <div
-        className={`hidden sm:block fixed bottom-6 right-6 lg:bottom-8 lg:right-8 z-40 transition-all duration-300 ease-out transform ${
-          showScrollDock
-            ? "translate-y-0 opacity-100 scale-100 pointer-events-auto"
-            : "translate-y-8 opacity-0 scale-95 pointer-events-none"
-        }`}
-      >
-        <div className="flex items-center gap-2 p-1.5 rounded-xl bg-[#FFFFFF] border border-[#E7E2D9] shadow-xl text-[#1C1917]">
-          <button
-            onClick={() => setShowQuickBookModal(true)}
-            className="btn-heritage-primary px-4 py-2.5 rounded-lg text-xs font-semibold tracking-wider flex items-center space-x-2"
-          >
-            <Calendar className="w-3.5 h-3.5" />
-            <span>Check Rates &amp; Book</span>
-            <ArrowUpRight className="w-3.5 h-3.5 ml-0.5" />
-          </button>
+      {/* FLOATING ACTION DOCK (Desktop & Tablet) - Hidden on Booking & Checkout pages */}
+      {!isBookingOrCheckout && (
+        <div
+          className={`hidden sm:block fixed bottom-6 right-6 lg:bottom-8 lg:right-8 z-40 transition-all duration-300 ease-out transform ${
+            showScrollDock
+              ? "translate-y-0 opacity-100 scale-100 pointer-events-auto"
+              : "translate-y-8 opacity-0 scale-95 pointer-events-none"
+          }`}
+        >
+          <div className="flex items-center gap-2 p-1.5 rounded-xl bg-[#FFFFFF] border border-[#E7E2D9] shadow-xl text-[#1C1917]">
+            <button
+              onClick={() => setShowQuickBookModal(true)}
+              className="btn-heritage-primary px-4 py-2.5 rounded-lg text-xs font-semibold tracking-wider flex items-center space-x-2"
+            >
+              <Calendar className="w-3.5 h-3.5" />
+              <span>Check Rates &amp; Book</span>
+              <ArrowUpRight className="w-3.5 h-3.5 ml-0.5" />
+            </button>
 
-          <a
-            href={`tel:${HOTEL_INFO.phoneRaw}`}
-            className="w-9 h-9 flex items-center justify-center rounded-lg bg-[#FAF5EB] hover:bg-[#F4EFE6] text-[#8F6B2A] border border-[#E7E2D9] transition-all"
-            title="Call Front Desk 24/7"
-            aria-label="Call Front Desk"
-          >
-            <Phone className="w-3.5 h-3.5 text-[#8F6B2A]" />
-          </a>
+            <a
+              href={`tel:${HOTEL_INFO.phoneRaw}`}
+              className="w-9 h-9 flex items-center justify-center rounded-lg bg-[#FAF5EB] hover:bg-[#F4EFE6] text-[#8F6B2A] border border-[#E7E2D9] transition-all"
+              title="Call Front Desk 24/7"
+              aria-label="Call Front Desk"
+            >
+              <Phone className="w-3.5 h-3.5 text-[#8F6B2A]" />
+            </a>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* QUICK RESERVATION MODAL */}
-      {showQuickBookModal && !isCheckoutOrConfirmation && (
+      {showQuickBookModal && !isBookingOrCheckout && (
         <div className="fixed inset-0 z-[110] bg-[#1C1917]/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
           <div className="bg-[#FFFFFF] text-[#1C1917] rounded-t-2xl sm:rounded-2xl max-w-lg w-full max-h-[92vh] overflow-y-auto p-5 sm:p-7 space-y-5 shadow-2xl border border-[#E7E2D9] relative animate-fade-in">
             {/* Mobile Sheet Grab Handle */}
@@ -320,7 +341,7 @@ export default function Header() {
                   <label className="text-[10px] uppercase font-semibold text-[#78716C]">Rooms Count</label>
                   <select
                     value={roomsCount}
-                    onChange={(e) => setRoomsCount(e.target.value)}
+                    onChange={(e) => handleModalRoomsChange(e.target.value)}
                     className="w-full p-2.5 rounded-lg bg-[#FAF8F5] border border-[#E7E2D9] text-xs font-semibold text-[#1C1917] focus:outline-none focus:border-[#8F6B2A] cursor-pointer"
                   >
                     <option value="1">1 Room</option>
@@ -333,16 +354,38 @@ export default function Header() {
                   <label className="text-[10px] uppercase font-semibold text-[#78716C]">Adults</label>
                   <select
                     value={adults}
-                    onChange={(e) => setAdults(e.target.value)}
+                    onChange={(e) => handleModalAdultsChange(e.target.value)}
                     className="w-full p-2.5 rounded-lg bg-[#FAF8F5] border border-[#E7E2D9] text-xs font-semibold text-[#1C1917] focus:outline-none focus:border-[#8F6B2A] cursor-pointer"
                   >
-                    <option value="1">1 Adult</option>
-                    <option value="2">2 Adults</option>
-                    <option value="3">3 Adults</option>
-                    <option value="4">4 Adults</option>
+                    {[1, 2, 3, 4, 5, 6, 8].map((c) => (
+                      <option key={c} value={String(c)}>
+                        {c} {c === 1 ? "Adult" : "Adults"}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
+
+              {/* Capacity Prompt Notice */}
+              {parseInt(adults, 10) > parseInt(roomsCount, 10) * 2 && (
+                <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200/70 text-[11px] text-amber-900 flex items-start gap-2">
+                  <span className="shrink-0 font-bold">ℹ️</span>
+                  <div className="space-y-1">
+                    <p>
+                      <strong>{adults} Adults</strong> in <strong>{roomsCount} Room(s)</strong>: Standard rooms fit 2 adults comfortably. {parseInt(adults, 10) - parseInt(roomsCount, 10) * 2} extra mattress(es) @ ₹500/night will be arranged (max 3 pax/room, 4 for Suite).
+                    </p>
+                    {parseInt(roomsCount, 10) < Math.ceil(parseInt(adults, 10) / 3) && (
+                      <button
+                        type="button"
+                        onClick={() => setRoomsCount(String(Math.min(4, Math.ceil(parseInt(adults, 10) / 3))))}
+                        className="text-[11px] font-semibold text-[#8F6B2A] underline hover:text-[#684E1E]"
+                      >
+                        Adjust to {Math.ceil(parseInt(adults, 10) / 3)} Rooms &rarr;
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Promo Code Option */}
               <div className="pt-1 border-t border-[#E7E2D9] space-y-1">
@@ -448,6 +491,38 @@ export default function Header() {
               <span>Check Rates &amp; Book Direct</span>
               <ArrowUpRight className="w-4 h-4 ml-1.5" />
             </button>
+
+            {/* Social Media Links */}
+            <div className="flex items-center justify-center gap-3 pt-2 text-xs text-[#78716C]">
+              <span className="text-[11px]">Follow Us:</span>
+              <a
+                href={HOTEL_INFO.socials.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#8F6B2A] hover:text-[#1C1917] font-medium flex items-center gap-1 transition-colors"
+                aria-label="Hotel Ambarish on Instagram"
+              >
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+                <span>Instagram</span>
+              </a>
+              <span className="text-[#D6CEBE]">•</span>
+              <a
+                href={HOTEL_INFO.socials.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#8F6B2A] hover:text-[#1C1917] font-medium flex items-center gap-1 transition-colors"
+                aria-label="Hotel Ambarish on Facebook"
+              >
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+                <span>Facebook</span>
+              </a>
+            </div>
           </div>
         </div>
       )}

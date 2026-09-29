@@ -54,7 +54,7 @@ export const DINING_INFO: DiningInfo = {
     {
       meal: "Breakfast Service",
       hours: "08:00 AM – 11:00 AM",
-      description: "Hot Puri Sabji, Parathas, Omelettes, Toast, Sandwiches, Assam Milk Tea, and Coffee.",
+      description: "Freshly prepared breakfast at ₹150 per person: Hot Puri Sabji, Stuffed Parathas, Omelettes, Toast with Butter, and Assam Milk Tea / Coffee.",
     },
     {
       meal: "À La Carte Lunch & Dinner",
@@ -125,6 +125,14 @@ export const DINING_INFO: DiningInfo = {
   ],
   fullMenu: [
     // --- BREAKFAST (8:00 AM - 11:00 AM) ---
+    {
+      name: "Executive Breakfast Set (₹150 / Person)",
+      category: "Breakfast",
+      isVeg: true,
+      price: 150,
+      isSpecial: true,
+      description: "Complete breakfast meal: Choice of hot Puri Sabji or Aloo/Paneer Paratha with curd, fresh Toast & Butter, and piping hot Assam Tea or Coffee.",
+    },
     { name: "Bread Toast", category: "Breakfast", isVeg: true, price: 50 },
     { name: "Plain Bread with Butter / Jam", category: "Breakfast", isVeg: true, price: 50 },
     { name: "Bread Omelet", category: "Breakfast", isVeg: false, price: 80 },

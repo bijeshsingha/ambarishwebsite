@@ -7,6 +7,10 @@ export interface HotelInfo {
   phoneRaw: string;
   altPhone: string;
   email: string;
+  socials: {
+    instagram: string;
+    facebook: string;
+  };
   address: {
     street: string;
     area: string;
@@ -18,6 +22,8 @@ export interface HotelInfo {
   };
   checkInTime: string;
   checkOutTime: string;
+  breakfastRatePerPerson: number;
+  gstRate: number;
   earlyCheckInOffer?: string;
   coordinates: {
     lat: number;
@@ -41,6 +47,10 @@ export const HOTEL_INFO: HotelInfo = {
   phoneRaw: "+918822041211",
   altPhone: "+91 361 273 4500",
   email: "reservation.ambarish@gmail.com",
+  socials: {
+    instagram: "https://www.instagram.com/ambarishgrandresidency/",
+    facebook: "https://www.facebook.com/profile.php?id=61593323074024",
+  },
   address: {
     street: "Md Shah Road, Paltan Bazaar",
     area: "Paltan Bazaar",
@@ -52,6 +62,8 @@ export const HOTEL_INFO: HotelInfo = {
   },
   checkInTime: "12:00 PM",
   checkOutTime: "12:00 PM",
+  breakfastRatePerPerson: 150,
+  gstRate: 0.05,
   earlyCheckInOffer: "Complimentary Early Check-in from 5:00 AM onwards with no extra charge (subject to room availability)",
   coordinates: {
     lat: 26.1824,

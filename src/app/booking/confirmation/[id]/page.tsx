@@ -450,7 +450,7 @@ function ConfirmationContent() {
 
             {/* Taxes */}
             <div className="flex justify-between text-[#57534E] voucher-compact-text">
-              <span>Taxes (GST 12% SAC 996311):</span>
+              <span>Taxes (GST 5% SAC 996311):</span>
               <span className="font-medium text-[#1C1917]">{formatCurrencyINR(reservation.taxAmount || 0)}</span>
             </div>
 
