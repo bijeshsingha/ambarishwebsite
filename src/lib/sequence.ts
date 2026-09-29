@@ -8,13 +8,30 @@ import { db } from "@/lib/db";
 
 export async function getNextReservationReference(): Promise<string> {
   // Execute within atomic transaction on sequence_counters table
-  db.exec("BEGIN IMMEDIATE");
   try {
+    db.exec("BEGIN IMMEDIATE");
     const row = db
       .prepare("SELECT current_value FROM sequence_counters WHERE name = ?")
       .get("reservation_sequence") as { current_value: number } | undefined;
 
-    const current = row ? row.current_value : 0;
+    let current = row ? row.current_value : 0;
+
+    // Safety: ensure current is strictly higher than any existing reference in reservations table
+    try {
+      const maxResRow = db
+        .prepare("SELECT booking_reference FROM reservations ORDER BY booking_reference DESC LIMIT 1")
+        .get() as { booking_reference: string } | undefined;
+
+      if (maxResRow && maxResRow.booking_reference?.startsWith("HAGR-")) {
+        const existingNum = parseInt(maxResRow.booking_reference.replace("HAGR-", ""), 10);
+        if (!isNaN(existingNum) && existingNum >= current) {
+          current = existingNum + 1;
+        }
+      }
+    } catch {
+      // Ignore if table query fails
+    }
+
     const nextValue = current + 1;
 
     db.prepare(
@@ -26,7 +43,11 @@ export async function getNextReservationReference(): Promise<string> {
     const padded = String(current).padStart(4, "0");
     return `HAGR-${padded}`;
   } catch (err) {
-    db.exec("ROLLBACK");
+    try {
+      db.exec("ROLLBACK");
+    } catch {
+      // Ignore rollback failure if no txn active
+    }
     throw new Error(`Failed to allocate sequential reservation reference: ${(err as Error).message}`);
   }
 }

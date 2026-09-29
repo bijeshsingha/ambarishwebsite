@@ -4,6 +4,7 @@ import { db, runTransaction } from "@/lib/db";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 import { ROOMS } from "@/data/rooms";
 import { AVAILABLE_PROMOS } from "@/data/promos";
+import { createCheckoutToken } from "@/lib/session-token";
 
 // Capacity ceiling per physical category (Total 35 rooms)
 const ROOM_CAPACITIES: Record<string, number> = {
@@ -161,9 +162,31 @@ export async function POST(request: Request) {
 
     // SEC 05: Atomic Inventory Hold Allocation across stay dates
     const checkoutId = crypto.randomUUID();
-    const accessToken = crypto.randomBytes(32).toString("hex");
-    const tokenHash = crypto.createHash("sha256").update(accessToken).digest("hex");
     const holdExpiresAt = now + 15 * 60 * 1000; // 15-minute checkout lock window
+
+    // Generate stateless recovery access token to ensure seamless multi-container serverless execution
+    const accessToken = createCheckoutToken({
+      checkoutId,
+      checkIn,
+      checkOut,
+      occupancy: {
+        adults: occupancy?.adults || 2,
+        children: occupancy?.children || 0,
+        rooms: totalRoomsCount,
+      },
+      pricing: {
+        subtotalPaise: totalBasePaise,
+        discountPaise,
+        taxPaise,
+        totalPaise,
+      },
+      items: validatedItems,
+      promoCode: appliedPromoCode,
+      bookingType,
+      expiresAt: holdExpiresAt,
+      createdAt: now,
+    });
+    const tokenHash = crypto.createHash("sha256").update(accessToken).digest("hex");
 
     // Execute hold check and creation inside an atomic IMMEDIATE transaction
     runTransaction(() => {
@@ -277,7 +300,10 @@ export async function POST(request: Request) {
     }
     console.error("[Checkouts API] Error creating checkout:", err);
     return NextResponse.json(
-      { error: "INTERNAL_ERROR", message: "Failed to initialize checkout." },
+      {
+        error: "INTERNAL_ERROR",
+        message: err?.message || "Failed to initialize checkout.",
+      },
       { status: 500 }
     );
   }

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import crypto from "crypto";
 import { db } from "@/lib/db";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
+import { ensureCheckoutSession } from "@/lib/session-token";
 
 export async function POST(request: Request) {
   const clientIp = getClientIp(request);
@@ -29,10 +30,8 @@ export async function POST(request: Request) {
 
     const tokenHash = crypto.createHash("sha256").update(accessToken).digest("hex");
 
-    // SEC 03: Verify against stored checkout session
-    const checkout = db
-      .prepare("SELECT * FROM checkout_sessions WHERE id = ? AND token_hash = ?")
-      .get(checkoutId, tokenHash) as any;
+    // SEC 03: Verify against stored checkout session (with stateless recovery if cross-container)
+    const checkout = ensureCheckoutSession(checkoutId, accessToken);
 
     if (!checkout) {
       return NextResponse.json(
@@ -130,7 +129,7 @@ export async function POST(request: Request) {
   } catch (err: any) {
     console.error("[Payment Verify API] Internal error:", err?.message);
     return NextResponse.json(
-      { error: "INTERNAL_ERROR", message: "Payment verification failed." },
+      { error: "INTERNAL_ERROR", message: err?.message || "Payment verification failed." },
       { status: 500 }
     );
   }

@@ -80,7 +80,7 @@ function initDbSchema(db: DatabaseSync): void {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         checkout_id TEXT NOT NULL REFERENCES checkout_sessions(id) ON DELETE CASCADE,
         room_type_id TEXT NOT NULL,
-        ratePlanCode TEXT NOT NULL,
+        rate_plan_code TEXT NOT NULL,
         quantity INTEGER NOT NULL,
         unit_price_paise INTEGER NOT NULL,
         tax_rate_bps INTEGER NOT NULL
@@ -182,6 +182,23 @@ function initDbSchema(db: DatabaseSync): void {
     `);
   } catch (schemaErr) {
     console.warn("[DB] Schema init warning (already exists or locked):", schemaErr);
+  }
+
+  // Safe migration for checkout_items rate_plan_code column if previously created as ratePlanCode
+  try {
+    const tableInfo = db.prepare("PRAGMA table_info(checkout_items)").all() as Array<{ name: string }>;
+    const colNames = tableInfo.map((c) => c.name);
+    if (colNames.includes("ratePlanCode") && !colNames.includes("rate_plan_code")) {
+      db.exec("ALTER TABLE checkout_items RENAME COLUMN ratePlanCode TO rate_plan_code;");
+    } else if (colNames.includes("ratePlanCode") && colNames.includes("rate_plan_code")) {
+      try {
+        db.exec("ALTER TABLE checkout_items DROP COLUMN ratePlanCode;");
+      } catch {
+        // Ignore if DROP COLUMN not supported
+      }
+    }
+  } catch {
+    // Ignore migration warning
   }
 
   // Safe migration for check_in / check_out columns if missing

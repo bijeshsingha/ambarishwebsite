@@ -5,6 +5,7 @@ import { getNextReservationReference } from "@/lib/sequence";
 import { queueOutboxEvent, processOutboxQueue } from "@/lib/outbox";
 import { ROOMS } from "@/data/rooms";
 import { generateAdminConfirmToken } from "@/lib/admin-token";
+import { ensureCheckoutSession } from "@/lib/session-token";
 
 export async function POST(request: Request) {
   try {
@@ -39,10 +40,8 @@ export async function POST(request: Request) {
     const tokenHash = crypto.createHash("sha256").update(accessToken).digest("hex");
     const now = Date.now();
 
-    // 1. Verify checkout session exists and token matches
-    const checkout = db
-      .prepare("SELECT * FROM checkout_sessions WHERE id = ? AND token_hash = ?")
-      .get(checkoutId, tokenHash) as any;
+    // 1. Verify checkout session exists and token matches (with stateless recovery if across serverless instances)
+    const checkout = ensureCheckoutSession(checkoutId, accessToken);
 
     if (!checkout) {
       return NextResponse.json(
@@ -114,12 +113,13 @@ export async function POST(request: Request) {
 
     const bookedRooms = items.map((itm) => {
       const roomCat = ROOMS.find((r) => r.id === itm.room_type_id || r.slug === itm.room_type_id) || ROOMS[0];
-      const ratePlan = roomCat.ratePlans.find((rp) => rp.code === itm.rate_plan_code) || roomCat.ratePlans[0];
+      const planCode = itm.rate_plan_code || itm.ratePlanCode || "EP";
+      const ratePlan = roomCat.ratePlans.find((rp) => rp.code === planCode) || roomCat.ratePlans[0];
       return {
         roomTypeId: itm.room_type_id,
         roomName: roomCat.name,
         bedType: roomCat.bedType,
-        ratePlanCode: itm.rate_plan_code,
+        ratePlanCode: planCode,
         ratePlanName: ratePlan.name,
         pricePerNight: itm.unit_price_paise / 100,
         quantity: itm.quantity,
@@ -285,7 +285,7 @@ export async function POST(request: Request) {
   } catch (err: any) {
     console.error("[Reservations Finalize API] Error:", err);
     return NextResponse.json(
-      { error: "INTERNAL_ERROR", message: "Failed to finalize reservation." },
+      { error: "INTERNAL_ERROR", message: err?.message || "Failed to finalize reservation." },
       { status: 500 }
     );
   }

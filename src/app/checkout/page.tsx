@@ -286,7 +286,7 @@ function CheckoutContent() {
       const { ok: coOk, data: checkoutData } = await readSafeJson(checkoutRes);
 
       if (!coOk || !checkoutData?.checkoutId) {
-        throw new Error(checkoutData?.error || "Unable to reserve rooms. Please try again.");
+        throw new Error(checkoutData?.message || checkoutData?.error || "Unable to reserve rooms. Please try again.");
       }
 
       const { checkoutId, accessToken } = checkoutData;
@@ -390,6 +390,12 @@ function CheckoutContent() {
 
               const { ok: finOk, data: finData } = await readSafeJson(finRes);
               if (finOk && finData?.success && finData?.reservation) {
+                try {
+                  sessionStorage.setItem(
+                    `hagr_booking_${finData.reservation.bookingReference}`,
+                    JSON.stringify(finData.reservation)
+                  );
+                } catch {}
                 router.push(
                   `/booking/confirmation/${finData.reservation.bookingReference}?token=${finData.reservation.lookupToken}`
                 );
@@ -424,6 +430,12 @@ function CheckoutContent() {
 
         const { ok: finOk, data: finData } = await readSafeJson(finRes);
         if (finOk && finData?.success && finData?.reservation) {
+          try {
+            sessionStorage.setItem(
+              `hagr_booking_${finData.reservation.bookingReference}`,
+              JSON.stringify(finData.reservation)
+            );
+          } catch {}
           router.push(
             `/booking/confirmation/${finData.reservation.bookingReference}?token=${finData.reservation.lookupToken}`
           );

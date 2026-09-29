@@ -53,9 +53,33 @@ function ConfirmationContent() {
             return;
           }
         }
+        // Check sessionStorage cache for freshly placed booking if server is transiently not synced
+        try {
+          const cached = sessionStorage.getItem(`hagr_booking_${reference}`);
+          if (cached) {
+            const parsed = JSON.parse(cached);
+            if (parsed && (parsed.bookingReference === reference || parsed.id === reference)) {
+              setReservation(parsed);
+              setNotFound(false);
+              return;
+            }
+          }
+        } catch {}
+
         setNotFound(true);
       } catch (err) {
         console.error("Failed to load reservation from server:", err);
+        try {
+          const cached = sessionStorage.getItem(`hagr_booking_${reference}`);
+          if (cached) {
+            const parsed = JSON.parse(cached);
+            if (parsed && (parsed.bookingReference === reference || parsed.id === reference)) {
+              setReservation(parsed);
+              setNotFound(false);
+              return;
+            }
+          }
+        } catch {}
         setNotFound(true);
       } finally {
         setLoading(false);

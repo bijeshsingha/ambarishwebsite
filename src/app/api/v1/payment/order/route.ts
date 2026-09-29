@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import crypto from "crypto";
 import { db } from "@/lib/db";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
+import { ensureCheckoutSession } from "@/lib/session-token";
 
 export async function POST(request: Request) {
   const clientIp = getClientIp(request);
@@ -30,10 +31,8 @@ export async function POST(request: Request) {
     const tokenHash = crypto.createHash("sha256").update(accessToken).digest("hex");
     const now = Date.now();
 
-    // SEC 03: Load authoritative checkout session from DB
-    const checkout = db
-      .prepare("SELECT * FROM checkout_sessions WHERE id = ? AND token_hash = ?")
-      .get(checkoutId, tokenHash) as any;
+    // SEC 03: Load authoritative checkout session (with stateless recovery if cross-container)
+    const checkout = ensureCheckoutSession(checkoutId, accessToken);
 
     if (!checkout) {
       return NextResponse.json(
@@ -122,7 +121,7 @@ export async function POST(request: Request) {
   } catch (err: any) {
     console.error("[Payment Order API] Error creating order:", err);
     return NextResponse.json(
-      { error: "INTERNAL_ERROR", message: "Could not create payment order." },
+      { error: "INTERNAL_ERROR", message: err?.message || "Could not create payment order." },
       { status: 500 }
     );
   }
